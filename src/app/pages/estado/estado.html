@@ -1,0 +1,127 @@
+<div class="container">
+
+  <div class="breadcrumb">
+    Estudiante > <span>Estado de Pago</span>
+  </div>
+
+  <div class="card">
+    <h3>Carrera</h3>
+    <div class="input-box">
+      {{ carreraEstudiante }}
+    </div>
+  </div>
+
+  <div class="card">
+    <app-stepper [currentStep]="pasoActual"></app-stepper>
+  </div>
+
+  <div class="card">
+
+    <h3>
+      @if (esRenovacion) {
+        Renovación de Matrícula
+      } @else {
+        Matrícula Nueva
+      }
+    </h3>
+
+    <p class="subtitle">
+      Consulta el estado de tu pago de matrícula
+    </p>
+
+    @if (validando) {
+    <div class="status-box info">
+      <div class="loader"></div>
+      <p class="status-title">Verificando pago...</p>
+    </div>
+    }
+
+    @if (verificado) {
+    <div class="inner-card">
+
+      <div class="grid">
+        <div>
+          <span class="label">Estado:</span>
+          <p [ngClass]="pagado ? 'success-msg' : 'error-msg'">
+            {{ pagado ? 'Pagado ✔' : 'No registrado ❌' }}
+          </p>
+        </div>
+
+        <div>
+          <span class="label">Periodo:</span>
+          <p>2026</p>
+        </div>
+      </div>
+
+      @if (pagado) {
+      <div>
+        <p><strong>Monto:</strong> ${{ montoPago | number }}</p>
+        <p><strong>Fecha:</strong> {{ fechaPago }}</p>
+        <p class="success-msg">
+          Su pago ha sido verificado correctamente.
+        </p>
+      </div>
+      }
+
+      @if (!pagado) {
+      <div>
+        <p class="error-msg">
+          No se registra un pago asociado a su matrícula.
+        </p>
+      </div>
+      }
+
+    </div>
+    }
+
+    <div class="actions">
+
+      <button 
+        class="primary-btn"
+        (click)="verificarPago()"
+        [disabled]="validando || pagado">
+
+        {{ pagado ? 'Pago verificado ✔' : 'Verificar pago →' }}
+
+      </button>
+
+      <button 
+        class="primary-btn"
+        (click)="continuar()"
+        [disabled]="!pagado"
+        style="margin-left:10px;">
+
+        Continuar →
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+@if (mostrarModal) {
+<div class="modal-overlay">
+  <div class="modal-box" [ngClass]="modalTipo === 'success' ? 'modal-success' : 'modal-error'">
+
+    <div class="modal-icon">
+      {{ modalTipo === 'success' ? '✔' : '✖' }}
+    </div>
+
+    <h3 class="modal-title">
+      {{ modalTipo === 'success' ? '¡Pago verificado!' : 'Pago no encontrado' }}
+    </h3>
+
+    <p class="modal-msg">
+      {{ modalTipo === 'success'
+        ? 'Tu pago fue registrado correctamente.'
+        : 'No se encontró registro del pago.' }}
+    </p>
+
+    <button class="modal-btn" (click)="cerrarModal()">
+      Aceptar
+    </button>
+
+  </div>
+</div>
+}
