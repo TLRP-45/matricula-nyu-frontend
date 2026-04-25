@@ -1,3 +1,206 @@
-<h1>Inscripcion de asignaturas</h1>
+<div class="container py-5">
+  <div class="card shadow p-4 mb-4">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <label class="form-label fw-bold"> Carrera </label>
 
-<p>Esta es la página de inscripción de asignaturas.</p>
+        <select class="form-select" (change)="onCarreraChange(carreras, $event)">
+          @for (c of carreras; track c.codigo) {
+            <option [value]="c.codigo">
+              {{ c.nombre }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-bold"> Periodo </label>
+
+        <select class="form-select" (change)="onPeriodoChange(periodos, $event)">
+          @for (p of periodos; track p.codigo) {
+            <option [value]="p.codigo">
+              {{ p.nombre }}
+            </option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-outline-primary mb-3" (click)="toggleElectivos()">Electivos</button>
+
+  @if (mostrarElectivos) {
+    <app-inscripcion-electivos
+      [electivos]="electivosFiltrados"
+      [puedeInscribirsePeriodo]="puedeInscribirsePeriodo.bind(this)"
+      [cumpleRequisitos]="cumpleRequisitos.bind(this)"
+      [getGrupoSeleccionado]="getGrupoSeleccionado.bind(this)"
+      [onSelectChange]="onSelectChange.bind(this)"
+    />
+  }
+
+  @for (asignatura of asignaturasFiltradas; track asignatura.codigo) {
+    <div class="card shadow-sm mb-4 asignatura-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">
+            {{ asignatura.codigo }}
+            -
+            {{ asignatura.nombre }}
+          </h4>
+
+          @if (puedeInscribirsePeriodo()) {
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="asignatura.inscrita"
+                [disabled]="!puedeInscribirsePeriodo()"
+              />
+            </div>
+          }
+        </div>
+
+        @if (asignatura.catedra; as catedras) {
+          <div class="grupo-box">
+            <h5>Cátedra</h5>
+
+            @if (puedeInscribirsePeriodo()) {
+              <select
+                class="form-select mb-2"
+                (change)="onSelectChange(catedras, $event)"
+                [disabled]="!puedeInscribirsePeriodo()"
+              >
+                @for (c of catedras; track c.letra) {
+                  <option [value]="c.letra" [selected]="c.seleccionado" [disabled]="c.cupos === 0">
+                    {{ c.letra }}
+                  </option>
+                }
+              </select>
+
+              @if (getGrupoSeleccionado(catedras); as grupo) {
+                <p>
+                  Profesor:
+                  <strong>
+                    {{ grupo.profesor }}
+                  </strong>
+                </p>
+
+                <span class="badge bg-secondary">
+                  Cupos:
+                  {{ grupo.cupos }}
+                </span>
+              }
+            }
+            @if (!puedeInscribirsePeriodo()) {
+              <p>
+                Profesor:
+                <strong>
+                  {{ getGrupoSeleccionado(catedras)?.profesor || 'N/A' }}
+                </strong>
+              </p>
+
+              <p>Grupo: {{ getGrupoSeleccionado(asignatura.catedra)?.letra }}</p>
+            }
+          </div>
+        }
+
+        @if (asignatura.taller; as talleres) {
+          <div class="grupo-box">
+            <h5>Taller</h5>
+
+            @if (puedeInscribirsePeriodo()) {
+              <select
+                class="form-select mb-2"
+                (change)="onSelectChange(talleres, $event)"
+                [disabled]="!puedeInscribirsePeriodo()"
+              >
+                @for (t of talleres; track t.letra) {
+                  <option [value]="t.letra" [selected]="t.seleccionado" [disabled]="t.cupos === 0">
+                    {{ t.letra }}
+                  </option>
+                }
+              </select>
+
+              @if (getGrupoSeleccionado(talleres); as grupo) {
+                <p>
+                  Profesor:
+                  <strong>
+                    {{ grupo.profesor }}
+                  </strong>
+                </p>
+
+                <span class="badge bg-secondary">
+                  Cupos:
+                  {{ grupo.cupos }}
+                </span>
+              }
+            }
+
+            @if (!puedeInscribirsePeriodo()) {
+              <p>
+                Profesor:
+                <strong>
+                  {{ getGrupoSeleccionado(talleres)?.profesor || 'N/A' }}
+                </strong>
+              </p>
+
+              <p>Grupo: {{ getGrupoSeleccionado(asignatura.taller)?.letra }}</p>
+            }
+          </div>
+        }
+
+        @if (asignatura.laboratorio; as laboratorios) {
+          <div class="grupo-box">
+            <h5>Laboratorio</h5>
+
+            @if (puedeInscribirsePeriodo()) {
+              <select
+                class="form-select mb-2"
+                (change)="onSelectChange(laboratorios, $event)"
+                [disabled]="!puedeInscribirsePeriodo()"
+              >
+                @for (l of laboratorios; track l.letra) {
+                  <option [value]="l.letra" [selected]="l.seleccionado" [disabled]="l.cupos === 0">
+                    {{ l.letra }}
+                  </option>
+                }
+              </select>
+              @if (getGrupoSeleccionado(laboratorios); as grupo) {
+                <p>
+                  Profesor:
+                  <strong>
+                    {{ grupo.profesor }}
+                  </strong>
+                </p>
+
+                <span class="badge bg-secondary">
+                  Cupos:
+                  {{ grupo.cupos }}
+                </span>
+              }
+            }
+            @if (!puedeInscribirsePeriodo()) {
+              <p>
+                Profesor:
+                <strong>
+                  {{ getGrupoSeleccionado(laboratorios)?.profesor || 'N/A' }}
+                </strong>
+              </p>
+
+              <p>Grupo: {{ getGrupoSeleccionado(asignatura.laboratorio)?.letra }}</p>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <button
+    class="btn btn-primary btn-lg w-100"
+    (click)="guardar()"
+    [disabled]="!puedeInscribirsePeriodo()"
+  >
+    Guardar
+  </button>
+</div>
