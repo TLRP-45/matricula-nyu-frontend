@@ -1,0 +1,38 @@
+<header class="header">
+
+  <div class="left">
+    <button class="menu-btn">
+      <lucide-icon [img]="icons.Menu"></lucide-icon>
+    </button>
+
+    <div class="icon-group">
+      <button class="icon-btn">
+        <lucide-icon [img]="icons.Home"></lucide-icon>
+      </button>
+
+      <button class="icon-btn">
+        <lucide-icon [img]="icons.HelpCircle"></lucide-icon>
+      </button>
+
+      <button class="icon-btn">
+        <lucide-icon [img]="icons.PlayCircle"></lucide-icon>
+      </button>
+
+      <button class="icon-btn">
+        <lucide-icon [img]="icons.FileText"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="user">
+      <div class="avatar">{{ nombreEstudiante.charAt(0).toUpperCase() }}</div>
+      <span class="name">{{ nombreEstudiante }}</span>
+    </div>
+
+    <button class="menu-btn">
+      <lucide-icon [img]="icons.Menu"></lucide-icon>
+    </button>
+  </div>
+
+</header>

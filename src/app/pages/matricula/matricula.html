@@ -1,0 +1,141 @@
+<div class="container">
+
+  <div class="breadcrumb">
+    Estudiante > <span>Matricula</span>
+  </div>
+
+  <div class="card">
+    <h3>Carrera</h3>
+    <div class="input-box">
+      {{ carreraEstudiante }}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stepper">
+      
+      <div class="step active">
+        <div class="circle">1</div>
+        <div class="label">
+          <strong>{{ isRenovacion ? 'Renovación' : 'Verificación' }}</strong>
+          <span>{{ isRenovacion ? 'Renovación de matrícula' : 'Validación de requisitos' }}</span>
+        </div>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="step">
+        <div class="circle">2</div>
+        <div class="label">
+          <strong>Inf. de Arancel</strong>
+          <span>Ver monto</span>
+        </div>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="step">
+        <div class="circle">3</div>
+        <div class="label">
+          <strong>Estado de pago</strong>
+          <span>Ver estado</span>
+        </div>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="step">
+        <div class="circle">4</div>
+        <div class="label">
+          <strong>Confirmación</strong>
+          <span>Confirmar datos</span>
+        </div>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="step">
+        <div class="circle">5</div>
+        <div class="label">
+          <strong>Finalizado</strong>
+          <span>Matrícula completa</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>{{ isRenovacion ? 'Renovación de Matrícula' : 'Verificación de Requisitos' }}</h3>
+    <p class="subtitle">
+      {{ isRenovacion ? 'Estamos renovando tu matrícula para el próximo período.' : 'Validaremos que cumples con todos los requisitos para matricularte' }}
+    </p>
+
+    @if (validando) {
+    <div class="status-box info">
+      <div class="loader"></div>
+      <p class="status-title">Validando requisitos...</p>
+    </div>
+    }
+
+    @if (!validando) {
+    <div class="inner-card">
+      <h4>Datos del Estudiante</h4>
+
+      <div class="grid">
+        <div>
+          <span class="label">Nombre:</span>
+          <p>{{ nombreEstudiante }}</p>
+        </div>
+
+        <div>
+          <span class="label">Email:</span>
+          <p>{{ emailEstudiante }}</p>
+        </div>
+      </div>
+
+      <div>
+        <span class="label">Carrera:</span>
+        <p>{{ carreraEstudiante }}</p>
+      </div>
+    </div>
+    }
+
+    <div class="actions">
+      <button 
+        class="primary-btn"
+        (click)="iniciarVerificacion()"
+        [disabled]="validando || bloqueado">
+        {{ bloqueado ? 'No disponible' : (isRenovacion ? 'Iniciar Renovación →' : 'Iniciar Verificación →') }}
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+@if (modalVisible) {
+<div class="modal-overlay">
+  <div class="modal-box" [ngClass]="modalExito ? 'modal-success' : 'modal-error'">
+
+    <div class="modal-icon">
+      {{ modalExito ? '✔' : '✖' }}
+    </div>
+
+    <h3 class="modal-title">
+      {{ modalExito ? (isRenovacion ? '¡Renovación exitosa!' : '¡Verificación exitosa!') : (isRenovacion ? 'Renovación fallida' : 'Verificación fallida') }}
+    </h3>
+
+    <p class="modal-msg">
+      {{ modalExito 
+        ? (isRenovacion ? 'Tu matrícula ha sido renovada correctamente.' : 'Todos los requisitos han sido validados correctamente.') 
+        : (isRenovacion ? 'No se pudo renovar tu matrícula.' : 'No se pudo validar tu matrícula.') }}
+    </p>
+
+    <button class="modal-btn" (click)="aceptarModal()">
+      Aceptar
+    </button>
+
+  </div>
+</div>
+}

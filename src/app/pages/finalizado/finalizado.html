@@ -1,0 +1,56 @@
+<div class="container">
+
+  <div class="breadcrumb">
+    Estudiante > <span>Finalizado</span>
+  </div>
+
+  <div class="card">
+    <h3>Carrera</h3>
+    <div class="input-box">
+      {{ carreraNombre }}
+    </div>
+  </div>
+
+  <div class="card">
+    <app-stepper [currentStep]="5"></app-stepper>
+  </div>
+
+  <div class="card" style="text-align:center;">
+
+    <h2 class="success-title">¡Matrícula Exitosa! ✔</h2>
+    <p class="subtitle">
+      Tu matrícula ha sido registrada correctamente
+    </p>
+
+    <div class="inner-card" style="text-align:left; margin-top:20px;">
+      <h4>Detalles de la Matrícula</h4>
+      <p><strong>ID Matrícula:</strong> {{ idMatricula }}</p>
+      <p><strong>Fecha:</strong> {{ fecha }}</p>
+      <p><strong>Estado:</strong> MATRÍCULA ACTIVA</p>
+    </div>
+
+    <div class="inner-card" style="text-align:left; margin-top:20px;">
+      <h4>Próximos pasos</h4>
+      <ul class="steps-list">
+        <li>Revisa tu correo para información de bienvenida</li>
+        <li>Accede a la inscripción de asignaturas a partir del 30-04-2026</li>
+        <li>Descarga tu comprobante de matrícula</li>
+      </ul>
+    </div>
+
+    <div class="actions" style="margin-top:20px;">
+      <button class="primary-btn" (click)="descargar()">
+        Descargar Comprobante
+      </button>
+
+      <button 
+        class="primary-btn"
+        (click)="irInicio()"
+        style="margin-left:10px;">
+        Ir al Inicio
+      </button>
+    </div>
+
+  </div>
+
+</div>

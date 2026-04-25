@@ -1,0 +1,9 @@
+.step.completed .circle {
+  background: var(--primary);
+  color: white;
+  border: none;
+}
+
+.line.active {
+  background: var(--primary);
+}
