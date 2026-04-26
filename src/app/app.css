@@ -1,0 +1,114 @@
+.container {
+  padding: 20px 40px;
+  background: #f5f6f8;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.breadcrumb {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+.breadcrumb span {
+  color: #57068c;
+  font-weight: 500;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.input-box {
+  background: #f1f2f4;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step {
+  text-align: center;
+  width: 120px;
+}
+
+.circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 8px;
+}
+
+.step.active .circle {
+  background: var(--primary);
+  color: white;
+}
+
+.label span {
+  font-size: 12px;
+  color: #777;
+}
+
+.line {
+  flex: 1;
+  height: 2px;
+  background: #d1d5db;
+  margin: 0 10px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.inner-card {
+  background: #f7f8fa;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.grid {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.label {
+  font-size: 13px;
+  color: #777;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.primary-btn {
+  background: #c89b5b;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.primary-btn:hover {
+  background: #b88a4d;
+  transform: translateY(-2px);
+}

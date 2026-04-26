@@ -1,0 +1,74 @@
+<div class="container">
+
+  <div class="card">
+    <label>Carrera</label>
+    <div class="carrera-display">{{ carreraEstudiante }}</div>
+  </div>
+
+  <div class="card">
+    <h3>Datos del Estudiante</h3>
+
+    <div class="datos-estudiante">
+      <div class="info-grid">
+        <div class="item"><strong>Nombre:</strong> {{ nombreEstudiante }}</div>
+        <div class="item"><strong>Email:</strong> {{ emailEstudiante }}</div>
+      </div>
+      <div class="item"><strong>Carrera:</strong> {{ carreraEstudiante }}</div>
+    </div>
+  </div>
+
+  @if (estadoMatricula !== 'renovado') {
+  <div class="card">
+
+    <div class="btn-container">
+      <button class="btn-renovar" (click)="irAMatricula()">
+
+        @if (estadoMatricula === 'sin') {
+          Iniciar Inscripción >
+        }
+
+        @if (estadoMatricula === 'inscrito') {
+          Renovar Matrícula >
+        }
+
+      </button>
+    </div>
+
+  </div>
+  }
+
+  <div class="card">
+    <h3>Historial de Matrículas</h3>
+
+    @if (matriculas.length === 0) {
+      <p>No hay matrículas registradas</p>
+    }
+
+    @if (matriculas.length > 0) {
+    <table class="uta-table">
+      <thead>
+        <tr>
+          <th>NRO</th>
+          <th>AÑO</th>
+          <th>SEM</th>
+          <th>FECHA</th>
+          <th>ESTADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (m of matriculas; track m.nro) {
+        <tr>
+          <td>{{ m.nro }}</td>
+          <td>{{ m.anio }}</td>
+          <td>{{ m.semestre }}</td>
+          <td>{{ m.fecha }}</td>
+          <td><span class="badge-activa">{{ m.estado }}</span></td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+
+  </div>
+
+</div>

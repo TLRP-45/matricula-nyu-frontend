@@ -1,0 +1,74 @@
+body {
+  background: #f8f9fa;
+}
+
+.asignatura-card {
+  border: none;
+  border-radius: 16px;
+}
+
+.grupo-box {
+  background: white;
+  border: 1px solid #57068c;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+h1 {
+  letter-spacing: 0.5px;
+}
+
+.card {
+  border: none;
+  border-radius: 18px;
+  color: #57068c;
+}
+
+.form-check-input {
+  width: 25px;
+  height: 25px;
+  border-radius: 6px;
+  border: 2px solid #57068c;
+}
+
+.form-check-input:checked {
+  border: 2px solid #57068c;
+  background-color: #57068c;
+}
+
+.bg-secondary {
+  background-color: #9360b2;
+}
+
+.form-select {
+  border-radius: 10px;
+  background-color: #e4d6ec;
+}
+
+.btn-primary {
+  margin-top: 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 14px;
+  background-color: #57068c;
+  border-color: #57068c;
+}
+
+.col-md-6 {
+  margin-bottom: 20px;
+}
+
+.btn-outline-primary {
+  margin-top: 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 14px;
+  background-color: #57068c;
+  border-color: #57068c;
+  color: white;
+}
+
+.btn-outline-primary:select {
+  background-color: #9360b2;
+}

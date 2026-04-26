@@ -1,0 +1,148 @@
+@for (electivo of electivos; track electivo.codigo) {
+  <div class="card shadow-sm mb-4 asignatura-card">
+    <div class="card-body">
+      <!-- 🔷 header -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">{{ electivo.codigo }} - {{ electivo.nombre }}</h4>
+
+        @if (puedeInscribirsePeriodo()) {
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [(ngModel)]="electivo.inscrita"
+              [disabled]="!puedeInscribirsePeriodo() || !cumpleRequisitos(electivo)"
+            />
+          </div>
+        }
+      </div>
+
+      @if (electivo.requisitos.length > 0) {
+        <div class="mb-3">
+          <p class="text-muted mb-1">Requisitos:</p>
+
+          @for (r of electivo.requisitos; track r.codigo) {
+            <span class="badge bg-warning text-dark me-1"> {{ r.codigo }} - {{ r.nombre }} </span>
+          }
+        </div>
+      }
+
+      @if (electivo.catedra; as catedras) {
+        <div class="grupo-box">
+          <h5>Cátedra</h5>
+
+          @if (puedeInscribirsePeriodo()) {
+            <select class="form-select mb-2" (change)="onSelectChange(catedras, $event)">
+              @for (c of catedras; track c.letra) {
+                <option [value]="c.letra" [selected]="c.seleccionado" [disabled]="c.cupos === 0">
+                  {{ c.letra }}
+                </option>
+              }
+            </select>
+
+            @if (getGrupoSeleccionado(catedras); as grupo) {
+              <p>
+                Profesor:
+                <strong>{{ grupo.profesor }}</strong>
+              </p>
+
+              <span class="badge bg-secondary"> Cupos: {{ grupo.cupos }} </span>
+            }
+          }
+
+          @if (!puedeInscribirsePeriodo()) {
+            <p>
+              Profesor:
+              <strong>
+                {{ getGrupoSeleccionado(catedras)?.profesor || 'N/A' }}
+              </strong>
+            </p>
+
+            <p>
+              Grupo:
+              {{ getGrupoSeleccionado(catedras)?.letra }}
+            </p>
+          }
+        </div>
+      }
+
+      @if (electivo.taller; as talleres) {
+        <div class="grupo-box">
+          <h5>Taller</h5>
+
+          @if (puedeInscribirsePeriodo()) {
+            <select class="form-select mb-2" (change)="onSelectChange(talleres, $event)">
+              @for (t of talleres; track t.letra) {
+                <option [value]="t.letra" [selected]="t.seleccionado" [disabled]="t.cupos === 0">
+                  {{ t.letra }}
+                </option>
+              }
+            </select>
+
+            @if (getGrupoSeleccionado(talleres); as grupo) {
+              <p>
+                Profesor:
+                <strong>{{ grupo.profesor }}</strong>
+              </p>
+
+              <span class="badge bg-secondary"> Cupos: {{ grupo.cupos }} </span>
+            }
+          }
+
+          @if (!puedeInscribirsePeriodo()) {
+            <p>
+              Profesor:
+              <strong>
+                {{ getGrupoSeleccionado(talleres)?.profesor || 'N/A' }}
+              </strong>
+            </p>
+
+            <p>
+              Grupo:
+              {{ getGrupoSeleccionado(talleres)?.letra }}
+            </p>
+          }
+        </div>
+      }
+
+      @if (electivo.laboratorio; as laboratorios) {
+        <div class="grupo-box">
+          <h5>Laboratorio</h5>
+
+          @if (puedeInscribirsePeriodo()) {
+            <select class="form-select mb-2" (change)="onSelectChange(laboratorios, $event)">
+              @for (l of laboratorios; track l.letra) {
+                <option [value]="l.letra" [selected]="l.seleccionado" [disabled]="l.cupos === 0">
+                  {{ l.letra }}
+                </option>
+              }
+            </select>
+
+            @if (getGrupoSeleccionado(laboratorios); as grupo) {
+              <p>
+                Profesor:
+                <strong>{{ grupo.profesor }}</strong>
+              </p>
+
+              <span class="badge bg-secondary"> Cupos: {{ grupo.cupos }} </span>
+            }
+          }
+
+          @if (!puedeInscribirsePeriodo()) {
+            <p>
+              Profesor:
+              <strong>
+                {{ getGrupoSeleccionado(laboratorios)?.profesor || 'N/A' }}
+              </strong>
+            </p>
+
+            <p>
+              Grupo:
+              {{ getGrupoSeleccionado(laboratorios)?.letra }}
+            </p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

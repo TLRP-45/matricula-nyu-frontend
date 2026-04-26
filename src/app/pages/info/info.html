@@ -1,0 +1,50 @@
+<div class="container">
+
+  <div class="breadcrumb">
+    Estudiante > <span>Información de Aranceles</span>
+  </div>
+
+  <div class="card">
+    <h3>Carrera</h3>
+    <div class="input-box">
+      {{ carreraEstudiante }}
+    </div>
+  </div>
+
+  <div class="card">
+    <app-stepper [currentStep]="pasoActual"></app-stepper>
+  </div>
+
+  <div class="card">
+    <h3>Información de Aranceles</h3>
+
+    <div class="inner-card">
+      <div class="grid">
+        <span>Matrícula</span>
+        <span>$85.000</span>
+      </div>
+
+      <div class="grid">
+        <span>Arancel Semestral</span>
+        <span>$3.500.000</span>
+      </div>
+
+      <div class="grid">
+        <strong>Total</strong>
+        <strong class="total">$3.585.000</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary-btn secondary" (click)="volver()">
+        ← Volver
+      </button>
+
+      <button class="primary-btn" (click)="continuar()">
+        Continuar →
+      </button>
+    </div>
+
+  </div>
+
+</div>
