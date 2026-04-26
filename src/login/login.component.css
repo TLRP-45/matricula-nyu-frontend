@@ -1,0 +1,35 @@
+.bg-blueviolet{
+    background: linear-gradient(0deg, #57068c, blueviolet, #57068c);
+}
+
+.btn-login{
+    background-color:blueviolet;
+    min-height: 10vh;
+    min-width: 50vh;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.btn-login:hover{
+    background-color:darkblue;
+    min-height: 10vh;
+    min-width: 50vh;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.welcome{
+    display: grid;
+    align-items: center;
+    place-items: center;
+    text-align: justify;
+}
+
+.login{
+    display: grid;
+    place-items: center;
+    min-height: 40vh;
+    min-width: 50vh;
+    background-color:white;
+    border-radius: 15px;
+}
