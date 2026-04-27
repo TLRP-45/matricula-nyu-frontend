@@ -16,8 +16,8 @@ Utiliza:
 El sistema espera implementar los flujos típicos de un estudiante con respecto a su matrícula y la inscripción de asignaturas. La siguiente lista se irá actualizando a medida que se avance en el proyecto:
 
 - [x] Inicio de sesión
-- [/] Inscripción de asignaturas
-- [/] Inscripción de matrícula
+- [x] Inscripción de asignaturas
+- [x] Inscripción de matrícula
 - [ ] Desinscripción de asignaturas
 - [ ] Registro de usuarios
 - [ ] Administración de carreras y planes de estudio
