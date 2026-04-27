@@ -1,4 +1,19 @@
-<div>
-  <p>home works!</p>
-  <button (click)="logout()">Cerrar Sesión (Logout)</button>
+<div class="dashboard-simple">
+  <div class="welcome-header">
+    <h1>Bienvenido, {{ user?.nombre }}</h1>
+    <p>Selecciona una opción para continuar</p>
+  </div>
+
+  <div class="menu-grid">
+    @for (item of menuItems; track item.title) {
+      <div class="menu-card" (click)="navigateTo(item.route)">
+        <span class="menu-icon">{{ item.icon }}</span>
+        <h3>{{ item.title }}</h3>
+      </div>
+    }
+  </div>
+
+  <div class="logout-section">
+    <button (click)="logout()" class="btn-logout-simple">Cerrar Sesión</button>
+  </div>
 </div>

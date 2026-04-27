@@ -36,6 +36,10 @@ export class LoginService {
     return true
   }
   
+  public getUser(): any {
+    return this.authService.getUser();
+  }
+  
   public isLoggedIn(): Observable<boolean> {
     let token = this.authService.getToken()
     if (token){

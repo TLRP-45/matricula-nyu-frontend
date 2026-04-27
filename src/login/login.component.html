@@ -1,24 +1,26 @@
-<body class="bg-blueviolet">
+<div class="login-page">
+  <div class="login-wrapper">
+    <form class="login-container shadow-lg" [formGroup]="loginForm" (ngSubmit)="logIn()">
+      <div class="login-header text-center">
+        <h1 class="login-title">Bienvenido</h1>
+        <p class="login-subtitle">Portal de la Universidad de Nueva York</p>
+      </div>
 
-  <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <form class="login" [formGroup]="loginForm" (ngSubmit)="logIn()">
-      <div class="container mt-4">
-        <div class="welcome">
-          <label class="h2">Bienvenido al portal de la</label>
-          <label class="h2">Universidad de Nueva York</label>
+      <div class="form-body">
+        <div class="form-group mb-4">
+          <label class="form-label font-weight-bold">RUT</label>
+          <input formControlName="rut" type="text" appRutFormat class="form-control" placeholder="12.345.678-9">
         </div>
-        <div class="form-group">
-          <label class="font-weight-bold">RUT:</label>
-          <input formControlName="rut" type="text" appRutFormat class="form-control">
+
+        <div class="form-group mb-4">
+          <label class="form-label font-weight-bold">Contraseña</label>
+          <input formControlName="password" type="password" class="form-control" placeholder="••••••••">
         </div>
-        <div class="form-group">
-          <label class="font-weight-bold">Contraseña:</label>
-          <input formControlName="password" type="password" class="form-control">
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-          <button class="btn-login btn-block text-sm btn text-white btn-block mt-2" type="submit">Acceder</button>
-        </div>
+
+        <button class="btn-login btn btn-block w-100" type="submit">
+          Acceder
+        </button>
       </div>
     </form>
   </div>
-</body>
+</div>

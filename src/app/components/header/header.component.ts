@@ -7,7 +7,7 @@ import {
   PlayCircle,
   FileText
 } from 'lucide-angular';
-import { StudentService } from '../../services/student.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-header',
@@ -25,9 +25,10 @@ export class HeaderComponent {
     FileText
   };
 
-  nombreEstudiante: string;
+  nombreEstudiante: string = '';
 
-  constructor(private studentService: StudentService) {
-    this.nombreEstudiante = this.studentService.getStudentName();
+  constructor(private loginService: LoginService) {
+    const user = this.loginService.getUser();
+    this.nombreEstudiante = user ? user.nombre : 'Estudiante';
   }
 }

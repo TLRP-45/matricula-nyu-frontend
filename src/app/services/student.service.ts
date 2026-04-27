@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoginService } from '../../services/login.service';
 
 export interface StudentData {
   nombre: string;
@@ -12,10 +13,15 @@ export interface StudentData {
 export class StudentService {
 
   private studentData: StudentData = {
-    nombre: 'Juan Alex Fuentes Valdivia',
-    email: 'JFuentes@gmail.com',
-    carrera: '534-INGENIERÍA CIVIL EN COMPUTACIÓN E INFORMÁTICA (Año Ingreso 2023)'
+//    nombre: 'Juan Alex Fuentes Valdivia',
+//    email: 'JFuentes@gmail.com',
+//    carrera: '534-INGENIERÍA CIVIL EN COMPUTACIÓN E INFORMÁTICA (Año Ingreso 2023)'
+    nombre: 'Estudiante',
+    email: '',
+    carrera: ''
   };
+
+  constructor(private loginService: LoginService) { }
 
   private esRenovacion = false;
   private historialTemporal: any[] = [];
@@ -29,19 +35,30 @@ export class StudentService {
   }
 
   getStudentData(): StudentData {
+    const user = this.loginService.getUser();
+    if (user) {
+      return {
+        nombre: user.nombre,
+        email: user.email || this.studentData.email,
+        carrera: user.carrera || this.studentData.carrera
+      };
+    }
     return this.studentData;
   }
 
   getStudentName(): string {
-    return this.studentData.nombre;
+    const user = this.loginService.getUser();
+    return user ? user.nombre : this.studentData.nombre;
   }
 
   getStudentEmail(): string {
-    return this.studentData.email;
+    const user = this.loginService.getUser();
+    return user ? user.email : this.studentData.email;
   }
 
   getStudentCareer(): string {
-    return this.studentData.carrera;
+    const user = this.loginService.getUser();
+    return user ? user.carrera : this.studentData.carrera;
   }
 
   setHistorialTemporal(historial: any[]) {
