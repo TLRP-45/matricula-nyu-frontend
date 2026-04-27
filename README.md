@@ -1,59 +1,56 @@
-# MatriculaNyuFrontend
+# matricula-nyu-frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
+[Backend](https://github.com/TLRP-45/matricula-nyu-backend)
 
-## Development server
+Este repositorio contiene la parte frontend del sistema de matrícula y gestión académica para el ramo de Taller de Aplicaciones Web de la Universidad de Tarapacá.
 
-To start a local development server, run:
+Utiliza:
 
-```bash
-ng serve
-```
+- [Angular](https://angular.io/) v21.2.0
+- [Bootstrap](https://getbootstrap.com/) v5.3.8
+- [Lucide Angular](https://lucide.dev/guide/packages/lucide-angular)
+- [Vitest](https://vitest.dev/)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Funcionalidades y Roadmap
 
-## Code scaffolding
+El sistema espera implementar los flujos típicos de un estudiante con respecto a su matrícula y la inscripción de asignaturas. La siguiente lista se irá actualizando a medida que se avance en el proyecto:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- [x] Inicio de sesión
+- [/] Inscripción de asignaturas
+- [/] Inscripción de matrícula
+- [ ] Desinscripción de asignaturas
+- [ ] Registro de usuarios
+- [ ] Administración de carreras y planes de estudio
+- [ ] Administración de oferta académica
+- [ ] Acceso a malla curricular
+- [ ] Acceso a horario semanal
+- [ ] Prevención de choques horarios
+- [ ] Autenticación de solicitudes
+- [ ] Caching y optimizaciones de rendimiento
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Setup del proyecto
 
 ```bash
-ng test
+$ npm install
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+## Compilar y correr
 
 ```bash
-ng e2e
+# levantar servidor de desarrollo
+$ npm start
+
+# compilar para producción
+$ npm run build
+
+# modo watch
+$ npm run watch
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Tests
 
-## Additional Resources
+Para ejecutar las pruebas unitarias con el test runner [Vitest](https://vitest.dev/):
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+$ npm test
+```
