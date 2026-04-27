@@ -1,23 +1,20 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router'; 
+import { RouterOutlet, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, CommonModule], 
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class AppComponent {
-  showHeader = false;
+  constructor(private router: Router) {}
 
-  constructor(private router: Router) {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      this.showHeader = !event.url.includes('/login');
-    });
+  showHeader(): boolean {
+    return this.router.url !== '/login';
   }
-}
+}
