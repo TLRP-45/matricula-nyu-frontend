@@ -1,0 +1,56 @@
+<div class="admin-sidebar">
+  <div class="sidebar-header">
+    <h2>Panel Admin</h2>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li (click)="navigateTo('/admin/dashboard')" class="nav-item">
+        <lucide-icon [img]="icons.Home" class="nav-icon"></lucide-icon>
+        <span>Dashboard</span>
+      </li>
+
+      <li (click)="navigateTo('/admin/estudiantes')" class="nav-item">
+        <lucide-icon [img]="icons.GraduationCap" class="nav-icon"></lucide-icon>
+        <span>Estudiantes</span>
+      </li>
+
+      <li (click)="navigateTo('/admin/carreras')" class="nav-item">
+        <lucide-icon [img]="icons.FileText" class="nav-icon"></lucide-icon>
+        <span>Carreras</span>
+      </li>
+
+      <li (click)="navigateTo('/admin/asignaturas')" class="nav-item">
+        <lucide-icon [img]="icons.BookOpen" class="nav-icon"></lucide-icon>
+        <span>Asignaturas</span>
+      </li>
+
+      <li (click)="navigateTo('/admin/periodos')" class="nav-item">
+        <lucide-icon [img]="icons.Calendar" class="nav-icon"></lucide-icon>
+        <span>Períodos</span>
+      </li>
+
+      <li (click)="navigateTo('/admin/usuarios')" class="nav-item">
+        <lucide-icon [img]="icons.Users" class="nav-icon"></lucide-icon>
+        <span>Usuarios</span>
+      </li>
+
+      <li (click)="navigateTo('/admin/reportes')" class="nav-item">
+        <lucide-icon [img]="icons.BarChart3" class="nav-icon"></lucide-icon>
+        <span>Reportes</span>
+      </li>
+
+      <li (click)="navigateTo('/admin/configuracion')" class="nav-item">
+        <lucide-icon [img]="icons.Settings" class="nav-icon"></lucide-icon>
+        <span>Configuración</span>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button (click)="logout()" class="logout-btn">
+      <lucide-icon [img]="icons.LogOut" class="nav-icon"></lucide-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </div>
+</div>

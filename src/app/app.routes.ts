@@ -9,6 +9,7 @@ import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
 import { LoginComponent } from './login/login.component';
 import { authGuard, notLogged } from './guards/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,11 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'admin',
+    component: AdminPanelComponent,
     canActivate: [authGuard]
   },
   {
