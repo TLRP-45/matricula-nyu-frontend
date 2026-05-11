@@ -7,7 +7,7 @@ import {
   PlayCircle,
   FileText
 } from 'lucide-angular';
-import { LoginService } from '../../../services/login.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-header',

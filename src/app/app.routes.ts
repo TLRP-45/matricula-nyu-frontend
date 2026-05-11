@@ -6,9 +6,9 @@ import { EstadoComponent } from './pages/estado/estado';
 import { ConfirmacionComponent } from './pages/confirmacion/confirmacion';
 import { FinalizadoComponent } from './pages/finalizado/finalizado';
 import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
-import { LoginComponent } from '../login/login.component';
-import { authGuard, notLogged } from '../guards/auth.guard';
-import { HomeComponent } from '../home/home.component';
+import { LoginComponent } from './login/login.component';
+import { authGuard, notLogged } from './guards/auth.guard';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
   {
