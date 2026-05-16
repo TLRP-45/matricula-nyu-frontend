@@ -9,7 +9,8 @@ import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
 import { LoginComponent } from './login/login.component';
 import { authGuard, notLogged } from './guards/auth.guard';
 import { HomeComponent } from './home/home.component';
-import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
   {
@@ -23,49 +24,55 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [authGuard]
-  },
-  {
     path: 'admin',
-    component: AdminPanelComponent,
-    canActivate: [authGuard]
+    component: AdminLayoutComponent,
+    children: []
   },
   {
-    path: 'inscripcion',
-    component: InscripcionAsignaturas,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'matricula',
-    component: MatriculaComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'info',
-    component: InfoComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'estado',
-    component: EstadoComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'confirmacion',
-    component: ConfirmacionComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'finalizado',
-    component: FinalizadoComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'ma-principal',
-    component: MaPrincipalComponent,
-    canActivate: [authGuard]
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: 'home',
+        component: HomeComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'inscripcion',
+        component: InscripcionAsignaturas,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'matricula',
+        component: MatriculaComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'info',
+        component: InfoComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'estado',
+        component: EstadoComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'confirmacion',
+        component: ConfirmacionComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'finalizado',
+        component: FinalizadoComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'ma-principal',
+        component: MaPrincipalComponent,
+        canActivate: [authGuard]
+      }
+    ]
   },
   {
     path: '**',

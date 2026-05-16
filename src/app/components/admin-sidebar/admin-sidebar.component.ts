@@ -1,37 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
-  Home,
+  LayoutDashboard,
   Users,
+  UserPlus,
+  UserCircle2,
   FileText,
   Settings,
-  BarChart3,
   GraduationCap,
-  Calendar,
+  BookOpen,
   LogOut,
-  BookOpen
 } from 'lucide-angular';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { LoginService } from '../../services/login.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-sidebar',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './admin-sidebar.component.html',
   styleUrls: ['./admin-sidebar.component.css']
 })
-export class AdminSidebarComponent {
+export class AdminSidebarComponent implements OnInit {
+
+  activeRoute = '';
+
   icons = {
-    Home,
+    LayoutDashboard,
     Users,
+    UserPlus,
+    UserCircle2,
     FileText,
     Settings,
-    BarChart3,
     GraduationCap,
-    Calendar,
+    BookOpen,
     LogOut,
-    BookOpen
   };
 
   constructor(
@@ -39,11 +44,26 @@ export class AdminSidebarComponent {
     private loginService: LoginService
   ) {}
 
-  navigateTo(route: string) {
-    this.router.navigate([route]);
+  ngOnInit(): void {
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: any) => {
+        const segments = e.urlAfterRedirects.split('/');
+        this.activeRoute = segments[segments.length - 1] || 'dashboard';
+      });
+
+    const segments = this.router.url.split('/');
+    this.activeRoute = segments[segments.length - 1] || 'dashboard';
   }
 
-  logout() {
+  navigateTo(route: string): void {
+    this.activeRoute = route;
+    this.router.navigate([route], {
+      relativeTo: this.router.routerState.root.firstChild
+    });
+  }
+
+  logout(): void {
     this.loginService.logOut();
     this.router.navigate(['/login']);
   }
