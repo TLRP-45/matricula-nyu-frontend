@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { Client } from '../app/models/client';
+import { Client } from '../models/client';
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +17,10 @@ export class ClientService {
   
   public editClientData(clientId: number, client: Partial<Client>): Observable<any> {
     return this.http.put<Client>(`${this.apiUrl}/${clientId}`, client)
+  }
+
+  public register(userData: any): Observable<any> {
+    const registerUrl = 'http://localhost:3000/autenticacion/register';
+    return this.http.post<any>(registerUrl, userData);
   }
 }

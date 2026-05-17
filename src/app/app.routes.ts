@@ -6,9 +6,12 @@ import { EstadoComponent } from './pages/estado/estado';
 import { ConfirmacionComponent } from './pages/confirmacion/confirmacion';
 import { FinalizadoComponent } from './pages/finalizado/finalizado';
 import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
-import { LoginComponent } from '../login/login.component';
-import { authGuard, notLogged } from '../guards/auth.guard';
-import { HomeComponent } from '../home/home.component';
+import { LoginComponent } from './pages/login/login.component';
+import { authGuard, notLogged } from './guards/auth.guard';
+import { HomeComponent } from './pages/home/home.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { Role } from './models/roles';
 
 export const routes: Routes = [
   {
@@ -24,42 +27,62 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [authGuard],
+    data: { role: Role.ADMIN }
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [authGuard],
+    data: { role: Role.ADMIN }
   },
   {
     path: 'inscripcion',
     component: InscripcionAsignaturas,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
   },
   {
     path: 'matricula',
     component: MatriculaComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
   },
   {
     path: 'info',
     component: InfoComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
   },
   {
     path: 'estado',
     component: EstadoComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
   },
   {
     path: 'confirmacion',
     component: ConfirmacionComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
   },
   {
     path: 'finalizado',
     component: FinalizadoComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
   },
   {
     path: 'ma-principal',
     component: MaPrincipalComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { role: Role.STUDENT }
   },
   {
     path: '**',
