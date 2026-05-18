@@ -1,0 +1,204 @@
+<div class="register-page container-fluid min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <div class="card register-container shadow-lg border-0 overflow-hidden rounded-4 w-100" style="max-width: 900px;">
+    <div class="card-body p-4 p-md-5">
+      <!-- Encabezado -->
+      <div class="text-center mb-5">
+        <div class="header-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow" style="width: 64px; height: 64px;">
+          <i class="bi bi-person-plus-fill fs-2"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="color: var(--primary);">Registrar Nuevo Usuario</h2>
+        <p class="text-muted mb-0">Complete los datos para dar de alta un nuevo usuario en el sistema.</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation">
+        <div class="row g-4">
+          <!-- Información Personal -->
+          <div class="col-md-6">
+            <h5 class="fw-bold mb-4 pb-2 border-bottom text-primary d-flex align-items-center" style="color: var(--primary) !important;">
+              <i class="bi bi-person-lines-fill me-2 fs-4"></i>Información Personal
+            </h5>
+
+            <!-- Nombre -->
+            <div class="mb-3">
+              <label for="nombre" class="form-label fw-bold small text-uppercase text-muted mb-1">Nombre</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-person-fill"></i></span>
+                <input id="nombre" type="text" formControlName="nombre" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('nombre')?.touched && registerForm.get('nombre')?.invalid" placeholder="Ej: Juan">
+              </div>
+              @if (registerForm.get('nombre')?.touched && registerForm.get('nombre')?.errors?.['required']) {
+                <div class="invalid-feedback d-block small">Nombre es requerido</div>
+              }
+              @if (registerForm.get('nombre')?.touched && registerForm.get('nombre')?.errors?.['minlength']) {
+                <div class="invalid-feedback d-block small">El nombre debe tener al menos 2 caracteres</div>
+              }
+            </div>
+
+            <!-- Apellido -->
+            <div class="mb-3">
+              <label for="apellido" class="form-label fw-bold small text-uppercase text-muted mb-1">Apellido</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-person-fill"></i></span>
+                <input id="apellido" type="text" formControlName="apellido" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('apellido')?.touched && registerForm.get('apellido')?.invalid" placeholder="Ej: Pérez">
+              </div>
+              @if (registerForm.get('apellido')?.touched && registerForm.get('apellido')?.errors?.['required']) {
+                <div class="invalid-feedback d-block small">Apellido es requerido</div>
+              }
+              @if (registerForm.get('apellido')?.touched && registerForm.get('apellido')?.errors?.['minlength']) {
+                <div class="invalid-feedback d-block small">El apellido debe tener al menos 2 caracteres</div>
+              }
+            </div>
+
+            <!-- RUT y Sexo en una fila -->
+            <div class="row g-3 mb-3">
+              <div class="col-sm-6">
+                <label for="rut" class="form-label fw-bold small text-uppercase text-muted mb-1">RUT</label>
+                <div class="input-group shadow-sm">
+                  <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-card-heading"></i></span>
+                  <input id="rut" type="text" formControlName="rut" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('rut')?.touched && registerForm.get('rut')?.invalid" placeholder="12.345.678-9" appRutFormat>
+                </div>
+                @if (registerForm.get('rut')?.touched && registerForm.get('rut')?.errors?.['required']) {
+                  <div class="invalid-feedback d-block small">RUT es requerido</div>
+                }
+                @else if (registerForm.get('rut')?.touched && !registerForm.get('rut')?.valid) {
+                  <div class="invalid-feedback d-block small">RUT inválido</div>
+                }
+              </div>
+
+              <div class="col-sm-6">
+                <label for="sexo" class="form-label fw-bold small text-uppercase text-muted mb-1">Sexo</label>
+                <div class="input-group shadow-sm">
+                  <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-gender-ambiguous"></i></span>
+                  <select id="sexo" formControlName="sexo" class="form-select border-start-0 ps-0" [class.is-invalid]="registerForm.get('sexo')?.touched && registerForm.get('sexo')?.invalid">
+                    <option value="">Seleccione</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                    <option value="O">Otro</option>
+                  </select>
+                </div>
+                @if (registerForm.get('sexo')?.touched && registerForm.get('sexo')?.errors?.['required']) {
+                  <div class="invalid-feedback d-block small">Sexo es requerido</div>
+                }
+              </div>
+            </div>
+
+            <!-- Fecha de Nacimiento -->
+            <div class="mb-3">
+              <label for="nacimiento" class="form-label fw-bold small text-uppercase text-muted mb-1">Fecha de Nacimiento</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-calendar-date"></i></span>
+                <input id="nacimiento" type="date" formControlName="nacimiento" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('nacimiento')?.touched && registerForm.get('nacimiento')?.invalid">
+              </div>
+              @if (registerForm.get('nacimiento')?.touched && registerForm.get('nacimiento')?.errors?.['required']) {
+                <div class="invalid-feedback d-block small">Fecha de nacimiento es requerida</div>
+              }
+            </div>
+          </div>
+
+          <!-- Contacto y Seguridad -->
+          <div class="col-md-6">
+            <h5 class="fw-bold mb-4 pb-2 border-bottom text-primary d-flex align-items-center" style="color: var(--primary) !important;">
+              <i class="bi bi-shield-lock-fill me-2 fs-4"></i>Contacto y Seguridad
+            </h5>
+
+            <!-- Correo Electrónico -->
+            <div class="mb-3">
+              <label for="email" class="form-label fw-bold small text-uppercase text-muted mb-1">Correo Electrónico</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-envelope-fill"></i></span>
+                <input id="email" type="email" formControlName="email" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" placeholder="juan@ejemplo.com">
+              </div>
+              @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']) {
+                <div class="invalid-feedback d-block small">Email es requerido</div>
+              }
+              @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']) {
+                <div class="invalid-feedback d-block small">Email inválido</div>
+              }
+            </div>
+
+            <!-- Contraseña -->
+            <div class="mb-3">
+              <label for="password" class="form-label fw-bold small text-uppercase text-muted mb-1">Contraseña</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-lock-fill"></i></span>
+                <input id="password" type="password" formControlName="password" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" placeholder="Min. 8 caracteres">
+              </div>
+              @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+                <div class="invalid-feedback d-block small mt-1">
+                  La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo especial
+                </div>
+              }
+            </div>
+
+            <!-- Nacionalidad y Teléfono en una fila -->
+            <div class="row g-3 mb-3">
+              <div class="col-sm-6">
+                <label for="nacionalidad" class="form-label fw-bold small text-uppercase text-muted mb-1">Nacionalidad</label>
+                <div class="input-group shadow-sm">
+                  <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-globe"></i></span>
+                  <input id="nacionalidad" type="text" formControlName="nacionalidad" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('nacionalidad')?.touched && registerForm.get('nacionalidad')?.invalid" placeholder="Ej: Chilena">
+                </div>
+                @if (registerForm.get('nacionalidad')?.touched && registerForm.get('nacionalidad')?.errors?.['required']) {
+                  <div class="invalid-feedback d-block small">Nacionalidad es requerida</div>
+                }
+              </div>
+
+              <div class="col-sm-6">
+                <label for="telefono" class="form-label fw-bold small text-uppercase text-muted mb-1">Teléfono</label>
+                <div class="input-group shadow-sm">
+                  <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-telephone-fill"></i></span>
+                  <input id="telefono" type="text" formControlName="telefono" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('telefono')?.touched && registerForm.get('telefono')?.invalid" placeholder="+569...">
+                </div>
+                @if (registerForm.get('telefono')?.touched && registerForm.get('telefono')?.errors?.['required']) {
+                  <div class="invalid-feedback d-block small">Teléfono es requerido</div>
+                }
+                @if (registerForm.get('telefono')?.touched && registerForm.get('telefono')?.errors?.['pattern']) {
+                  <div class="invalid-feedback d-block small">Teléfono inválido (sólo números y +)</div>
+                }
+              </div>
+            </div>
+
+            <!-- Dirección -->
+            <div class="mb-3">
+              <label for="direccion" class="form-label fw-bold small text-uppercase text-muted mb-1">Dirección</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-geo-alt-fill"></i></span>
+                <input id="direccion" type="text" formControlName="direccion" class="form-control border-start-0 ps-0" [class.is-invalid]="registerForm.get('direccion')?.touched && registerForm.get('direccion')?.invalid" placeholder="Calle, Número, Ciudad">
+              </div>
+              @if (registerForm.get('direccion')?.touched && registerForm.get('direccion')?.errors?.['required']) {
+                <div class="invalid-feedback d-block small">Dirección es requerida</div>
+              }
+            </div>
+
+            <!-- Rol del Usuario -->
+            <div class="mb-3">
+              <label for="rol" class="form-label fw-bold small text-uppercase text-muted mb-1">Rol del Usuario</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-people-fill"></i></span>
+                <select id="rol" formControlName="rol" class="form-select border-start-0 ps-0">
+                  @for (role of roles; track role.value) {
+                    <option [value]="role.value">{{ role.label }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="d-flex justify-content-end gap-3 mt-5 pt-4 border-top">
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4 rounded-3 fw-medium" (click)="router.navigate(['/admin'])">
+            <i class="bi bi-x-circle me-2"></i>Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg px-5 rounded-3 fw-bold shadow d-flex align-items-center" [disabled]="loading">
+            @if (!loading) {
+              <i class="bi bi-person-check-fill me-2 fs-5"></i>Registrar Usuario
+            } @else {
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Procesando...
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

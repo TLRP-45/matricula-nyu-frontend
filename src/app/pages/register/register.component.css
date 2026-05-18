@@ -1,0 +1,66 @@
+.register-page {
+  background: linear-gradient(135deg, var(--primary) 0%, #7b2cbf 50%, #9d4edd 100%);
+  min-height: 100vh;
+}
+
+.register-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: fadeIn 0.6s ease-out;
+}
+
+.register-container:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.form-control, .form-select {
+  border-color: #dee2e6;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #7b2cbf;
+  box-shadow: 0 0 0 4px rgba(123, 44, 191, 0.15);
+  background-color: #fff;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #7b2cbf);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #3c096c, var(--primary));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(87, 6, 140, 0.35) !important;
+}
+
+.btn-outline-secondary {
+  border-width: 2px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,169 @@
+:host {
+  --nyu-navbar: #240046;
+  --nyu-hero: #57068c;
+  --nyu-content: #7b2cbf;
+  --nyu-card-accent: #c084fc;
+  --nyu-muted-icon: #a855f7;
+}
+
+.home-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* Hero Styles */
+.nyu-hero {
+  background-color: var(--nyu-hero);
+  height: 400px;
+}
+
+/* Content Styles */
+.nyu-content {
+  background-color: var(--nyu-content);
+  flex-grow: 1;
+}
+
+/* Card Styles */
+.nyu-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nyu-card-top {
+  flex: 1;
+  background-color: white;
+}
+
+.nyu-card-middle {
+  height: 100px;
+  background-color: var(--nyu-card-accent);
+}
+
+.nyu-card-bottom {
+  height: 100px;
+  background-color: var(--nyu-card-accent);
+}
+
+.text-nyu-muted {
+  color: var(--nyu-muted-icon) !important;
+  opacity: 0.7;
+}
+
+/* Calendario Section Styles */
+.nyu-calendar {
+  background-color: #000000;
+}
+
+.nyu-card-calendar {
+  background-color: white;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nyu-card-calendar .card-top {
+  flex: 1;
+}
+
+.nyu-card-calendar .card-bottom {
+  height: 80px;
+  background-color: #cccccc;
+}
+
+/* Procedures Section Styles */
+.nyu-procedures {
+  background-color: #f1f0fb;
+}
+
+.procedure-icon {
+  width: 70px;
+  height: 70px;
+  background-color: #ffffff;
+  border: 2px solid #333;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+/* Footer Styles */
+.nyu-footer {
+  background-color: var(--nyu-navbar);
+}
+
+.footer-desc {
+  max-width: 400px;
+}
+
+.newsletter-box {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bi-podcast {
+  color: white;
+}
+
+.nyu-footer i:hover {
+  color: var(--nyu-card-accent);
+  cursor: pointer;
+}
+
+/* Sidebar (Offcanvas) Styles */
+.nyu-sidebar {
+  background-color: var(--nyu-navbar);
+  color: white;
+  width: 380px !important;
+}
+
+.user-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-profile-circle {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--nyu-card-accent), var(--nyu-muted-icon));
+  border-radius: 50%;
+}
+
+.item-icon-wrapper {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.sidebar-item {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.x-small {
+  font-size: 0.7rem;
+}
+
+/* Override global container if necessary */
+::ng-deep .home-wrapper .container {
+  background: transparent !important;
+  min-height: auto !important;
+  padding: 0 !important;
+}
+
+
+
