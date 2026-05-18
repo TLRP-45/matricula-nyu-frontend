@@ -39,14 +39,14 @@
     />
   }
 
-  @for (asignatura of asignaturasFiltradas; track asignatura.codigo) {
+  @for (oferta of asignaturasFiltradas; track oferta.id) {
     <div class="card shadow-sm mb-4 asignatura-card">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h4 class="mb-0">
-            {{ asignatura.codigo }}
+            {{ oferta.asignatura.codigo }}
             -
-            {{ asignatura.nombre }}
+            {{ oferta.asignatura.nombre }}
           </h4>
 
           @if (puedeInscribirsePeriodo()) {
@@ -54,14 +54,14 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                [(ngModel)]="asignatura.inscrita"
+                [(ngModel)]="oferta.inscrita"
                 [disabled]="!puedeInscribirsePeriodo()"
               />
             </div>
           }
         </div>
 
-        @if (asignatura.catedra; as catedras) {
+        @if (oferta.grupos.catedra; as catedras) {
           <div class="grupo-box">
             <h5>Cátedra</h5>
 
@@ -71,8 +71,8 @@
                 (change)="onSelectChange(catedras, $event)"
                 [disabled]="!puedeInscribirsePeriodo()"
               >
-                @for (c of catedras; track c.letra) {
-                  <option [value]="c.letra" [selected]="c.seleccionado" [disabled]="c.cupos === 0">
+                @for (c of catedras; track c.id) {
+                  <option [value]="c.id" [selected]="c.seleccionado" [disabled]="c.cupos === 0">
                     {{ c.letra }}
                   </option>
                 }
@@ -92,6 +92,7 @@
                 </span>
               }
             }
+
             @if (!puedeInscribirsePeriodo()) {
               <p>
                 Profesor:
@@ -100,12 +101,15 @@
                 </strong>
               </p>
 
-              <p>Grupo: {{ getGrupoSeleccionado(asignatura.catedra)?.letra }}</p>
+              <p>
+                Grupo:
+                {{ getGrupoSeleccionado(catedras)?.letra }}
+              </p>
             }
           </div>
         }
 
-        @if (asignatura.taller; as talleres) {
+        @if (oferta.grupos.taller; as talleres) {
           <div class="grupo-box">
             <h5>Taller</h5>
 
@@ -115,8 +119,8 @@
                 (change)="onSelectChange(talleres, $event)"
                 [disabled]="!puedeInscribirsePeriodo()"
               >
-                @for (t of talleres; track t.letra) {
-                  <option [value]="t.letra" [selected]="t.seleccionado" [disabled]="t.cupos === 0">
+                @for (t of talleres; track t.id) {
+                  <option [value]="t.id" [selected]="t.seleccionado" [disabled]="t.cupos === 0">
                     {{ t.letra }}
                   </option>
                 }
@@ -145,12 +149,15 @@
                 </strong>
               </p>
 
-              <p>Grupo: {{ getGrupoSeleccionado(asignatura.taller)?.letra }}</p>
+              <p>
+                Grupo:
+                {{ getGrupoSeleccionado(talleres)?.letra }}
+              </p>
             }
           </div>
         }
 
-        @if (asignatura.laboratorio; as laboratorios) {
+        @if (oferta.grupos.laboratorio; as laboratorios) {
           <div class="grupo-box">
             <h5>Laboratorio</h5>
 
@@ -160,12 +167,13 @@
                 (change)="onSelectChange(laboratorios, $event)"
                 [disabled]="!puedeInscribirsePeriodo()"
               >
-                @for (l of laboratorios; track l.letra) {
-                  <option [value]="l.letra" [selected]="l.seleccionado" [disabled]="l.cupos === 0">
+                @for (l of laboratorios; track l.id) {
+                  <option [value]="l.id" [selected]="l.seleccionado" [disabled]="l.cupos === 0">
                     {{ l.letra }}
                   </option>
                 }
               </select>
+
               @if (getGrupoSeleccionado(laboratorios); as grupo) {
                 <p>
                   Profesor:
@@ -180,6 +188,7 @@
                 </span>
               }
             }
+
             @if (!puedeInscribirsePeriodo()) {
               <p>
                 Profesor:
@@ -188,7 +197,10 @@
                 </strong>
               </p>
 
-              <p>Grupo: {{ getGrupoSeleccionado(asignatura.laboratorio)?.letra }}</p>
+              <p>
+                Grupo:
+                {{ getGrupoSeleccionado(laboratorios)?.letra }}
+              </p>
             }
           </div>
         }

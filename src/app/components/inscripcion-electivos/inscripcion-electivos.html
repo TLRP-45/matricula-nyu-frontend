@@ -1,9 +1,13 @@
-@for (electivo of electivos; track electivo.codigo) {
+@for (electivo of electivos; track electivo.id) {
   <div class="card shadow-sm mb-4 asignatura-card">
     <div class="card-body">
       <!-- 🔷 header -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0">{{ electivo.codigo }} - {{ electivo.nombre }}</h4>
+        <h4 class="mb-0">
+          {{ electivo.asignatura.codigo }}
+          -
+          {{ electivo.asignatura.nombre }}
+        </h4>
 
         @if (puedeInscribirsePeriodo()) {
           <div class="form-check">
@@ -17,24 +21,28 @@
         }
       </div>
 
-      @if (electivo.requisitos.length > 0) {
+      @if (electivo.asignatura.requisitos.length > 0) {
         <div class="mb-3">
           <p class="text-muted mb-1">Requisitos:</p>
 
-          @for (r of electivo.requisitos; track r.codigo) {
-            <span class="badge bg-warning text-dark me-1"> {{ r.codigo }} - {{ r.nombre }} </span>
+          @for (r of electivo.asignatura.requisitos; track r.codigo) {
+            <span class="badge bg-warning text-dark me-1">
+              {{ r.codigo }}
+              -
+              {{ r.nombre }}
+            </span>
           }
         </div>
       }
 
-      @if (electivo.catedra; as catedras) {
+      @if (electivo.grupos.catedra; as catedras) {
         <div class="grupo-box">
           <h5>Cátedra</h5>
 
           @if (puedeInscribirsePeriodo()) {
             <select class="form-select mb-2" (change)="onSelectChange(catedras, $event)">
-              @for (c of catedras; track c.letra) {
-                <option [value]="c.letra" [selected]="c.seleccionado" [disabled]="c.cupos === 0">
+              @for (c of catedras; track c.id) {
+                <option [value]="c.id" [selected]="c.seleccionado" [disabled]="c.cupos === 0">
                   {{ c.letra }}
                 </option>
               }
@@ -43,10 +51,15 @@
             @if (getGrupoSeleccionado(catedras); as grupo) {
               <p>
                 Profesor:
-                <strong>{{ grupo.profesor }}</strong>
+                <strong>
+                  {{ grupo.profesor }}
+                </strong>
               </p>
 
-              <span class="badge bg-secondary"> Cupos: {{ grupo.cupos }} </span>
+              <span class="badge bg-secondary">
+                Cupos:
+                {{ grupo.cupos }}
+              </span>
             }
           }
 
@@ -66,14 +79,14 @@
         </div>
       }
 
-      @if (electivo.taller; as talleres) {
+      @if (electivo.grupos.taller; as talleres) {
         <div class="grupo-box">
           <h5>Taller</h5>
 
           @if (puedeInscribirsePeriodo()) {
             <select class="form-select mb-2" (change)="onSelectChange(talleres, $event)">
-              @for (t of talleres; track t.letra) {
-                <option [value]="t.letra" [selected]="t.seleccionado" [disabled]="t.cupos === 0">
+              @for (t of talleres; track t.id) {
+                <option [value]="t.id" [selected]="t.seleccionado" [disabled]="t.cupos === 0">
                   {{ t.letra }}
                 </option>
               }
@@ -82,10 +95,15 @@
             @if (getGrupoSeleccionado(talleres); as grupo) {
               <p>
                 Profesor:
-                <strong>{{ grupo.profesor }}</strong>
+                <strong>
+                  {{ grupo.profesor }}
+                </strong>
               </p>
 
-              <span class="badge bg-secondary"> Cupos: {{ grupo.cupos }} </span>
+              <span class="badge bg-secondary">
+                Cupos:
+                {{ grupo.cupos }}
+              </span>
             }
           }
 
@@ -105,14 +123,14 @@
         </div>
       }
 
-      @if (electivo.laboratorio; as laboratorios) {
+      @if (electivo.grupos.laboratorio; as laboratorios) {
         <div class="grupo-box">
           <h5>Laboratorio</h5>
 
           @if (puedeInscribirsePeriodo()) {
             <select class="form-select mb-2" (change)="onSelectChange(laboratorios, $event)">
-              @for (l of laboratorios; track l.letra) {
-                <option [value]="l.letra" [selected]="l.seleccionado" [disabled]="l.cupos === 0">
+              @for (l of laboratorios; track l.id) {
+                <option [value]="l.id" [selected]="l.seleccionado" [disabled]="l.cupos === 0">
                   {{ l.letra }}
                 </option>
               }
@@ -121,10 +139,15 @@
             @if (getGrupoSeleccionado(laboratorios); as grupo) {
               <p>
                 Profesor:
-                <strong>{{ grupo.profesor }}</strong>
+                <strong>
+                  {{ grupo.profesor }}
+                </strong>
               </p>
 
-              <span class="badge bg-secondary"> Cupos: {{ grupo.cupos }} </span>
+              <span class="badge bg-secondary">
+                Cupos:
+                {{ grupo.cupos }}
+              </span>
             }
           }
 

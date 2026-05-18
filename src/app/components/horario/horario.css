@@ -1,0 +1,86 @@
+.horario-grid {
+  display: grid;
+
+  grid-template-columns: 120px repeat(5, 1fr);
+
+  gap: 10px;
+}
+
+.dia-header,
+.hora-header,
+.hora-cell {
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  font-weight: 600;
+
+  text-align: center;
+
+  border: 1px solid #dee2e6;
+}
+
+.celda-horario {
+  min-height: 180px;
+
+  background: #f8f9fa;
+
+  border-radius: 12px;
+
+  padding: 10px;
+
+  border: 1px solid #dee2e6;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.celda-horario:hover {
+  background: #eef3ff;
+}
+
+.celda-horario.cdk-drop-list-receiving {
+  background: #e7f1ff;
+
+  border: 2px dashed #0d6efd;
+}
+
+.drag-wrapper {
+  width: 100%;
+}
+
+.cdk-drag {
+  display: block;
+  width: 100%;
+}
+
+.cdk-drag-preview {
+  width: 260px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+}
+
+.cdk-drag-animating {
+  transition: transform 200ms ease;
+}
+
+app-oferta-card {
+  display: block;
+
+  width: 100%;
+}

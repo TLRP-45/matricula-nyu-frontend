@@ -9,61 +9,67 @@ import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
 import { LoginComponent } from '../login/login.component';
 import { authGuard, notLogged } from '../guards/auth.guard';
 import { HomeComponent } from '../home/home.component';
+import { OfertaAcademica } from './pages/oferta-academica/oferta-academica/oferta-academica';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [notLogged]
+    canActivate: [notLogged],
   },
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    redirectTo: 'home',
+    pathMatch: 'full',
   },
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'inscripcion',
     component: InscripcionAsignaturas,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'matricula',
     component: MatriculaComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'info',
     component: InfoComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'estado',
     component: EstadoComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'confirmacion',
     component: ConfirmacionComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'finalizado',
     component: FinalizadoComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'ma-principal',
     component: MaPrincipalComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+  },
+  {
+    path: 'oferta-academica',
+    component: OfertaAcademica,
+    canActivate: [authGuard],
   },
   {
     path: '**',
     redirectTo: 'login',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
