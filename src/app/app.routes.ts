@@ -9,6 +9,7 @@ import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
 import { LoginComponent } from './login/login.component';
 import { authGuard, notLogged } from './guards/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { AdminCarrerasComponent } from './pages/admin-carreras/admin-carreras';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
@@ -26,7 +27,17 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    children: []
+    children: [
+      {
+        path: '',
+        redirectTo: 'carreras',
+        pathMatch: 'full'
+      },
+      {
+        path: 'carreras',
+        component: AdminCarrerasComponent
+      }
+    ]
   },
   {
     path: '',

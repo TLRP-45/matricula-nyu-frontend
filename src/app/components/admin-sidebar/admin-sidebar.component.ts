@@ -58,9 +58,13 @@ export class AdminSidebarComponent implements OnInit {
 
   navigateTo(route: string): void {
     this.activeRoute = route;
-    this.router.navigate([route], {
-      relativeTo: this.router.routerState.root.firstChild
-    });
+
+    if (route === 'dashboard') {
+      this.router.navigate(['/admin']);
+      return;
+    }
+
+    this.router.navigate(['/admin', route]);
   }
 
   logout(): void {
