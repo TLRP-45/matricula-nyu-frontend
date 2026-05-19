@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { AdminCarrerasComponent } from './pages/admin-carreras/admin-carreras';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { Role } from './models/roles';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,8 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [authGuard],
+    data: { role: Role.ADMIN },
     children: [
       {
         path: '',
@@ -46,42 +49,50 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       },
       {
         path: 'inscripcion',
         component: InscripcionAsignaturas,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       },
       {
         path: 'matricula',
         component: MatriculaComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       },
       {
         path: 'info',
         component: InfoComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       },
       {
         path: 'estado',
         component: EstadoComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       },
       {
         path: 'confirmacion',
         component: ConfirmacionComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       },
       {
         path: 'finalizado',
         component: FinalizadoComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       },
       {
         path: 'ma-principal',
         component: MaPrincipalComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
       }
     ]
   },

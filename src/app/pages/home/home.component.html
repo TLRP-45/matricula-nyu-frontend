@@ -1,0 +1,216 @@
+<div class="home-wrapper">
+
+  <!-- Sidebar (Offcanvas) -->
+  <div class="offcanvas offcanvas-start nyu-sidebar" tabindex="-1" id="nyuSidebar" aria-labelledby="nyuSidebarLabel">
+    <div class="offcanvas-header border-bottom border-secondary-subtle py-4">
+      <h5 class="offcanvas-title text-white fw-bold fs-3" id="nyuSidebarLabel">NYU</h5>
+      <button type="button" class="btn-close btn-close-white border border-white p-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-4">
+      <!-- User Profile Card -->
+      <div class="user-card p-4 mb-4">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-profile-circle d-flex align-items-center justify-content-center">
+            <i class="bi bi-person-fill text-white fs-1"></i>
+          </div>
+          <div class="user-info">
+            <p class="mb-0 text-white-50 small">Intranet - New York University</p>
+            <h6 class="text-white fw-bold mb-0 fs-5">{{ user?.nombre || 'Nombre Apellido' }}</h6>
+            <p class="text-white-50 small mb-1">{{ user?.email || 'usuario@alumnos.nyu.com' }}</p>
+            <p class="text-white-50 x-small mb-0">Último acceso: 05-05-2026 , 17:00:00</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Access Section -->
+      <div class="sidebar-section mb-4">
+        <h6 class="text-white-50 fw-bold small mb-3">Acceso rápido</h6>
+        <div class="sidebar-item d-flex align-items-center gap-3 p-2 rounded mb-2">
+          <div class="item-icon-wrapper d-flex align-items-center justify-content-center">
+            <i class="bi bi-layout-text-window-reverse text-white"></i>
+          </div>
+          <span class="text-white fw-medium">Documento electrónico</span>
+        </div>
+        <div class="sidebar-item d-flex align-items-center gap-3 p-2 rounded">
+          <div class="item-icon-wrapper d-flex align-items-center justify-content-center">
+            <i class="bi bi-file-earmark-text text-white"></i>
+          </div>
+          <span class="text-white fw-medium">Documentos secretaría</span>
+        </div>
+      </div>
+
+      <!-- Student Section -->
+      <div class="sidebar-section">
+        <h6 class="text-white-50 fw-bold small mb-3">Estudiante</h6>
+        <div class="sidebar-item d-flex align-items-center gap-3 p-2 rounded">
+          <div class="item-icon-wrapper d-flex align-items-center justify-content-center">
+            <i class="bi bi-list text-white"></i>
+          </div>
+          <span class="text-white fw-medium">Registro curricular</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <header class="nyu-hero d-flex align-items-center justify-content-center">
+    <h1 class="display-1 fw-bold text-white m-0">NYU</h1>
+  </header>
+
+
+  <!-- Content Section -->
+  <main class="nyu-content py-5">
+    <div class="container px-4 px-lg-5">
+      <h2 class="text-white fw-bold mb-5 fs-3">Avisos importantes</h2>
+
+      <div class="row g-4 mb-5">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+          <div class="nyu-card">
+            <div class="nyu-card-top"></div>
+            <div class="nyu-card-bottom d-flex align-items-center justify-content-center">
+              <i class="bi bi-image text-nyu-muted fs-1"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+          <div class="nyu-card">
+            <div class="nyu-card-top"></div>
+            <div class="nyu-card-middle d-flex align-items-center justify-content-center">
+              <i class="bi bi-person text-nyu-muted fs-1"></i>
+            </div>
+            <div class="nyu-card-top"></div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+          <div class="nyu-card">
+            <div class="nyu-card-top"></div>
+            <div class="nyu-card-bottom d-flex align-items-center justify-content-center">
+              <i class="bi bi-grid-3x3-gap text-nyu-muted fs-1"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendario Section -->
+    <section class="nyu-calendar py-5">
+      <div class="container px-4 px-lg-5">
+        <h2 class="text-white fw-bold mb-5 fs-3">Calendario</h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="nyu-card-calendar">
+              <div class="card-top"></div>
+              <div class="card-bottom d-flex align-items-center justify-content-center">
+                <i class="bi bi-image text-secondary fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="nyu-card-calendar">
+              <div class="card-top"></div>
+              <div class="card-bottom d-flex align-items-center justify-content-center">
+                <i class="bi bi-circle text-secondary fs-1"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="nyu-card-calendar">
+              <div class="card-top"></div>
+              <div class="card-bottom d-flex align-items-center justify-content-center">
+                <i class="bi bi-grid-3x3 text-secondary fs-1"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trámites Recientes Section -->
+    <section class="nyu-procedures py-5">
+      <div class="container px-4 px-lg-5 text-center">
+        <h2 class="text-dark fw-bold mb-5 fs-3 text-start">Trámites recientes</h2>
+        <div class="row g-5">
+          <div class="col-md-4">
+            <div class="procedure-icon mb-3 mx-auto">
+              <i class="bi bi-check2-square fs-2"></i>
+            </div>
+            <h5 class="fw-bold">Matricula realizada</h5>
+          </div>
+          <div class="col-md-4">
+            <div class="procedure-icon mb-3 mx-auto">
+              <i class="bi bi-plus-circle fs-2"></i>
+            </div>
+            <h5 class="fw-bold">Inscripción de asignaturas</h5>
+          </div>
+          <div class="col-md-4">
+            <div class="procedure-icon mb-3 mx-auto">
+              <i class="bi bi-file-earmark-text fs-2"></i>
+            </div>
+            <h5 class="fw-bold">Certificado descargado</h5>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="nyu-footer py-5 text-white">
+      <div class="container px-4 px-lg-5">
+        <div class="row g-4">
+          <!-- Logo & Description -->
+          <div class="col-lg-5">
+            <h4 class="fw-bold mb-4 text-white">New York University</h4>
+            <p class="small text-white-50 lh-base footer-desc">
+              Igualdad de Oportunidades y No Discriminación de NYU - <br>
+              La Universidad de Nueva York está comprometida con mantener un entorno que promueva y fomente el respeto por los valores individuales y una conducta adecuada entre todas las personas. En todos los espacios de la universidad...
+            </p>
+          </div>
+          
+          <!-- Links -->
+          <div class="col-lg-3">
+            <ul class="list-unstyled footer-links small">
+              <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">EL NUEVO NYU.edu</a></li>
+              <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Mapa del campus</a></li>
+              <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Eventos</a></li>
+              <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Contáctanos</a></li>
+              <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Donar</a></li>
+              <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Accesibilidad</a></li>
+              <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Comentarios</a></li>
+            </ul>
+          </div>
+
+          <!-- Social & Newsletter -->
+          <div class="col-lg-4 text-center text-lg-start text-white">
+            <div class="newsletter-box bg-black p-3 rounded mb-4 d-flex justify-content-between align-items-center">
+              <span class="fw-bold">Boletín</span>
+              <button class="btn btn-link text-white text-decoration-none p-0 fw-bold small">SUSCRIBIRSE</button>
+            </div>
+            
+            <div class="d-flex flex-column align-items-center align-items-lg-start px-3">
+              <div class="mb-4 text-center">
+                <span class="d-block fw-bold mb-2">Podcast</span>
+                <i class="bi bi-podcast fs-1"></i>
+              </div>
+              
+              <div>
+                <span class="d-block fw-bold mb-3">Síguenos</span>
+                <div class="d-flex gap-3 fs-4">
+                  <i class="bi bi-facebook"></i>
+                  <i class="bi bi-instagram"></i>
+                  <i class="bi bi-youtube"></i>
+                  <i class="bi bi-linkedin"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+

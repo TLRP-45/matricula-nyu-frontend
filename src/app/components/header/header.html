@@ -1,14 +1,14 @@
 <header class="header">
-
   <div class="left">
-    <button class="menu-btn">
+    <button class="menu-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#userSidebar" aria-controls="userSidebar">
       <lucide-icon [img]="icons.Menu"></lucide-icon>
     </button>
 
     <div class="icon-group">
-      <button class="icon-btn">
+      <button (click)="navigateTo('/home')" class="icon-btn">
         <lucide-icon [img]="icons.Home"></lucide-icon>
       </button>
+
 
       <button class="icon-btn">
         <lucide-icon [img]="icons.HelpCircle"></lucide-icon>
@@ -34,5 +34,65 @@
       <lucide-icon [img]="icons.Menu"></lucide-icon>
     </button>
   </div>
-
 </header>
+
+<!-- Sidebar (Offcanvas) -->
+<div class="offcanvas offcanvas-start user-sidebar" tabindex="-1" id="userSidebar" aria-labelledby="userSidebarLabel">
+  <div class="offcanvas-header nyu-sidebar-header text-white">
+    <div class="d-flex align-items-center gap-3">
+      <div class="sidebar-avatar">{{ nombreEstudiante.charAt(0).toUpperCase() }}</div>
+      <div class="sidebar-user-info">
+        <h5 class="offcanvas-title mb-0" id="userSidebarLabel">{{ nombreEstudiante }}</h5>
+        <small class="text-white-50">{{ isAdmin ? 'Administrador' : 'Estudiante' }}</small>
+      </div>
+    </div>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div class="sidebar-content">
+      <div class="sidebar-section p-4">
+        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Información de Usuario</h6>
+        <div class="info-item d-flex align-items-center gap-3 mb-3">
+          <div class="info-icon"><lucide-icon [img]="icons.Mail" size="18"></lucide-icon></div>
+          <div class="info-detail">
+            <span class="d-block text-muted small">Correo Electrónico</span>
+            <span class="fw-medium">{{ user?.email || 'No disponible' }}</span>
+          </div>
+        </div>
+        <div class="info-item d-flex align-items-center gap-3 mb-3">
+          <div class="info-icon"><lucide-icon [img]="icons.CreditCard" size="18"></lucide-icon></div>
+          <div class="info-detail">
+            <span class="d-block text-muted small">RUT / Identificación</span>
+            <span class="fw-medium">{{ user?.rut || 'No disponible' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section p-4">
+        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Acciones</h6>
+        <button *ngIf="isAdmin" (click)="navigateTo('/register')" class="btn btn-sidebar w-100 d-flex align-items-center gap-3 mb-2" data-bs-dismiss="offcanvas">
+          <lucide-icon [img]="icons.UserPlus" size="18"></lucide-icon>
+          <span>Registrar Usuario</span>
+        </button>
+        <button (click)="navigateTo('/info')" class="btn btn-sidebar w-100 d-flex align-items-center gap-3 mb-2" data-bs-dismiss="offcanvas">
+          <lucide-icon [img]="icons.User" size="18"></lucide-icon>
+          <span>Mi Perfil</span>
+        </button>
+        <button (click)="navigateTo('/home')" class="btn btn-sidebar w-100 d-flex align-items-center gap-3 mb-2" data-bs-dismiss="offcanvas">
+          <lucide-icon [img]="icons.Home" size="18"></lucide-icon>
+          <span>Inicio</span>
+        </button>
+        <button (click)="logout()" class="btn btn-sidebar logout-btn w-100 d-flex align-items-center gap-3 mt-4" data-bs-dismiss="offcanvas">
+          <lucide-icon [img]="icons.LogOut" size="18"></lucide-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+  <div class="offcanvas-footer p-4 text-center border-top">
+    <small class="text-muted">NYU Portal v1.0.0</small>
+  </div>
+</div>
