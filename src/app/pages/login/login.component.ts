@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../services/login.service';
+import { LoginService } from '../../services/login.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { RutFormatDirective } from '../directive/rut-format.directive';
-import { rutValidator } from '../validators/rut.validator';
+import { RutFormatDirective } from '../../directive/rut-format.directive';
+import { rutValidator } from '../../validators/rut.validator';
+import { Role } from '../../models/roles';
+
 
 
 @Component({
@@ -25,10 +27,13 @@ export class LoginComponent implements OnInit {
   ){
     this.loginForm = this.formBuilder.group({
       rut: new FormControl ('', [Validators.required, rutValidator()]),
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      isAdmin: [false]
     });
   }
   ngOnInit() {
+    localStorage.clear();
+    sessionStorage.clear();
   }
 
 
@@ -36,11 +41,22 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid){
       const rut = this.loginForm.get('rut')?.value
       const password = this.loginForm.get('password')?.value
-      this.loginService.login(rut, password).subscribe(response=>{
-      if(response.authorized){
-            this.router.navigateByUrl('home')
+      const isAdmin = this.loginForm.get('isAdmin')?.value
+      this.loginService.login(rut, password, isAdmin).subscribe(response=>{
+        if(response.authorized){
+            if (isAdmin) {
+                this.router.navigateByUrl('admin');
+            } else {
+                this.router.navigateByUrl('home');
+            }
         }else{
-          alert("Error: Contraseña incorrecta")
+            if (response.errorType === 'NOT_ADMIN') {
+                alert("Acceso denegado: No tienes permisos de administrador");
+            } else if (response.errorType === 'NOT_STUDENT') {
+                alert("Acceso denegado: No es necesario iniciar como estudiante.");
+            } else {
+                alert("Error: Contraseña incorrecta");
+            }
         }
       })
       

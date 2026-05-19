@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoginService } from '../../services/login.service';
+import { LoginService } from './login.service';
 
 export interface StudentData {
   nombre: string;
@@ -13,9 +13,6 @@ export interface StudentData {
 export class StudentService {
 
   private studentData: StudentData = {
-//    nombre: 'Juan Alex Fuentes Valdivia',
-//    email: 'JFuentes@gmail.com',
-//    carrera: '534-INGENIERÍA CIVIL EN COMPUTACIÓN E INFORMÁTICA (Año Ingreso 2023)'
     nombre: 'Estudiante',
     email: '',
     carrera: ''

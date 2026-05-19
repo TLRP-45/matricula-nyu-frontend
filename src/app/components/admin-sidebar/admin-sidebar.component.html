@@ -1,0 +1,70 @@
+<div class="admin-sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-avatar">
+      <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </div>
+    <h2>Administrador</h2>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li class="nav-section-label">Principal</li>
+      <li (click)="navigateTo('dashboard')"
+          class="nav-item"
+          [class.active]="activeRoute === 'dashboard'">
+        <lucide-icon [img]="icons.LayoutDashboard" class="nav-icon"></lucide-icon>
+        <span>Panel de control</span>
+      </li>
+      <li class="nav-section-label">Gestión Académica</li>
+      <li (click)="navigateTo('carreras')"
+          class="nav-item"
+          [class.active]="activeRoute === 'carreras'">
+        <lucide-icon [img]="icons.GraduationCap" class="nav-icon"></lucide-icon>
+        <span>Administrar carreras</span>
+      </li>
+      <li (click)="navigateTo('oferta-academica')"
+          class="nav-item"
+          [class.active]="activeRoute === 'oferta-academica'">
+        <lucide-icon [img]="icons.BookOpen" class="nav-icon"></lucide-icon>
+        <span>Oferta académica</span>
+      </li>
+      <li (click)="navigateTo('asignaturas')"
+          class="nav-item"
+          [class.active]="activeRoute === 'asignaturas'">
+        <lucide-icon [img]="icons.FileText" class="nav-icon"></lucide-icon>
+        <span>Gestión de asignaturas</span>
+      </li>
+      <li class="nav-section-label">Usuarios</li>
+      <li (click)="navigateTo('registrar-usuarios')"
+          class="nav-item"
+          [class.active]="activeRoute === 'registrar-usuarios'">
+        <lucide-icon [img]="icons.UserPlus" class="nav-icon"></lucide-icon>
+        <span>Registrar usuarios</span>
+      </li>
+      <li (click)="navigateTo('usuarios')"
+          class="nav-item"
+          [class.active]="activeRoute === 'usuarios'">
+        <lucide-icon [img]="icons.Users" class="nav-icon"></lucide-icon>
+        <span>Gestionar usuarios</span>
+      </li>
+      <li class="nav-section-label">Sistema</li>
+      <li (click)="navigateTo('configuracion')"
+          class="nav-item"
+          [class.active]="activeRoute === 'configuracion'">
+        <lucide-icon [img]="icons.Settings" class="nav-icon"></lucide-icon>
+        <span>Configuración</span>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button (click)="logout()" class="logout-btn">
+      <lucide-icon [img]="icons.LogOut" class="nav-icon"></lucide-icon>
+      <span>Cerrar sesión</span>
+    </button>
+    <span class="sidebar-brand">NYU</span>
+  </div>
+</div>

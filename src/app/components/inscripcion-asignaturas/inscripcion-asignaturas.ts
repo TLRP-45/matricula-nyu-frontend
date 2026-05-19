@@ -391,7 +391,6 @@ import { Oferta } from '../../models/oferta';
 
       asignatura.inscrita = true;
 
-      // restaurar grupos
       i.grupos.forEach((g: any) => {
         let lista;
 
