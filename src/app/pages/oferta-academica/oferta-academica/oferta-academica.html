@@ -1,0 +1,124 @@
+<div class="container-fluid">
+  <app-filtros-academicos
+    [carreras]="carreras"
+    [periodos]="periodos"
+    (cambio)="onFiltroChange($event)"
+  >
+  </app-filtros-academicos>
+
+  <div class="row g-3 align-items-start">
+    <div class="col-md-3">
+      <app-panel-asignaturas
+        [ofertas]="ofertasDisponibles"
+        (nuevaOferta)="abrirNuevaOferta($event)"
+        (abrirSelector)="abrirSelectorAsignaturas()"
+        (seleccion)="agregarAlHorario($event)"
+      >
+      </app-panel-asignaturas>
+    </div>
+    <div class="col-md-9">
+      <app-horario [ofertas]="ofertasEnHorario" (eliminarOferta)="quitarDelHorario($event)">
+      </app-horario>
+    </div>
+  </div>
+
+  @if (mostrarFormularioOferta) {
+    <div class="card mt-3 p-3">
+      <h6>Nueva oferta de {{ asignaturaSeleccionada?.nombre }}</h6>
+
+      <form [formGroup]="ofertaForm">
+        <div class="mb-2">
+          <label>Tipo de grupo</label>
+
+          <select class="form-select" formControlName="tipo">
+            <option value="catedra">Cátedra</option>
+            <option value="taller">Taller</option>
+            <option value="laboratorio">Laboratorio</option>
+          </select>
+        </div>
+        <!-- GRUPO -->
+        <div class="mb-2">
+          <label>Grupo</label>
+          <select class="form-select" formControlName="letra">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="G">G</option>
+            <option value="H">H</option>
+          </select>
+        </div>
+
+        <div class="mb-2">
+          <label>Profesor</label>
+          <input class="form-control" placeholder="Profesor" formControlName="profesor" />
+        </div>
+
+        <div class="mb-2">
+          <label>Cupos</label>
+          <input type="number" class="form-control" placeholder="Cupos" formControlName="cupos" />
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Horarios</label>
+
+          @for (h of horariosTemp; track $index) {
+            <div class="horario-box">
+              <label>Día</label>
+              <select
+                class="form-select"
+                [value]="h.dia"
+                (change)="actualizarDiaTemp($index, $event)"
+              >
+                @for (dia of diasSemana; track dia) {
+                  <option [value]="dia">
+                    {{ dia }}
+                  </option>
+                }
+              </select>
+
+              <label>Hora de inicio</label>
+              <select
+                class="form-select"
+                [value]="h.horaInicio"
+                (change)="onHoraInicioChangeTemp($index, $event)"
+              >
+                @for (bloque of horas; track bloque.horaInicio) {
+                  <option [value]="bloque.horaInicio">
+                    {{ bloque.horaInicio }}
+                  </option>
+                }
+              </select>
+
+              <label>Hora de fin</label>
+              <input type="time" class="form-control" [value]="h.horaFin" disabled />
+            </div>
+          }
+        </div>
+
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="agregarHorario()">
+          + Agregar horario
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="eliminarHorario(-1)">
+          - Eliminar horario
+        </button>
+      </form>
+
+      <button class="btn btn-success w-100 mt-2" (click)="guardarOferta()">Guardar oferta</button>
+    </div>
+  }
+
+  @if (mostrarSelectorAsignaturas) {
+    <div class="card p-3 mb-3">
+      <h6>Selecciona una asignatura</h6>
+
+      @for (asig of asignaturasFiltradas; track asig.codigo) {
+        <button class="btn btn-outline-primary w-100 mb-2" (click)="abrirNuevaOferta(asig)">
+          {{ asig.codigo }} - {{ asig.nombre }}
+        </button>
+      }
+    </div>
+  }
+</div>

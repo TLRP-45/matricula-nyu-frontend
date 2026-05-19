@@ -1,0 +1,78 @@
+:host {
+  display: block;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.header-row.panel {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.oferta-card {
+  border-radius: 14px;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+
+  border: 1px solid #dee2e6;
+
+  cursor: pointer;
+}
+
+.oferta-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.08);
+}
+
+.card-seleccionada {
+  border: 2px solid #0d6efd;
+
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+}
+
+.nombre-asignatura {
+  font-size: 0.95rem;
+
+  line-height: 1.2;
+}
+
+.formulario-edicion {
+  border-top: 1px solid #dee2e6;
+
+  padding-top: 1rem;
+}
+
+.horario-box {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr 1fr;
+
+  gap: 0.5rem;
+
+  margin-bottom: 0.5rem;
+}
+
+.horario-preview {
+  margin-bottom: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+
+  font-weight: 600;
+}
+
+.acciones-panel {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}

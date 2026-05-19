@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.panel-asignaturas {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  width: 100%;
+}
+
+app-oferta-card {
+  display: block;
+
+  width: 100%;
+
+  min-width: 0;
+}
+
+.bloque-grupo {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+}
+
+.oferta-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.oferta-card.border-primary {
+  border-width: 2px !important;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+small {
+  font-size: 0.8rem;
+}
+
+.panel-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel-container::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+
+  border-radius: 999px;
+}
+
+.panel-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Asignatura } from '../../models/asignatura';
+import { Oferta } from '../../models/oferta';
+import { Grupo } from '../../models/grupo';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -11,9 +12,18 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './inscripcion-electivos.css',
 })
 export class InscripcionElectivos {
-  @Input() electivos: Asignatura[] = [];
-  @Input() puedeInscribirsePeriodo!: () => boolean;
-  @Input() cumpleRequisitos!: (a: Asignatura) => boolean;
-  @Input() getGrupoSeleccionado!: Function;
-  @Input() onSelectChange!: Function;
+  @Input()
+  electivos: Oferta[] = [];
+
+  @Input()
+  puedeInscribirsePeriodo!: () => boolean;
+
+  @Input()
+  cumpleRequisitos!: (oferta: Oferta) => boolean;
+
+  @Input()
+  getGrupoSeleccionado!: (grupos?: Grupo[]) => Grupo | undefined;
+
+  @Input()
+  onSelectChange!: (grupos: Grupo[], event: Event) => void;
 }

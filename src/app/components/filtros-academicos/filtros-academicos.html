@@ -1,0 +1,29 @@
+<div class="card shadow p-4 mb-4">
+  <div class="row g-4">
+    <!-- CARRERA -->
+    <div class="col-md-6">
+      <label class="form-label fw-bold">Carrera</label>
+
+      <select class="form-select" [(ngModel)]="carreraSeleccionada" (ngModelChange)="onChange()">
+        @for (c of carreras; track c.codigo) {
+          <option [value]="c.codigo">
+            {{ c.nombre }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- PERIODO -->
+    <div class="col-md-6">
+      <label class="form-label fw-bold">Periodo</label>
+
+      <select class="form-select" [(ngModel)]="periodoSeleccionado" (ngModelChange)="onChange()">
+        @for (p of periodos; track p.codigo) {
+          <option [value]="p.codigo">
+            {{ p.nombre }}
+          </option>
+        }
+      </select>
+    </div>
+  </div>
+</div>

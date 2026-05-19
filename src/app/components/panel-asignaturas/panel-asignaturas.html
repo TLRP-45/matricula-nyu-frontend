@@ -1,0 +1,23 @@
+<div class="p-3 panel-asignaturas">
+  <h5 class="mb-3">Asignaturas del periodo</h5>
+  <button class="btn btn-primary btn-sm w-100 mb-2" (click)="abrirSelector.emit()">
+    + Nueva oferta
+  </button>
+  @if (ofertas.length === 0) {
+    <div class="alert alert-light border">No hay ofertas disponibles.</div>
+  }
+
+  @for (
+    item of ofertas;
+    track item.grupo.id + '-' + item.horario.dia + '-' + item.horario.horaInicio
+  ) {
+    <app-oferta-card
+      class="d-block mb-3"
+      [item]="item"
+      modo="panel"
+      [seleccionada]="esSeleccionada(item)"
+      (seleccionar)="seleccionar(item)"
+    >
+    </app-oferta-card>
+  }
+</div>
