@@ -68,8 +68,6 @@
   }
 }
 
-/* ===== BASE UI (REUTILIZABLE EN TODA LA APP) ===== */
-
 * {
   box-sizing: border-box;
 }
@@ -136,8 +134,6 @@ body {
   border-radius: 10px;
   border: 1px solid #f1e6f9;
 }
-
-/* ===== STEPPER ===== */
 
 .stepper {
   display: flex;
@@ -215,8 +211,6 @@ body {
   background: var(--primary);
 }
 
-/* ===== BOTONES ===== */
-
 .actions {
   display: flex;
   gap: 12px;
@@ -274,8 +268,6 @@ body {
 .secondary-btn:active {
   transform: translateY(0);
 }
-
-/* ===== GRID INFO ===== */
 
 .grid {
   display: flex;

@@ -37,7 +37,6 @@ export class HeaderComponent implements OnInit {
     CreditCard,
     UserPlus
   };
-
   user: any;
   nombreEstudiante: string = '';
   isAdmin: boolean = false;
@@ -62,5 +61,3 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([route]);
   }
 }
-
-

@@ -64,5 +64,3 @@ export class FinalizadoComponent implements OnInit {
     alert(`Descargando comprobante de ${this.nombreEstudiante}...`);
   }
 }
-
-///localStorage.clear(); en la consola del navegador es para poder verificar la inscripcion de matricula :) (esto era para probar)
