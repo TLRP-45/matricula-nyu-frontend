@@ -1,0 +1,111 @@
+<div class="malla-curricular-container">
+
+  <div class="leyenda-bar">
+    <div class="leg-item">
+      <span class="leg-badge aprobado">A</span> Aprobada
+    </div>
+    <div class="leg-item">
+      <span class="leg-badge reprobada">R</span> Reprobada
+    </div>
+    <div class="leg-item">
+      <span class="leg-badge nocursada">N</span> No Cursada
+    </div>
+    <div class="leg-item">
+      <span class="leg-badge inscrita">I</span> Inscrita
+    </div>
+    <div style="flex:1"></div>
+    <div class="leg-item">
+      <span class="leg-badge prerreq-sem">&nbsp;</span> Prerrequisito Semestre
+    </div>
+    <div class="leg-item">
+      <span class="leg-badge prerrequisito">&nbsp;</span> Prerrequisito
+    </div>
+    <div class="leg-item">
+      <span class="leg-badge seleccionada">&nbsp;</span> Seleccionada
+    </div>
+    <div class="leg-item">
+      <span class="leg-badge tributa">&nbsp;</span> Tributa
+    </div>
+  </div>
+
+  <div class="malla-scroll">
+    <div class="semestres-grid">
+
+      <div *ngFor="let semestre of semestres" class="semestre-column">
+
+        <div class="semestre-header">{{ getSemestreRomano(semestre) }}</div>
+
+        <div class="asignaturas-container">
+          <div
+            *ngFor="let asignatura of getAsignaturasBySemestre(semestre)"
+            class="asignatura-card"
+            [ngClass]="getEstadoClass(asignatura.estado)"
+            (click)="abrirModal(asignatura)"
+            [title]="asignatura.nombre"
+          >
+            <div class="asignatura-numero">{{ asignatura.codigo }}</div>
+            <div class="asignatura-nombre">{{ asignatura.nombre | slice:0:18 }}...</div>
+            <div class="asignatura-meta">
+              {{ asignatura.horas }} ({{ asignatura.creditos }})<br>
+              <span *ngIf="asignatura.anio !== '-'">( {{ asignatura.anio }} )</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div
+  *ngIf="modalVisible && selectedAsignatura"
+  class="modal-overlay"
+  (click)="onOverlayClick($event)"
+>
+  <div class="modal-card">
+    <div class="modal-header" [ngClass]="getEstadoClass(selectedAsignatura.estado)">
+      <h3 class="modal-title">{{ selectedAsignatura.nombre }}</h3>
+      <p class="modal-codigo">{{ selectedAsignatura.codigo }}</p>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-row">
+        <span class="modal-key">Estado</span>
+        <span class="modal-value">{{ estadoLabel[selectedAsignatura.estado] }}</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-key">Créditos</span>
+        <span class="modal-value">{{ selectedAsignatura.creditos }}</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-key">Horas (T,P,L)</span>
+        <span class="modal-value">{{ selectedAsignatura.horas }}</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-key">Semestre</span>
+        <span class="modal-value">{{ getSemestreRomano(selectedAsignatura.semestre) }}</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-key">Año cursado</span>
+        <span class="modal-value">{{ selectedAsignatura.anio || '—' }}</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-key">Prerrequisitos</span>
+        <span class="modal-value">
+          <ng-container *ngIf="selectedAsignatura.prerequisitos && selectedAsignatura.prerequisitos.length > 0; else sinPrereqs">
+            <span *ngFor="let pre of selectedAsignatura.prerequisitos" class="prereq-chip">{{ pre }}</span>
+          </ng-container>
+          <ng-template #sinPrereqs>
+            <span class="sin-prerequisitos">Ninguno</span>
+          </ng-template>
+        </span>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="modal-close-btn" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
