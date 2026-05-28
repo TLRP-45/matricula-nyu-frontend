@@ -1,0 +1,52 @@
+<div class="horario-grid">
+  <div class="hora-header">Hora</div>
+
+  @for (dia of dias; track dia) {
+    <div class="dia-header">
+      {{ dia }}
+    </div>
+  }
+
+  @for (hora of horas; track hora.id) {
+    <div class="hora-cell">
+      {{ hora.horaInicio }}
+      -
+      {{ hora.horaFin }}
+    </div>
+
+    @for (dia of dias; track dia) {
+      <div
+        class="celda-horario"
+        cdkDropList
+        [id]="dia + '-' + hora.horaInicio"
+        [cdkDropListConnectedTo]="dropListIds"
+        [cdkDropListData]="celdasHorario[dia + '-' + hora.horaInicio]"
+        [attr.data-dia]="dia"
+        [attr.data-hora-inicio]="hora.horaInicio"
+        [attr.data-hora-fin]="hora.horaFin"
+        [cdkDropListSortingDisabled]="true"
+        (cdkDropListDropped)="onDrop($event)"
+      >
+        @for (
+          item of celdasHorario[dia + '-' + hora.horaInicio];
+          track item.grupo.id + '-' + item.horario.dia + '-' + item.horario.horaInicio
+        ) {
+          <div class="drag-wrapper" cdkDrag [cdkDragData]="item">
+            <app-oferta-card
+              [item]="item"
+              modo="horario"
+              [seleccionada]="
+                item.grupo.id === ofertaSeleccionada?.grupo?.id &&
+                item.horario.dia === ofertaSeleccionada?.horario?.dia &&
+                item.horario.horaInicio === ofertaSeleccionada?.horario?.horaInicio
+              "
+              (actualizado)="construirHorario()"
+              (quitar)="quitarDelHorario($event)"
+            >
+            </app-oferta-card>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

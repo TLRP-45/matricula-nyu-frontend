@@ -1,0 +1,228 @@
+<div class="toast-container">
+  <div *ngFor="let t of toasts" class="toast" [ngClass]="'toast-' + t.type">
+    <i class="ti" [ngClass]="t.type === 'success' ? 'ti-circle-check' : 'ti-alert-circle'"></i>
+    {{ t.msg }}
+  </div>
+</div>
+
+
+<div *ngIf="currentView === 'carreras'">
+
+  <div class="topbar">
+    <h1><i class="ti ti-school"></i> Administrar carreras</h1>
+    <button type="button" class="btn btn-primary" (click)="openCarreraModal()">
+      <i class="ti ti-plus"></i> Nueva carrera
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Carreras registradas</span>
+      <span class="badge badge-purple">{{ carreras.length }} carrera{{ carreras.length !== 1 ? 's' : '' }}</span>
+    </div>
+
+    <div *ngIf="carreras.length === 0" class="empty-state">
+      <i class="ti ti-school-off"></i>
+      <p>No hay carreras registradas.<br>Crea la primera con <strong>Nueva carrera</strong>.</p>
+    </div>
+
+    <table *ngIf="carreras.length > 0" class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Facultad</th>
+          <th>Duración</th>
+          <th>Semestres</th>
+          <th>Asignaturas</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let c of carreras">
+          <tr>
+            <td><strong>{{ c.nombre }}</strong></td>
+            <td><span class="badge badge-purple">{{ c.facultad }}</span></td>
+            <td><span class="badge badge-amber">{{ c.duracion }} años</span></td>
+            <td>
+              <span class="badge badge-teal clickable" (click)="openSemestresView(c)">
+                <i class="ti ti-books"></i> {{ c.semestres.length }} sem. • Ver semestres
+              </span>
+            </td>
+            <td>
+              <span class="badge badge-slate">
+                <i class="ti ti-clipboard-list"></i> {{ totalAsigs(c) }} asig.
+              </span>
+            </td>
+            <td>
+              <div class="action-group">
+                <button type="button" class="btn-icon btn-icon-ghost" title="Editar carrera" (click)="openCarreraModal(c)">
+                  <i class="ti ti-edit"></i>
+                </button>
+                <button type="button" class="btn-icon btn-icon-del" title="Eliminar carrera"
+                        (click)="askDelete('carrera', c.id, c.nombre)">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div *ngIf="currentView === 'semestres' && currentCarrera">
+
+  <div class="topbar">
+    <div class="breadcrumb" (click)="backToCarreras()">
+      <i class="ti ti-arrow-left"></i> Volver a carreras
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openSemestreModal()">
+      <i class="ti ti-plus"></i> Agregar semestre
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">
+        <i class="ti ti-school" style="color:var(--purple);margin-right:6px"></i>
+        Semestres — {{ currentCarrera.nombre }}
+      </span>
+    </div>
+
+    <div *ngIf="currentCarrera.semestres.length === 0" class="empty-state">
+      <i class="ti ti-calendar-off"></i>
+      <p>Sin semestres aún. Agrega el primero.</p>
+    </div>
+
+    <div *ngIf="currentCarrera.semestres.length > 0" class="sem-grid">
+      <div *ngFor="let s of sortedSemestres(currentCarrera)" class="sem-card">
+        <h3><i class="ti ti-calendar-event"></i> Semestre {{ s.num }}</h3>
+        <p>{{ s.anio }} · {{ s.asignaturas.length }} asignaturas</p>
+        <div class="sem-preview">
+          <span *ngFor="let a of s.asignaturas.slice(0,3)" class="sem-asig-chip">{{ a }}</span>
+          <span *ngIf="s.asignaturas.length > 3" class="sem-asig-more">+{{ s.asignaturas.length - 3 }} más</span>
+        </div>
+        <div class="sem-actions">
+          <button type="button" class="btn btn-sm btn-secondary" (click)="openSemestreModal(s)">
+            <i class="ti ti-edit"></i> Editar
+          </button>
+          <button type="button" class="btn-icon btn-icon-del" (click)="askDelete('semestre', s.id, 'Semestre ' + s.num)">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showModalCarrera" class="overlay" (click)="showModalCarrera = false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ editingCarreraId ? 'Editar carrera' : 'Nueva carrera' }}</h2>
+      <button type="button" class="modal-close" (click)="showModalCarrera = false"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Nombre de la carrera</label>
+        <input class="form-control" [(ngModel)]="formCarrera.nombre"
+               placeholder="Ej: Ingeniería en Informática">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Facultad</label>
+          <select class="form-control" [(ngModel)]="formCarrera.facultad">
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let f of facultades" [value]="f">{{ f }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duración (años)</label>
+          <select class="form-control" [(ngModel)]="formCarrera.duracion">
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let d of duraciones" [value]="d">{{ d }}</option>
+          </select>
+          <div class="form-hint">Determina cantidad máx. de semestres</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary btn-sm" (click)="showModalCarrera = false">Cancelar</button>
+      <button type="button" class="btn btn-primary btn-sm" (click)="saveCarrera()">
+        <i class="ti ti-device-floppy"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showModalSemestre" class="overlay" (click)="showModalSemestre = false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ editingSemestreId ? 'Editar semestre' : 'Nuevo semestre' }}</h2>
+      <button type="button" class="modal-close" (click)="showModalSemestre = false"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Número de semestre</label>
+          <input class="form-control" type="number" [(ngModel)]="formSemestre.num"
+                 min="1" max="12" placeholder="Ej: 1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Año académico</label>
+          <select class="form-control" [(ngModel)]="formSemestre.anio">
+            <option *ngFor="let a of anios" [value]="a">{{ a }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Asignaturas del semestre</label>
+        <div class="asig-input-row">
+          <input class="form-control" [(ngModel)]="newAsigInput"
+                 placeholder="Nombre de asignatura..."
+                 (keydown.enter)="addTempAsig()">
+          <button type="button" class="btn btn-primary btn-sm" (click)="addTempAsig()">
+            <i class="ti ti-plus"></i>
+          </button>
+        </div>
+        <div class="asig-list">
+          <span *ngFor="let a of tempAsigs; let i = index" class="asig-tag">
+            {{ a }}
+            <button type="button" (click)="removeTempAsig(i)" title="Quitar">×</button>
+          </span>
+        </div>
+        <div class="form-hint">
+          {{ tempAsigs.length ? tempAsigs.length + ' asignatura(s) agregadas' : 'Presiona Enter o + para agregar' }}
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary btn-sm" (click)="showModalSemestre = false">Cancelar</button>
+      <button type="button" class="btn btn-primary btn-sm" (click)="saveSemestre()">
+        <i class="ti ti-device-floppy"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showModalConfirm" class="overlay" (click)="showModalConfirm = false">
+  <div class="modal modal-sm" (click)="$event.stopPropagation()">
+    <div class="modal-body confirm-body">
+      <div class="confirm-icon"><i class="ti ti-trash"></i></div>
+      <div class="confirm-text">
+        <h3>¿Eliminar {{ deleteType === 'carrera' ? 'carrera' : 'semestre' }}?</h3>
+        <p>Se eliminará <strong>{{ deleteNombre }}</strong>. Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="confirm-actions">
+        <button type="button" class="btn btn-secondary" (click)="showModalConfirm = false">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">
+          <i class="ti ti-trash"></i> Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

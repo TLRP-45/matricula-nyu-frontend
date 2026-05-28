@@ -1,0 +1,133 @@
+<div
+  class="card shadow-sm oferta-card"
+  [class.card-seleccionada]="seleccionada"
+  (click)="onSeleccionar()"
+>
+  <div class="card-body">
+    <div class="header-row" [class.panel]="modo === 'panel'">
+      <div class="header-info">
+        <h6 class="fw-bold mb-1">
+          {{ item.oferta.asignatura.codigo }}
+        </h6>
+
+        <div class="nombre-asignatura">
+          {{ item.oferta.asignatura.nombre }}
+        </div>
+
+        <small class="text-muted">
+          {{ item.grupo.tipo | titlecase }}
+          {{ item.grupo.letra }}
+        </small>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <div class="mb-2">
+        <span class="badge bg-primary">
+          {{ item.grupo.tipo }}
+        </span>
+      </div>
+
+      <p class="mb-1">
+        <strong>Profesor:</strong>
+
+        {{ item.grupo.profesor }}
+      </p>
+
+      <p class="mb-1">
+        <strong>Cupos:</strong>
+
+        {{ item.grupo.cupos }}
+      </p>
+    </div>
+
+    @if (modo === 'horario') {
+      <button class="btn btn-sm btn-outline-danger mt-2" (click)="quitar.emit(item)">Quitar</button>
+    }
+
+    @if (modo === 'panel') {
+      <div class="mt-3">
+        @for (h of item.grupo.horarios; track $index) {
+          <div class="horario-preview">
+            <span class="badge bg-light text-dark">
+              {{ h.dia }}
+
+              {{ h.horaInicio }}
+
+              -
+
+              {{ h.horaFin }}
+            </span>
+          </div>
+        }
+      </div>
+    }
+
+    @if (expandida && modo === 'panel') {
+      <div class="mt-4 formulario-edicion" (click)="$event.stopPropagation()">
+        <div class="mb-3">
+          <label class="form-label"> Profesor </label>
+
+          <input
+            type="text"
+            class="form-control"
+            [value]="item.grupo.profesor"
+            (input)="actualizarProfesor($event)"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"> Cupos </label>
+
+          <input
+            type="number"
+            class="form-control"
+            [value]="item.grupo.cupos"
+            (input)="actualizarCupos($event)"
+          />
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label"> Horarios </label>
+
+          @for (h of item.grupo.horarios; track $index) {
+            <div class="horario-box">
+              <select
+                class="form-select"
+                [value]="h.dia"
+                (change)="actualizarHorario($index, 'dia', $event)"
+              >
+                @for (dia of diasSemana; track dia) {
+                  <option [value]="dia">
+                    {{ dia }}
+                  </option>
+                }
+              </select>
+
+              <select
+                class="form-select"
+                [value]="h.horaInicio"
+                (change)="onHoraInicioChange($index, $event)"
+              >
+                @for (bloque of bloquesHorario; track bloque.inicio) {
+                  <option [value]="bloque.inicio">
+                    {{ bloque.inicio }}
+                  </option>
+                }
+              </select>
+
+              <input type="time" class="form-control" [value]="h.horaFin" disabled />
+            </div>
+          }
+        </div>
+      </div>
+    }
+    @if (modo === 'panel') {
+      <div class="acciones-panel">
+        <button class="btn btn-sm btn-outline-primary" (click)="toggleExpandir($event)">
+          {{ expandida ? 'Cerrar' : 'Editar' }}
+        </button>
+      </div>
+    }
+  </div>
+</div>
