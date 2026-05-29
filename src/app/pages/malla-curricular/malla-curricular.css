@@ -1,102 +1,117 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+:host {
+  display: block;
+  background: #ffffff;
+  min-height: 100vh;
+}
+
 .malla-curricular-container {
-  background: #fff;
-  font-family: Arial, sans-serif;
+  background: #ffffff;
+  font-family: 'Segoe UI', Arial, sans-serif;
   font-size: 12px;
   color: #222;
-  padding: 12px;
-  min-width: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.malla-header {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.malla-header-left { min-width: 200px; }
+
+.malla-titulo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #7c6fe0;
+  letter-spacing: .5px;
+}
+
+.malla-carrera {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
 }
 
 .leyenda-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 14px;
-  padding: 8px 4px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ccc;
+  gap: 8px 18px;
 }
 
 .leg-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   font-size: 12px;
-  font-weight: 600;
+  color: #444;
+  font-weight: 500;
 }
 
 .leg-badge {
   display: inline-block;
-  width: 20px;
-  height: 16px;
-  border-radius: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
   border: 1px solid rgba(0,0,0,.15);
-  font-size: 10px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  line-height: 16px;
 }
 
-.leg-badge.aprobado    { background: #4472C4; }
-.leg-badge.reprobada   { background: #FF0000; color: #fff; }
-.leg-badge.nocursada   { background: #fff; color: #222; border: 1.5px solid #555; }
-.leg-badge.inscrita    { background: #FFFF00; color: #222; }
-.leg-badge.prerreq-sem { background: #7030A0; }
-.leg-badge.prerrequisito { background: #FF9999; color: #222; }
-.leg-badge.seleccionada  { background: #9DC3E6; color: #222; }
-.leg-badge.tributa       { background: #70AD47; }
+.leg-badge.aprobado      { background: #4BA3E3; }
+.leg-badge.reprobada     { background: #E85B5B; }
+.leg-badge.nocursada     { background: transparent; border: 2px solid #aaa; }
+.leg-badge.inscrita      { background: #90D895; }
+.leg-badge.prerrequisito { background: #FFB74D; }
+.leg-badge.tributa       { background: #E040FB; }
 
-.malla-scroll { overflow-x: auto; }
+.malla-scroll { overflow-x: auto; padding-bottom: 8px; }
 
 .semestres-grid {
   display: grid;
-  grid-template-columns: repeat(11, minmax(130px, 1fr));
-  gap: 0;
-  border-left: 1px solid #aaa;
-  border-top: 1px solid #aaa;
-  min-width: 1430px;
+  grid-template-columns: repeat(11, minmax(140px, 1fr));
+  gap: 12px;
+  min-width: 1580px;
 }
 
 .semestre-column {
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #aaa;
+  gap: 8px;
 }
 
 .semestre-header {
-  background: #D9E1F2;
-  border-bottom: 1px solid #aaa;
   text-align: center;
-  padding: 5px 4px;
-  font-size: 13px;
+  padding: 6px 4px;
+  font-size: 16px;
   font-weight: 700;
-  color: #222;
-  letter-spacing: .5px;
+  color: #7c6fe0;
+  letter-spacing: 1px;
 }
 
 .asignaturas-container {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  gap: 8px;
 }
 
 .asignatura-card {
-  border-bottom: 1px solid rgba(0,0,0,.12);
-  padding: 5px 6px;
+  border-radius: 10px;
+  padding: 10px 10px 8px;
   cursor: pointer;
-  transition: filter .15s;
-  line-height: 1.35;
+  transition: transform .15s, box-shadow .15s, background .2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  line-height: 1.4;
+  border: 2px solid transparent;
 }
 
-.asignatura-card:hover { filter: brightness(.93); }
-
-.asignatura-numero {
-  font-size: 10px;
-  font-weight: 700;
-  opacity: .75;
+.asignatura-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.2);
 }
 
 .asignatura-nombre {
@@ -104,23 +119,22 @@
   font-weight: 700;
   text-transform: uppercase;
   word-break: break-word;
+  margin-bottom: 4px;
 }
 
 .asignatura-meta {
   font-size: 10px;
   opacity: .85;
-  margin-top: 1px;
 }
 
-.asignatura--aprobado      { background: #4472C4; color: #fff; }
-.asignatura--reprobada     { background: #FF0000; color: #fff; }
-.asignatura--nocursada     { background: #fff;    color: #222; }
-.asignatura--inscrita      { background: #FFFF00; color: #222; }
-.asignatura--cursando      { background: #FFFF00; color: #222; }
-.asignatura--prerreq_sem   { background: #7030A0; color: #fff; }
-.asignatura--prerrequisito { background: #FF9999; color: #222; }
-.asignatura--seleccionada  { background: #9DC3E6; color: #222; }
-.asignatura--tributa       { background: #70AD47; color: #fff; }
+.asignatura--aprobado      { background: #4BA3E3; color: #fff; }
+.asignatura--reprobada     { background: #E85B5B; color: #fff; }
+.asignatura--nocursada     { background: #f5f5f5; color: #666; border: 2px solid #ccc; }
+.asignatura--inscrita      { background: #90D895; color: #1a1a2e; }
+.asignatura--cursando      { background: #ffffff; color: #1a1a2e; border: 2px solid #90D895; }
+.asignatura--prerrequisito { background: #FFB74D; color: #1a1a2e; }
+.asignatura--seleccionada  { background: #64B5F6; color: #1a1a2e; }
+.asignatura--tributa       { background: #E040FB; color: #fff; }
 
 .modal-overlay {
   position: fixed;
@@ -134,42 +148,35 @@
 
 .modal-card {
   background: #fff;
-  border: 1px solid #888;
-  border-radius: 6px;
-  width: 380px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 390px;
   max-width: 95vw;
-  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  box-shadow: 0 12px 40px rgba(0,0,0,.2);
   overflow: hidden;
 }
 
-.modal-header {
-  padding: 14px 18px 10px;
-}
+.modal-header { padding: 16px 20px 12px; }
 
 .modal-title {
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
-.modal-codigo {
-  font-size: 11px;
-  opacity: .8;
-}
+.modal-codigo { font-size: 11px; opacity: .8; }
 
 .modal-header.asignatura--aprobado    .modal-title,
 .modal-header.asignatura--aprobado    .modal-codigo,
 .modal-header.asignatura--reprobada   .modal-title,
 .modal-header.asignatura--reprobada   .modal-codigo,
-.modal-header.asignatura--prerreq_sem .modal-title,
-.modal-header.asignatura--prerreq_sem .modal-codigo,
 .modal-header.asignatura--tributa     .modal-title,
 .modal-header.asignatura--tributa     .modal-codigo { color: #fff; }
 
-.modal-header.asignatura--nocursada   .modal-title,
-.modal-header.asignatura--inscrita    .modal-title,
-.modal-header.asignatura--cursando    .modal-title,
+.modal-header.asignatura--nocursada     .modal-title,
+.modal-header.asignatura--inscrita      .modal-title,
+.modal-header.asignatura--cursando      .modal-title,
 .modal-header.asignatura--prerrequisito .modal-title,
 .modal-header.asignatura--seleccionada  .modal-title { color: #222; }
 
@@ -178,44 +185,41 @@
 .modal-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 18px;
+  padding: 9px 20px;
   border-bottom: 1px solid #eee;
   font-size: 13px;
 }
 
 .modal-row:last-child { border-bottom: none; }
 
-.modal-key   { color: #666; font-weight: 600; min-width: 120px; }
-.modal-value { color: #222; font-weight: 400; text-align: right; display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+.modal-key   { color: #888; font-weight: 600; min-width: 120px; }
+.modal-value { color: #222; text-align: right; display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
 
 .prereq-chip {
   display: inline-block;
   background: #e8eaf6;
   color: #3949ab;
   border: 1px solid #c5cae9;
-  border-radius: 3px;
-  padding: 1px 6px;
+  border-radius: 4px;
+  padding: 2px 7px;
   font-size: 11px;
   font-weight: 600;
 }
 
 .sin-prerequisitos { color: #aaa; font-style: italic; }
 
-.modal-footer { padding: 12px 18px; border-top: 1px solid #eee; }
+.modal-footer { padding: 14px 20px; border-top: 1px solid #eee; }
 
 .modal-close-btn {
   width: 100%;
-  padding: 8px;
+  padding: 9px;
   border: 1px solid #bbb;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #f5f5f5;
   color: #333;
   font-size: 13px;
   cursor: pointer;
+  transition: background .15s;
 }
 
 .modal-close-btn:hover { background: #e0e0e0; }
-
-@media (max-width: 900px) {
-  .semestres-grid { min-width: 900px; }
-}

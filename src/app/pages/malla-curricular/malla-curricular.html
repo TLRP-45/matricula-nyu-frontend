@@ -1,62 +1,46 @@
 <div class="malla-curricular-container">
-
-  <div class="leyenda-bar">
-    <div class="leg-item">
-      <span class="leg-badge aprobado">A</span> Aprobada
+  <div class="malla-header">
+    <div class="malla-header-left">
+      <h1 class="malla-titulo">Avance curricular</h1>
+      <p class="malla-carrera">{{ carrera }}</p>
     </div>
-    <div class="leg-item">
-      <span class="leg-badge reprobada">R</span> Reprobada
-    </div>
-    <div class="leg-item">
-      <span class="leg-badge nocursada">N</span> No Cursada
-    </div>
-    <div class="leg-item">
-      <span class="leg-badge inscrita">I</span> Inscrita
-    </div>
-    <div style="flex:1"></div>
-    <div class="leg-item">
-      <span class="leg-badge prerreq-sem">&nbsp;</span> Prerrequisito Semestre
-    </div>
-    <div class="leg-item">
-      <span class="leg-badge prerrequisito">&nbsp;</span> Prerrequisito
-    </div>
-    <div class="leg-item">
-      <span class="leg-badge seleccionada">&nbsp;</span> Seleccionada
-    </div>
-    <div class="leg-item">
-      <span class="leg-badge tributa">&nbsp;</span> Tributa
+    <div class="leyenda-bar">
+      <div class="leg-item"><span class="leg-badge aprobado"></span> Aprobado</div>
+      <div class="leg-item"><span class="leg-badge reprobada"></span> Reprobada</div>
+      <div class="leg-item"><span class="leg-badge nocursada"></span> No Cursada</div>
+      <div class="leg-item"><span class="leg-badge inscrita"></span> Inscrita</div>
+      <div class="leg-item"><span class="leg-badge prerrequisito"></span> Prerrequisito</div>
+      <div class="leg-item"><span class="leg-badge tributa"></span> Tributa / Abre</div>
     </div>
   </div>
 
   <div class="malla-scroll">
     <div class="semestres-grid">
-
       <div *ngFor="let semestre of semestres" class="semestre-column">
-
         <div class="semestre-header">{{ getSemestreRomano(semestre) }}</div>
-
         <div class="asignaturas-container">
           <div
             *ngFor="let asignatura of getAsignaturasBySemestre(semestre)"
             class="asignatura-card"
-            [ngClass]="getEstadoClass(asignatura.estado)"
+            [ngClass]="getCardClass(asignatura)"
             (click)="abrirModal(asignatura)"
+            (mouseenter)="onMouseEnter(asignatura)"
+            (mouseleave)="onMouseLeave()"
             [title]="asignatura.nombre"
           >
-            <div class="asignatura-numero">{{ asignatura.codigo }}</div>
-            <div class="asignatura-nombre">{{ asignatura.nombre | slice:0:18 }}...</div>
+            <div class="asignatura-nombre">
+              <span class="asignatura-codigo">{{ asignatura.codigo }}</span><br>
+              {{ asignatura.nombre | slice:0:22 }}<ng-container *ngIf="asignatura.nombre.length > 22">...</ng-container>
+            </div>
             <div class="asignatura-meta">
-              {{ asignatura.horas }} ({{ asignatura.creditos }})<br>
-              <span *ngIf="asignatura.anio !== '-'">( {{ asignatura.anio }} )</span>
+              {{ asignatura.horas }} · {{ asignatura.creditos }} cr<br>
+              <span *ngIf="asignatura.anio !== '-'">{{ asignatura.anio }}</span>
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
   </div>
-
 </div>
 
 <div
@@ -69,18 +53,21 @@
       <h3 class="modal-title">{{ selectedAsignatura.nombre }}</h3>
       <p class="modal-codigo">{{ selectedAsignatura.codigo }}</p>
     </div>
-
     <div class="modal-body">
       <div class="modal-row">
         <span class="modal-key">Estado</span>
         <span class="modal-value">{{ estadoLabel[selectedAsignatura.estado] }}</span>
+      </div>
+      <div class="modal-row" *ngIf="selectedAsignatura.caracter">
+        <span class="modal-key">Carácter</span>
+        <span class="modal-value">{{ selectedAsignatura.caracter }}</span>
       </div>
       <div class="modal-row">
         <span class="modal-key">Créditos</span>
         <span class="modal-value">{{ selectedAsignatura.creditos }}</span>
       </div>
       <div class="modal-row">
-        <span class="modal-key">Horas (T,P,L)</span>
+        <span class="modal-key">Horas (C,T,L)</span>
         <span class="modal-value">{{ selectedAsignatura.horas }}</span>
       </div>
       <div class="modal-row">
@@ -91,19 +78,40 @@
         <span class="modal-key">Año cursado</span>
         <span class="modal-value">{{ selectedAsignatura.anio || '—' }}</span>
       </div>
+      <div class="modal-row" *ngIf="selectedAsignatura.nota">
+        <span class="modal-key">Nota Final</span>
+        <span class="modal-value" style="font-weight: bold;">{{ selectedAsignatura.nota }}</span>
+      </div>
+      <div class="modal-row" *ngIf="selectedAsignatura.oportunidad">
+        <span class="modal-key">Oportunidad</span>
+        <span class="modal-value">{{ selectedAsignatura.oportunidad }}</span>
+      </div>
+      
       <div class="modal-row">
         <span class="modal-key">Prerrequisitos</span>
         <span class="modal-value">
           <ng-container *ngIf="selectedAsignatura.prerequisitos && selectedAsignatura.prerequisitos.length > 0; else sinPrereqs">
-            <span *ngFor="let pre of selectedAsignatura.prerequisitos" class="prereq-chip">{{ pre }}</span>
+            <span *ngFor="let pre of getPrerequisitosData(selectedAsignatura.prerequisitos)" class="prereq-chip" [title]="pre.nombre">{{ pre.codigo }}</span>
           </ng-container>
           <ng-template #sinPrereqs>
             <span class="sin-prerequisitos">Ninguno</span>
           </ng-template>
         </span>
       </div>
-    </div>
 
+      <div class="modal-row">
+        <span class="modal-key">Tributa a (Abre)</span>
+        <span class="modal-value">
+          <ng-container *ngIf="getTributasData(selectedAsignatura.id).length > 0; else sinTributas">
+            <span *ngFor="let trib of getTributasData(selectedAsignatura.id)" class="prereq-chip" style="background:#f3e5f5; color:#9c27b0; border-color:#e1bee7;" [title]="trib.nombre">{{ trib.codigo }}</span>
+          </ng-container>
+          <ng-template #sinTributas>
+            <span class="sin-prerequisitos">Ninguna</span>
+          </ng-template>
+        </span>
+      </div>
+
+    </div>
     <div class="modal-footer">
       <button class="modal-close-btn" (click)="cerrarModal()">Cerrar</button>
     </div>
