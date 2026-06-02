@@ -1,28 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Semestre {
-  id: number;
-  num: number;
-  anio: string;
-  asignaturas: string[];
-}
-
-interface Carrera {
-  id: number;
-  nombre: string;
-  facultad: string;
-  duracion: string;
-  semestres: Semestre[];
-}
-
-interface Toast {
-  id: number;
-  msg: string;
-  type: 'success' | 'danger';
-}
-
+import { CarrerasService } from '../../services/carreras.service';
+import { Carrera, Semestre, Toast } from '../../models/carrera.model';
 @Component({
   selector: 'app-admin-carreras',
   standalone: true,
@@ -30,24 +10,24 @@ interface Toast {
   templateUrl: './admin-carreras.html',
   styleUrls: ['./admin-carreras.css']
 })
-export class AdminCarrerasComponent {
+export class AdminCarrerasComponent implements OnInit {
 
-  carreras: Carrera[] = [
-    {
-      id: 1, nombre: 'Ingeniería Civil Informática', facultad: 'Ingeniería', duracion: '5',
-      semestres: [
-        { id: 1, num: 1, anio: '1° año', asignaturas: ['Cálculo I', 'Álgebra Lineal', 'Intro. Programación'] },
-        { id: 2, num: 2, anio: '1° año', asignaturas: ['Cálculo II', 'Estructuras de Datos', 'Física I'] }
-      ]
-    },
-    { id: 2, nombre: 'Medicina', facultad: 'Medicina', duracion: '6', semestres: [] },
-    { id: 3, nombre: 'Derecho', facultad: 'Derecho', duracion: '5', semestres: [] }
-  ];
-  private nextId = 10;
+  carreras: Carrera[] = [];
 
   readonly facultades = ['Ingeniería', 'Medicina', 'Cs. Sociales', 'Derecho', 'Economía', 'Arte y Diseño'];
   readonly duraciones = ['3', '4', '5', '6'];
   readonly anios      = ['1° año', '2° año', '3° año', '4° año', '5° año'];
+  constructor(private carrerasService: CarrerasService) {}
+
+  ngOnInit(): void {
+    this.carrerasService.getCarreras$().subscribe(list => {
+      this.carreras = list;
+      if (this.currentCarrera) {
+        // refresh reference to the up-to-date carrera object
+        this.currentCarrera = this.carreras.find(c => c.id === this.currentCarrera!.id) || null;
+      }
+    });
+  }
 
   currentView: 'carreras' | 'semestres' = 'carreras';
   currentCarrera: Carrera | null = null;
@@ -106,19 +86,12 @@ export class AdminCarrerasComponent {
       return;
     }
     if (this.editingCarreraId !== null) {
-      const c = this.carreras.find(x => x.id === this.editingCarreraId)!;
-      c.nombre = nombre.trim();
-      c.facultad = facultad;
-      c.duracion = duracion;
+      this.carrerasService.updateCarrera(this.editingCarreraId, {
+        nombre: nombre.trim(), facultad, duracion
+      });
       this.showToast('Carrera actualizada correctamente', 'success');
     } else {
-      this.carreras.push({
-        id: this.nextId++,
-        nombre: nombre.trim(),
-        facultad,
-        duracion,
-        semestres: []
-      });
+      this.carrerasService.addCarrera({ nombre: nombre.trim(), facultad, duracion, semestres: [] });
       this.showToast('Carrera creada correctamente', 'success');
     }
     this.showModalCarrera = false;
@@ -159,15 +132,14 @@ export class AdminCarrerasComponent {
     }
     const c = this.currentCarrera!;
     if (this.editingSemestreId !== null) {
-      const s = c.semestres.find(x => x.id === this.editingSemestreId)!;
-      s.num = num; s.anio = anio; s.asignaturas = [...this.tempAsigs];
+      this.carrerasService.updateSemestre(c.id, this.editingSemestreId, { num, anio, asignaturas: [...this.tempAsigs] });
       this.showToast('Semestre actualizado correctamente', 'success');
     } else {
       if (c.semestres.find(x => x.num === num)) {
         this.showToast(`El semestre ${num} ya existe en esta carrera`, 'danger');
         return;
       }
-      c.semestres.push({ id: this.nextId++, num, anio, asignaturas: [...this.tempAsigs] });
+      this.carrerasService.addSemestre(c.id, { id: 0, num, anio, asignaturas: [...this.tempAsigs] });
       this.showToast('Semestre agregado correctamente', 'success');
     }
     this.showModalSemestre = false;
@@ -182,12 +154,11 @@ export class AdminCarrerasComponent {
 
   confirmDelete(): void {
     if (this.deleteType === 'carrera') {
-      this.carreras = this.carreras.filter(x => x.id !== this.deleteTarget);
+      this.carrerasService.deleteCarrera(this.deleteTarget!);
       if (this.currentView === 'semestres') this.backToCarreras();
       this.showToast('Carrera eliminada', 'success');
     } else {
-      this.currentCarrera!.semestres =
-        this.currentCarrera!.semestres.filter(x => x.id !== this.deleteTarget);
+      this.carrerasService.deleteSemestre(this.currentCarrera!.id, this.deleteTarget!);
       this.showToast('Semestre eliminado', 'success');
     }
     this.showModalConfirm = false;

@@ -18,6 +18,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, matricula-nyu-frontend');
+    // do not depend on an arbitrary title in the UI; assert router outlet exists
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });
