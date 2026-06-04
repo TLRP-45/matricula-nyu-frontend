@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, SlicePipe } from '@angular/common';
 import { MallaService } from '../../services/malla.service';
+import { HttpClient } from '@angular/common/http';
+
 
 export interface Asignatura {
   id: string;
@@ -70,16 +72,18 @@ export class MallaCurricular implements OnInit {
   asignaturas: Asignatura[] = [];
 
 
-  constructor(private mallaService: MallaService) {}
+  constructor(
+    private mallaService: MallaService,
+    private http: HttpClient,
+  ) {}
 
   async ngOnInit() {
     if (!this.mallaService.getAsignaturasSnapshot().length) {
       this.mallaService.setAsignaturas(this.asignaturasPlaceholder());
     }
-    const aux = await this.obtenerUsuarios();
-    this.carrera = aux.nombre;
-    console.log(aux.nombre);
-    console.log(this.carrera);
+    this.obtenerUsuarios().subscribe((aux: any) => {
+      this.carrera = aux.nombre;
+    });
     this.mallaService.getAsignaturas$().subscribe(list => this.asignaturas = list);
   }
 
@@ -195,14 +199,7 @@ export class MallaCurricular implements OnInit {
     }
   }
 
-  async obtenerUsuarios() {
-    const response = await fetch('http://localhost:3000/carrera/1');
-
-    if (!response.ok) {
-      throw new Error('Error al obtener usuarios');
-    }
-
-    const data = await response.json();
-    return data;
+  obtenerUsuarios() {
+    return this.http.get('http://localhost:3000/carrera/1');
   }
 }
