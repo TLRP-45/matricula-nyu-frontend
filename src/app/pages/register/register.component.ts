@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { ClientService } from '../../services/client.service';
 import { rutValidator } from '../../validators/rut.validator';
-import { RutFormatDirective } from '../../directive/rut-format.directive';
+import { RutFormatDirective } from '../../directives/rut-format.directive';
 import { Role } from '../../models/roles';
 
 @Component({

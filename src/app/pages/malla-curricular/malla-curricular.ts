@@ -36,7 +36,8 @@ export type EstadoAsignatura =
   styleUrl: './malla-curricular.css',
 })
 export class MallaCurricular implements OnInit {
-  carrera: string = 'Ingeniería Civil en Computación e Informática';
+
+  carrera: any;
   semestres: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   selectedAsignatura: Asignatura | null = null;
   modalVisible: boolean = false;
@@ -67,14 +68,18 @@ export class MallaCurricular implements OnInit {
   };
 
   asignaturas: Asignatura[] = [];
-  
+
 
   constructor(private mallaService: MallaService) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     if (!this.mallaService.getAsignaturasSnapshot().length) {
       this.mallaService.setAsignaturas(this.asignaturasPlaceholder());
     }
+    const aux = await this.obtenerUsuarios();
+    this.carrera = aux.nombre;
+    console.log(aux.nombre);
+    console.log(this.carrera);
     this.mallaService.getAsignaturas$().subscribe(list => this.asignaturas = list);
   }
 
@@ -188,5 +193,16 @@ export class MallaCurricular implements OnInit {
     if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
       this.cerrarModal();
     }
+  }
+
+  async obtenerUsuarios() {
+    const response = await fetch('http://localhost:3000/carrera/1');
+
+    if (!response.ok) {
+      throw new Error('Error al obtener usuarios');
+    }
+
+    const data = await response.json();
+    return data;
   }
 }

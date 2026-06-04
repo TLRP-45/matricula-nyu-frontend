@@ -105,7 +105,7 @@ export const routes: Routes = [
       {
         path: 'malla-curricular',
         component: MallaCurricular,
-        canActivate: [authGuard],
+        //canActivate: [authGuard],
         data: { role: Role.STUDENT }
       }
     ]

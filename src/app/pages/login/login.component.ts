@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { RutFormatDirective } from '../../directive/rut-format.directive';
+import { RutFormatDirective } from '../../directives/rut-format.directive';
 import { rutValidator } from '../../validators/rut.validator';
 import { Role } from '../../models/roles';
 
