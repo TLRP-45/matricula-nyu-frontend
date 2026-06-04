@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, SlicePipe } from '@angular/common';
 import { MallaService } from '../../services/malla.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../enviroment';
+
+// Coloca algo para cargar, porque los datos llegan atrasados del backend❕❕
 
 
 export interface Asignatura {
@@ -78,10 +81,13 @@ export class MallaCurricular implements OnInit {
   ) {}
 
   async ngOnInit() {
+    //cambiar a la logica real
+    sessionStorage.setItem('id', JSON.stringify(1));
+
     if (!this.mallaService.getAsignaturasSnapshot().length) {
       this.mallaService.setAsignaturas(this.asignaturasPlaceholder());
     }
-    this.obtenerUsuarios().subscribe((aux: any) => {
+    this.obtenerCarrera().subscribe((aux: any) => {
       this.carrera = aux.nombre;
     });
     this.mallaService.getAsignaturas$().subscribe(list => this.asignaturas = list);
@@ -141,9 +147,9 @@ export class MallaCurricular implements OnInit {
   getPrerequisitosData(ids: string[]): { codigo: string, nombre: string }[] {
     return ids.map(id => {
       const asig = this.asignaturas.find(a => a.id === id);
-      return { 
-        codigo: asig ? asig.codigo : id, 
-        nombre: asig ? asig.nombre : id 
+      return {
+        codigo: asig ? asig.codigo : id,
+        nombre: asig ? asig.nombre : id
       };
     });
   }
@@ -151,9 +157,9 @@ export class MallaCurricular implements OnInit {
   getTributasData(id: string): { codigo: string, nombre: string }[] {
     return this.asignaturas
       .filter(a => a.prerequisitos?.includes(id))
-      .map(a => ({ 
-        codigo: a.codigo, 
-        nombre: a.nombre 
+      .map(a => ({
+        codigo: a.codigo,
+        nombre: a.nombre
       }));
   }
 
@@ -199,7 +205,34 @@ export class MallaCurricular implements OnInit {
     }
   }
 
-  obtenerUsuarios() {
-    return this.http.get('http://localhost:3000/carrera/1');
+// ENPOINTS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  obtenerCarrera() {
+    // Cambiar el nombre a lo que haya
+    const estudianteID = sessionStorage.getItem('id');
+    return this.http.get(`${environment.apiUrl}/carrera/${estudianteID}`);
+  }
+
+  obtenerSemestres(carreraID: number){
+    return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
+  }
+
+  obtenerAsignaturaPorSemestre(carreraID:number, semestre: number){
+    return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/asignaturas/${semestre}`);
+  }
+
+  obtenerEstadoAsignatura(asignaturaID: number){
+    const estudianteID = localStorage.getItem('id');
+    return this.http.get(`${environment.apiUrl}/asignaturas/${asignaturaID}/${estudianteID}/estado`);
+  }
+
+// Estas cada vez que se seleccione una asignatura _______________________________________________________
+
+  obtenerPrerrequisitos(asignaturaID:number, carreraID:number){
+    return this.http.get(`${environment.apiUrl}/asignaturas/${asignaturaID}/prerrequisitos/${carreraID}`);
+  }
+
+  obtenerTributas(asignaturaID:number, carreraID:number){
+    return this.http.get(`${environment.apiUrl}/asignaturas/${asignaturaID}/tributas/${carreraID}`);
   }
 }

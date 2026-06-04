@@ -3,6 +3,29 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CarrerasService } from '../../services/carreras.service';
 import { Carrera, Semestre, Toast } from '../../models/carrera.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../enviroment';
+
+export interface CreateCarrera{
+  nombre: string;
+  facultad: string;
+  duracion: number;
+  cupos: number;
+}
+
+export interface UpdateCarrera{
+  nombre?: string;
+  facultad?: string;
+  duracion?: number;
+  cupos?: number;
+}
+
+export interface AsignarAsignatura{
+    ID_asignatura: number;
+    semestre: number;
+    posicion: number;
+}
+
 @Component({
   selector: 'app-admin-carreras',
   standalone: true,
@@ -17,7 +40,10 @@ export class AdminCarrerasComponent implements OnInit {
   readonly facultades = ['Ingeniería', 'Medicina', 'Cs. Sociales', 'Derecho', 'Economía', 'Arte y Diseño'];
   readonly duraciones = ['3', '4', '5', '6'];
   readonly anios      = ['1° año', '2° año', '3° año', '4° año', '5° año'];
-  constructor(private carrerasService: CarrerasService) {}
+  constructor(
+    private carrerasService: CarrerasService,
+    private http: HttpClient,
+  ) {}
 
   ngOnInit(): void {
     this.carrerasService.getCarreras$().subscribe(list => {
@@ -168,5 +194,54 @@ export class AdminCarrerasComponent implements OnInit {
     const id = this.toastSeq++;
     this.toasts.push({ id, msg, type });
     setTimeout(() => this.toasts = this.toasts.filter(t => t.id !== id), 3200);
+  }
+
+// ENPOINTS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  obtenerCarreras(){
+    return this.http.get(`${environment.apiUrl}/carrera`);
+  }
+
+  obtenerSemestres(carreraID: number){
+    return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
+  }
+
+  // Por si haces buscador____________________________________________________________
+  buscarCarreraNombre(busqueda: string){
+    return this.http.get(`${environment.apiUrl}/carrera/buscar/nombre/${busqueda}`);
+  }
+
+  buscarCarreraFacultad(busqueda: string){
+    return this.http.get(`${environment.apiUrl}/carrera/buscar/facultad/${busqueda}`);
+  }
+
+  // POST_____________________________________________________________________________
+  crearCarrera(carrera: CreateCarrera) {
+    return this.http.post(`${environment}/carrera`, carrera);
+  }
+
+  // PUT_______________________________________________________________________
+  actualizarCarrera(carrera: UpdateCarrera, carreraID: number) {
+    return this.http.put(`${environment}/carrera/${carreraID}/actualizar`, carrera);
+  }
+
+  //DELETE_____________________________________________________________________
+  eliminarCarrera(carreraID: number) {
+    return this.http.delete(`${environment}/carrera/${carreraID}`);
+  }
+
+  //Asignaturas________________________________________________________________ (para seleccionar y después agregar o eliminar)
+  getAsignaturasPorCarrera(carreraID:number){
+    return this.http.get(`${environment}/carrera/${carreraID}/asignaturas`);
+  }
+
+  //PUSH........................................................................................................................
+  putPushAsignatura(carreraID: number, asignatura: AsignarAsignatura) {
+    return this.http.put(`${environment}/carrera/${carreraID}/actualizar/asignatura/remove`, asignatura);
+  }
+
+  //REMOVE......................................................................................................................
+  putRemoveAsignatura(carreraID: number, asignaturaID: number) {
+    return this.http.put(`${environment}/carrera/${carreraID}/actualizar/asignatura/remove`, {ID_asignatura: asignaturaID});
   }
 }
