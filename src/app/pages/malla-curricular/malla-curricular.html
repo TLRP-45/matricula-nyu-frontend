@@ -2,7 +2,7 @@
   <div class="malla-header">
     <div class="malla-header-left">
       <h1 class="malla-titulo">Avance curricular</h1>
-      <p class="malla-carrera">{{carrera}}</p>
+      <p class="malla-carrera">{{carreraNombre}}</p>
     </div>
     <div class="leyenda-bar">
       <div class="leg-item"><span class="leg-badge aprobado"></span> Aprobado</div>
@@ -20,7 +20,7 @@
         <div class="semestre-header">{{ getSemestreRomano(semestre) }}</div>
         <div class="asignaturas-container">
           <div
-            *ngFor="let asignatura of getAsignaturasBySemestre(semestre)"
+            *ngFor="let asignatura of getAsignaturasDelSemestre(semestre)"
             class="asignatura-card"
             [ngClass]="getCardClass(asignatura)"
             (click)="abrirModal(asignatura)"
@@ -29,12 +29,11 @@
             [title]="asignatura.nombre"
           >
             <div class="asignatura-nombre">
-              <span class="asignatura-codigo">{{ asignatura.codigo }}</span><br>
+              <span class="asignatura-codigo">{{ 2+2 }}</span><br>
               {{ asignatura.nombre | slice:0:22 }}<ng-container *ngIf="asignatura.nombre.length > 22">...</ng-container>
             </div>
             <div class="asignatura-meta">
-              {{ asignatura.horas }} · {{ asignatura.creditos }} cr<br>
-              <span *ngIf="asignatura.anio !== '-'">{{ asignatura.anio }}</span>
+              {{ asignatura.hrs_presenciales + asignatura.hrs_autonomo}} · {{ asignatura.creditos }} cr<br>
             </div>
           </div>
         </div>
@@ -49,14 +48,14 @@
   (click)="onOverlayClick($event)"
 >
   <div class="modal-card">
-    <div class="modal-header" [ngClass]="getEstadoClass(selectedAsignatura.estado)">
+    <div class="modal-header" [ngClass]="getEstadoClass(estados[selectedAsignatura.ID_asignatura])">
       <h3 class="modal-title">{{ selectedAsignatura.nombre }}</h3>
-      <p class="modal-codigo">{{ selectedAsignatura.codigo }}</p>
+      <p class="modal-codigo">{{ selectedAsignatura.nombre }}</p>
     </div>
     <div class="modal-body">
       <div class="modal-row">
         <span class="modal-key">Estado</span>
-        <span class="modal-value">{{ estadoLabel[selectedAsignatura.estado] }}</span>
+        <span class="modal-value">{{ estadoLabel[estados[selectedAsignatura.ID_asignatura]] }}</span>
       </div>
       <div class="modal-row" *ngIf="selectedAsignatura.caracter">
         <span class="modal-key">Carácter</span>
@@ -68,46 +67,37 @@
       </div>
       <div class="modal-row">
         <span class="modal-key">Horas (C,T,L)</span>
-        <span class="modal-value">{{ selectedAsignatura.horas }}</span>
+        <span class="modal-value">{{ selectedAsignatura.hrs_presenciales }}</span>
       </div>
       <div class="modal-row">
         <span class="modal-key">Semestre</span>
-        <span class="modal-value">{{ getSemestreRomano(selectedAsignatura.semestre) }}</span>
+        <span class="modal-value">{{ getSemestreRomano(getSemestreAsignatura(selectedAsignatura.ID_asignatura)!) }}</span>
       </div>
-      <div class="modal-row">
-        <span class="modal-key">Año cursado</span>
-        <span class="modal-value">{{ selectedAsignatura.anio || '—' }}</span>
-      </div>
-      <div class="modal-row" *ngIf="selectedAsignatura.nota">
-        <span class="modal-key">Nota Final</span>
-        <span class="modal-value" style="font-weight: bold;">{{ selectedAsignatura.nota }}</span>
-      </div>
-      <div class="modal-row" *ngIf="selectedAsignatura.oportunidad">
-        <span class="modal-key">Oportunidad</span>
-        <span class="modal-value">{{ selectedAsignatura.oportunidad }}</span>
-      </div>
-      
+
       <div class="modal-row">
         <span class="modal-key">Prerrequisitos</span>
         <span class="modal-value">
-          <ng-container *ngIf="selectedAsignatura.prerequisitos && selectedAsignatura.prerequisitos.length > 0; else sinPrereqs">
-            <span *ngFor="let pre of getPrerequisitosData(selectedAsignatura.prerequisitos)" class="prereq-chip" [title]="pre.nombre">{{ pre.codigo }}</span>
-          </ng-container>
-          <ng-template #sinPrereqs>
-            <span class="sin-prerequisitos">Ninguno</span>
-          </ng-template>
+          <span
+            *ngFor="let pre of (getPrerequisitosData(selectedAsignatura.ID_asignatura) | async)"
+            class="prereq-chip"
+            [title]="pre.nombre"
+          >
+            {{ pre.nombre }}
+          </span>
         </span>
       </div>
 
       <div class="modal-row">
         <span class="modal-key">Tributa a (Abre)</span>
         <span class="modal-value">
-          <ng-container *ngIf="getTributasData(selectedAsignatura.id).length > 0; else sinTributas">
-            <span *ngFor="let trib of getTributasData(selectedAsignatura.id)" class="prereq-chip" style="background:#f3e5f5; color:#9c27b0; border-color:#e1bee7;" [title]="trib.nombre">{{ trib.codigo }}</span>
-          </ng-container>
-          <ng-template #sinTributas>
-            <span class="sin-prerequisitos">Ninguna</span>
-          </ng-template>
+          <span
+            *ngFor="let trib of (getTributasData(selectedAsignatura.ID_asignatura) | async)"
+            class="prereq-chip"
+            style="background:#f3e5f5; color:#9c27b0; border-color:#e1bee7;"
+            [title]="trib.nombre"
+          >
+            {{ trib.nombre }}
+          </span>
         </span>
       </div>
 

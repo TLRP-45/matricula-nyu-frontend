@@ -3,23 +3,24 @@ import { CommonModule, SlicePipe } from '@angular/common';
 import { MallaService } from '../../services/malla.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroment';
+import { BehaviorSubject, forkJoin, map, Observable } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 
 // Coloca algo para cargar, porque los datos llegan atrasados del backend❕❕
 
 
 export interface Asignatura {
-  id: string;
+  ID_asignatura: number;
   nombre: string;
-  codigo: string;
   creditos: number;
-  horas: string;
-  semestre: number;
-  estado: EstadoAsignatura;
-  anio: string;
-  prerequisitos?: string[];
-  caracter?: string;
-  nota?: string;
-  oportunidad?: number;
+  caracter: string;
+  hrs_presenciales: number;
+  hrs_autonomo: number;
+
+  prerrequisitos?: Asignatura[];
+  esPrerequisitoDe?: Asignatura[];
+
+  deletedAt?: Date | null;
 }
 
 export type EstadoAsignatura =
@@ -42,11 +43,17 @@ export type EstadoAsignatura =
 })
 export class MallaCurricular implements OnInit {
 
+  carreraNombre: any;
   carrera: any;
-  semestres: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  semestres: number[] = [];
   selectedAsignatura: Asignatura | null = null;
   modalVisible: boolean = false;
-  hoveredAsignaturaId: string | null = null;
+  hoveredAsignaturaId: number | null = null;
+  asignaturasPorSemestre: {
+    semestre: number;
+    asignaturas: Asignatura[];
+  }[] = [];
+  estados: Record<number, EstadoAsignatura> = {};
 
   estadoLabel: Record<EstadoAsignatura, string> = {
     aprobado:      'Aprobada',
@@ -72,8 +79,6 @@ export class MallaCurricular implements OnInit {
     seleccionada:  '#64B5F6',
   };
 
-  asignaturas: Asignatura[] = [];
-
 
   constructor(
     private mallaService: MallaService,
@@ -84,34 +89,81 @@ export class MallaCurricular implements OnInit {
     //cambiar a la logica real
     sessionStorage.setItem('id', JSON.stringify(1));
 
-    if (!this.mallaService.getAsignaturasSnapshot().length) {
-      this.mallaService.setAsignaturas(this.asignaturasPlaceholder());
-    }
     this.obtenerCarrera().subscribe((aux: any) => {
-      this.carrera = aux.nombre;
-    });
-    this.mallaService.getAsignaturas$().subscribe(list => this.asignaturas = list);
-  }
+      console.log('carga');
+      this.carreraNombre = aux.nombre;
+      this.carrera=aux;
 
-  private asignaturasPlaceholder(): Asignatura[] {
-    const lista: Asignatura[] = [];
-    for (let s = 1; s <= 11; s++) {
-      lista.push({
-        id: `S${s}-1`,
-        nombre: `Asignatura ${s}`,
-        codigo: `C${s}00`,
-        creditos: 4,
-        horas: '(4,0,0)',
-        semestre: s,
-        estado: 'nocursada',
-        anio: '-'
+      console.log(this.carrera);
+
+      this.obtenerSemestres(aux.id_carrera).subscribe(cant => {
+        this.semestres = Array.from({ length: cant }, (_, i) => i + 1);
+
+        this.semestres.forEach(semestre => {
+          this.loadSemestre(semestre);
+        });
       });
-    }
-    return lista;
+
+      console.log('cargó');
+    });
   }
 
-  getAsignaturasBySemestre(semestre: number): Asignatura[] {
-    return this.asignaturas.filter(a => a.semestre === semestre);
+  // Carga asignaturas al diccionario que las guarda por semestre
+  // Y carga los estados de las asignaturas en el diccionario de estados
+  getAsignaturasBySemestre(semestre: number) {
+    this.obtenerAsignaturaPorSemestre(
+      this.carrera.id_carrera,
+      semestre
+    ).subscribe(asignaturas => {
+
+      console.log('Semestre', semestre, asignaturas);
+
+      this.asignaturasPorSemestre.push({
+        semestre,
+        asignaturas
+      });
+
+      forkJoin(
+        asignaturas.map(asig =>
+          this.obtenerEstadoAsignatura(asig.ID_asignatura)
+        )
+      ).subscribe(estados => {
+        asignaturas.forEach((asig, i) => {
+          this.estados[asig.ID_asignatura] =
+            estados[i] as EstadoAsignatura;
+        });
+      });
+
+    });
+  }
+
+  loadSemestre(semestre: number) {
+    this.obtenerAsignaturaPorSemestre(this.carrera.id_carrera, semestre)
+      .subscribe(asignaturas => {
+
+        this.asignaturasPorSemestre.push({
+          semestre,
+          asignaturas
+        });
+
+        forkJoin(
+          asignaturas.map(asig =>
+            this.obtenerEstadoAsignatura(asig.ID_asignatura)
+          )
+        ).subscribe(estados => {
+          asignaturas.forEach((asig, i) => {
+            this.estados[asig.ID_asignatura] =
+              estados[i] as EstadoAsignatura;
+          });
+        });
+
+      });
+  }
+
+  getAsignaturasDelSemestre(semestre: number): Asignatura[] {
+    return this.asignaturasPorSemestre.find(
+      s => s.semestre === semestre
+    )?.asignaturas ?? [];
   }
 
   getEstadoClass(estado: EstadoAsignatura): string {
@@ -120,19 +172,23 @@ export class MallaCurricular implements OnInit {
 
   getCardClass(asignatura: Asignatura): string {
     if (this.hoveredAsignaturaId) {
-      const hovered = this.asignaturas.find(a => a.id === this.hoveredAsignaturaId);
-      if (hovered && hovered.prerequisitos?.includes(asignatura.id)) {
+      const hovered = this.asignaturasPorSemestre
+      .flatMap(s => s.asignaturas)
+      .find(a => a.ID_asignatura === this.hoveredAsignaturaId);
+
+      if (hovered && hovered.prerrequisitos?.includes(asignatura)) {
         return 'asignatura--prerrequisito';
       }
-      if (asignatura.prerequisitos?.includes(this.hoveredAsignaturaId)) {
+      if (hovered && asignatura.esPrerequisitoDe?.some(a => a.ID_asignatura === hovered.ID_asignatura)) {
         return 'asignatura--tributa';
       }
     }
-    return this.getEstadoClass(asignatura.estado);
+    const estado = this.estados[asignatura.ID_asignatura] ?? 'nocursada'
+    return this.getEstadoClass(estado);
   }
 
   onMouseEnter(asignatura: Asignatura): void {
-    this.hoveredAsignaturaId = asignatura.id;
+    this.hoveredAsignaturaId = asignatura.ID_asignatura;
   }
 
   onMouseLeave(): void {
@@ -140,49 +196,69 @@ export class MallaCurricular implements OnInit {
   }
 
   getSemestreRomano(semestre: number): string {
-    const romanos = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI'];
+    const romanos = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVII'];
     return romanos[semestre - 1] ?? semestre.toString();
   }
 
-  getPrerequisitosData(ids: string[]): { codigo: string, nombre: string }[] {
-    return ids.map(id => {
-      const asig = this.asignaturas.find(a => a.id === id);
-      return {
-        codigo: asig ? asig.codigo : id,
-        nombre: asig ? asig.nombre : id
-      };
-    });
+  getPrerequisitosData(id: number): Observable<{ nombre: string, id: number }[]>{
+    return this.obtenerPrerrequisitos(
+      id,
+      this.carrera.id_carrera
+    ).pipe(
+      map((asignaturas: Asignatura[]) =>
+        asignaturas.map(asig => ({
+          nombre: asig.nombre,
+          id: asig.ID_asignatura
+        }))
+      )
+    );
   }
 
-  getTributasData(id: string): { codigo: string, nombre: string }[] {
-    return this.asignaturas
-      .filter(a => a.prerequisitos?.includes(id))
-      .map(a => ({
-        codigo: a.codigo,
-        nombre: a.nombre
-      }));
+  getTributasData(id: number): Observable<{ nombre: string, id: number }[]>{
+    return this.obtenerTributas(
+      id,
+      this.carrera.id_carrera
+    ).pipe(
+      map((asignaturas: Asignatura[]) =>
+        asignaturas.map(asig => ({
+          nombre: asig.nombre,
+          id: asig.ID_asignatura
+        }))
+      )
+    );
   }
 
-  getTotalAsignaturas(): number { return this.asignaturas.length; }
+  getSemestreAsignatura(idAsignatura: number): number | null {
+    const bloque = this.asignaturasPorSemestre.find(s =>
+      s.asignaturas.some(a => a.ID_asignatura === idAsignatura)
+    );
+
+    return bloque?.semestre ?? null;
+  }
+
+  getTotalAsignaturas(): number { return this.asignaturasPorSemestre.length; }
 
   getTotalCreditos(): number {
-    return this.asignaturas.reduce((t, a) => t + a.creditos, 0);
+    return this.asignaturasPorSemestre.flatMap(s=>s.asignaturas).reduce((t, a) => t + a.creditos, 0);
   }
 
   getAsignaturasAprobadas(): number {
-    return this.asignaturas.filter(a => a.estado === 'aprobado').length;
+    return Object.values(this.estados).filter(estado => estado === 'aprobado').length;
   }
 
   getCreditosAprobados(): number {
-    return this.asignaturas.filter(a => a.estado === 'aprobado').reduce((t, a) => t + a.creditos, 0);
+    return this.asignaturasPorSemestre
+      .flatMap(s => s.asignaturas)
+      .filter(a => this.estados[a.ID_asignatura] === 'aprobado')
+      .reduce((t, a) => t + a.creditos, 0);
   }
 
   getAsignaturasReprobadas(): number {
-    return this.asignaturas.filter(a => a.estado === 'reprobada').length;
+    return Object.values(this.estados).filter(estado => estado === 'reprobada').length;
   }
 
   getAsignaturasActuales(): number {
-    return this.asignaturas.filter(a => a.estado === 'cursando' || a.estado === 'inscrita').length;
+    return Object.values(this.estados).filter(estado => estado === 'cursando' || estado === 'inscrita').length;
   }
 
   getAvancePercentage(): number {
@@ -214,25 +290,30 @@ export class MallaCurricular implements OnInit {
   }
 
   obtenerSemestres(carreraID: number){
-    return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
+    return this.http.get<number>(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
   }
 
   obtenerAsignaturaPorSemestre(carreraID:number, semestre: number){
-    return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/asignaturas/${semestre}`);
+    return this.http.get<Asignatura[]>(`${environment.apiUrl}/carrera/${carreraID}/asignaturas/${semestre}`);
   }
 
   obtenerEstadoAsignatura(asignaturaID: number){
-    const estudianteID = localStorage.getItem('id');
-    return this.http.get(`${environment.apiUrl}/asignaturas/${asignaturaID}/${estudianteID}/estado`);
+    // acá igual
+    const estudianteID = sessionStorage.getItem('id');
+    return this.http.get<String>(`${environment.apiUrl}/asignaturas/${asignaturaID}/${estudianteID}/estado`);
+  }
+
+  obtenerAsignatura(asignaturaID: number){
+    return this.http.get<Asignatura>(`${environment.apiUrl}/asignaturas/${asignaturaID}`);
   }
 
 // Estas cada vez que se seleccione una asignatura _______________________________________________________
 
   obtenerPrerrequisitos(asignaturaID:number, carreraID:number){
-    return this.http.get(`${environment.apiUrl}/asignaturas/${asignaturaID}/prerrequisitos/${carreraID}`);
+    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/prerrequisitos/${carreraID}`);
   }
 
   obtenerTributas(asignaturaID:number, carreraID:number){
-    return this.http.get(`${environment.apiUrl}/asignaturas/${asignaturaID}/tributas/${carreraID}`);
+    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/tributas/${carreraID}`);
   }
 }
