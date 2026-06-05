@@ -2,6 +2,9 @@
   <div class="malla-header">
     <div class="malla-header-left">
       <h1 class="malla-titulo">Avance curricular</h1>
+      <pre>hpla?{{ asignaturasPorSemestre | json }}</pre>
+      <p>SEMESTRES: {{ semestres | json }}</p>
+      <p>DATA: {{ asignaturasPorSemestre | json }}</p>
       <p class="malla-carrera">{{carreraNombre}}</p>
     </div>
     <div class="leyenda-bar">
@@ -100,7 +103,6 @@
           </span>
         </span>
       </div>
-
     </div>
     <div class="modal-footer">
       <button class="modal-close-btn" (click)="cerrarModal()">Cerrar</button>

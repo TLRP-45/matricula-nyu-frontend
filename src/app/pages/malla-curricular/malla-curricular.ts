@@ -97,10 +97,13 @@ export class MallaCurricular implements OnInit {
       console.log(this.carrera);
 
       this.obtenerSemestres(aux.id_carrera).subscribe(cant => {
-        this.semestres = Array.from({ length: cant }, (_, i) => i + 1);
+        console.log('SEMESTRES RAW:', cant);
+        const n = Number(cant);
+        this.semestres = Array.from({ length: n }, (_, i) => i + 1);
+        console.log('SEMESTRES FINAL:', this.semestres);
 
         this.semestres.forEach(semestre => {
-          this.loadSemestre(semestre);
+          this.loadSemestre(aux.id_carrera, semestre);
         });
       });
 
@@ -137,9 +140,10 @@ export class MallaCurricular implements OnInit {
     });
   }
 
-  loadSemestre(semestre: number) {
-    this.obtenerAsignaturaPorSemestre(this.carrera.id_carrera, semestre)
+  loadSemestre(carreraId: number, semestre: number) {
+    this.obtenerAsignaturaPorSemestre(carreraId, semestre)
       .subscribe(asignaturas => {
+        console.log('LOAD:', semestre, asignaturas);
 
         this.asignaturasPorSemestre.push({
           semestre,
@@ -156,7 +160,6 @@ export class MallaCurricular implements OnInit {
               estados[i] as EstadoAsignatura;
           });
         });
-
       });
   }
 
