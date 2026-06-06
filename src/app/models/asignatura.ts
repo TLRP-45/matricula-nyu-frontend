@@ -3,12 +3,13 @@ export interface Asignatura {
 
   nombre: string;
 
-  tipo: 'obligatoria' | 'electivo';
+  caracter: 'Obligatorio' | 'Electivo';
 
-  ubicaciones: {
-    carrera: string;
-    periodo: string;
-  }[];
+  creditos: number;
+
+  horasPresenciales: number;
+
+  horasAutonomas: number;
 
   requisitos: {
     codigo: string;
