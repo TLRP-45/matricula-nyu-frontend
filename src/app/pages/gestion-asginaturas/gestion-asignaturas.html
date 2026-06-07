@@ -205,28 +205,6 @@
             </div>
           </div>
 
-          <div class="requisito-list">
-            @for (ubicacion of ubicacionesTemp; track $index) {
-              <span class="requisito-tag">
-                {{ ubicacion.carrera }} - {{ ubicacion.periodo }}
-                <button
-                  type="button"
-                  (click)="eliminarUbicacion(ubicacion.carrera, ubicacion.periodo)"
-                  title="Quitar"
-                >
-                  ×
-                </button>
-              </span>
-            }
-          </div>
-          <div class="form-hint">
-            {{
-              ubicacionesTemp.length
-                ? ubicacionesTemp.length + ' ubicación(es) agregadas'
-                : 'Presiona Enter o + para agregar'
-            }}
-          </div>
-
           <div class="form-group">
             <label class="form-label">Requisitos</label>
 
