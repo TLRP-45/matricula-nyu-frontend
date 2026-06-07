@@ -1,7 +1,7 @@
 .horario-grid {
   display: grid;
 
-  grid-template-columns: 120px repeat(5, 1fr);
+  grid-template-columns: 150px repeat(5, max-content);
 
   gap: 10px;
 }
@@ -9,7 +9,7 @@
 .dia-header,
 .hora-header,
 .hora-cell {
-  background: white;
+  background: wh ite;
 
   border-radius: 12px;
 

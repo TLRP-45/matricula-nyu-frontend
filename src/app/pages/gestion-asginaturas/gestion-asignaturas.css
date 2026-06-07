@@ -55,20 +55,6 @@
   color: var(--purple);
   font-size: 18px;
 }
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-weight: 500;
-}
-.breadcrumb:hover {
-  color: var(--purple);
-  transform: translateX(-2px);
-}
 
 .btn {
   display: inline-flex;
@@ -254,68 +240,12 @@
   background: #f5f0ff;
 }
 
-.sem-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 24px;
-}
-.sem-card {
-  background: var(--purple-light);
-  border: 1.5px solid #d0c4f0;
-  border-radius: 12px;
-  padding: 18px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-}
-.sem-card:hover {
-  background: #e2d8f8;
-  border-color: var(--purple);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-.sem-card h3 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--purple-dark);
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  letter-spacing: -0.2px;
-}
-.sem-card p {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-  line-height: 1.4;
-}
-.sem-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 10px;
-}
-.sem-asig-chip {
+.requisito-chip {
   font-size: 10px;
   background: rgba(123, 47, 190, 0.12);
   color: var(--purple-dark);
   border-radius: 20px;
   padding: 2px 8px;
-}
-.sem-asig-more {
-  font-size: 10px;
-  color: var(--text-muted);
-}
-.sem-actions {
-  display: flex;
-  gap: 8px;
-}
-.sem-actions .btn {
-  flex: 1;
-  justify-content: center;
-  font-size: 12px;
 }
 
 .form-group {
@@ -360,21 +290,14 @@
   color: var(--text-muted);
   margin-top: 4px;
 }
-.asig-input-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.asig-input-row .form-control {
-  flex: 1;
-}
-.asig-list {
+
+.requisito-list {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 6px;
 }
-.asig-tag {
+.requisito-tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -385,7 +308,7 @@
   padding: 3px 10px;
   font-size: 12px;
 }
-.asig-tag button {
+.requisito-tag button {
   background: none;
   border: none;
   cursor: pointer;
@@ -394,7 +317,7 @@
   line-height: 1;
   padding: 0 0 0 3px;
 }
-.asig-tag button:hover {
+.requisito-tag button:hover {
   color: var(--danger);
 }
 
@@ -526,51 +449,6 @@
   justify-content: center;
 }
 
-.toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.toast {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  min-width: 230px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  animation: slideIn 0.25s ease;
-}
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-.toast-success {
-  background: #e1f5ee;
-  color: #085041;
-  border-left: 4px solid var(--success);
-}
-.toast-danger {
-  background: #faece7;
-  color: #4a1b0c;
-  border-left: 4px solid var(--danger);
-}
-.toast i {
-  font-size: 18px;
-}
-
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -595,4 +473,78 @@
   50% {
     transform: translateY(-8px);
   }
+}
+
+.codigo {
+  font-size: 12px;
+
+  color: #7b2fbe;
+
+  font-weight: 700;
+}
+
+tr.destacada td {
+  animation: parpadeo 1s ease;
+}
+
+@keyframes parpadeo {
+  0% {
+    background: #ffd54f;
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
+  min-width: 1200px;
+}
+
+.modal-tabla {
+  position: relative;
+
+  background: white;
+
+  width: 900px;
+  max-width: 95vw;
+
+  max-height: 85vh;
+
+  border-radius: 12px;
+  border: 1px solid var(--gray-border);
+
+  box-shadow: var(--shadow-lg);
+
+  animation: modalIn 0.2s ease;
+}
+
+.modal-close-table {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: var(--purple-light);
+  color: var(--purple-dark);
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-table:hover {
+  background: #d4c4f0;
 }

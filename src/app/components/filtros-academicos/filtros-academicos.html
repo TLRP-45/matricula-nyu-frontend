@@ -1,10 +1,9 @@
-<div class="card shadow p-4 mb-4">
-  <div class="row g-4">
-    <!-- CARRERA -->
-    <div class="col-md-6">
-      <label class="form-label fw-bold">Carrera</label>
+<div class="filtros-card">
+  <div class="filtros-row">
+    <div class="filtro-item">
+      <label> Carrera </label>
 
-      <select class="form-select" [(ngModel)]="carreraSeleccionada" (ngModelChange)="onChange()">
+      <select class="filtro-select" [(ngModel)]="carreraSeleccionada" (change)="onChange()">
         @for (c of carreras; track c.codigo) {
           <option [value]="c.codigo">
             {{ c.nombre }}
@@ -13,17 +12,87 @@
       </select>
     </div>
 
-    <!-- PERIODO -->
-    <div class="col-md-6">
-      <label class="form-label fw-bold">Periodo</label>
+    <div class="filtro-item">
+      <label> Período </label>
 
-      <select class="form-select" [(ngModel)]="periodoSeleccionado" (ngModelChange)="onChange()">
+      <select class="filtro-select" [(ngModel)]="periodoSeleccionado" (change)="onChange()">
         @for (p of periodos; track p.codigo) {
           <option [value]="p.codigo">
             {{ p.nombre }}
           </option>
         }
       </select>
+
+      @if (periodoActual) {
+        <div class="periodo-chip">
+          <i class="ti ti-calendar-event"></i>
+
+          {{ periodoActual.fechaInicio | date: 'dd/MM/yyyy' }}
+          -
+          {{ periodoActual.fechaTermino | date: 'dd/MM/yyyy' }}
+
+          @if (autorizado) {
+            <button class="btn-edit-periodo" (click)="abrirEditarPeriodo()">
+              <i class="ti ti-pencil"></i>
+            </button>
+          }
+        </div>
+      }
     </div>
+
+    @if (semestre) {
+      <div class="filtro-item">
+        <label> Semestre </label>
+
+        <select class="filtro-select" [(ngModel)]="semestreSeleccionado" (change)="onChange()">
+          @for (n of numeros; track n) {
+            <option [ngValue]="n">
+              {{ n }}
+            </option>
+          }
+        </select>
+      </div>
+    }
   </div>
 </div>
+
+@if (mostrarModalPeriodo) {
+  <div class="overlay" (click)="mostrarModalPeriodo = false">
+    <div class="modal modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2><i class="ti ti-calendar-edit"></i> Editar período</h2>
+
+        <button type="button" class="modal-close" (click)="mostrarModalPeriodo = false">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"> Fecha inicio </label>
+
+            <input type="date" class="form-control" [(ngModel)]="periodoEditandoForm.fechaInicio" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"> Fecha término </label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="periodoEditandoForm.fechaTermino"
+              [min]="periodoEditandoForm.fechaInicio"
+              [max]="fechaMaxima"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="mostrarModalPeriodo = false">Cancelar</button>
+
+        <button class="btn btn-primary" (click)="guardarPeriodo()">Guardar</button>
+      </div>
+    </div>
+  </div>
+}

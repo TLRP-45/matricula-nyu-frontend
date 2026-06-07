@@ -3,6 +3,36 @@
   height: 100%;
 }
 
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--gray-border);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+.topbar:hover {
+  border-color: #d8d0f0;
+  box-shadow: var(--shadow-md);
+}
+.topbar h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.3px;
+}
+.topbar h1 i {
+  color: var(--purple);
+  font-size: 18px;
+}
+
 .panel-asignaturas {
   display: flex;
 
@@ -13,6 +43,34 @@
   width: 100%;
 }
 
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--purple-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
 app-oferta-card {
   display: block;
 
@@ -59,4 +117,30 @@ small {
 
 .panel-container::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.empty-state i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.25;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+.empty-state p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }

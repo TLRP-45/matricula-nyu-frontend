@@ -1,0 +1,146 @@
+<div class="overlay" (click)="cancelar.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>
+        {{ esEdicion ? 'Editar oferta' : 'Nueva oferta' }}
+      </h2>
+
+      <button type="button" class="modal-close" (click)="cancelar.emit()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label"> Asignatura </label>
+
+        <div class="form-control readonly-field">
+          {{ oferta.asignatura.codigo }}
+          -
+          {{ oferta.asignatura.nombre }}
+        </div>
+      </div>
+
+      <form [formGroup]="ofertaForm">
+        <div class="form-group">
+          <label class="form-label"> Tipo de grupo </label>
+
+          <select class="form-control" formControlName="tipo">
+            <option value="catedra">Cátedra</option>
+            <option value="taller">Taller</option>
+            <option value="laboratorio">Laboratorio</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"> Grupo </label>
+
+            <select class="form-control" formControlName="letra">
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="F">F</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"> Cupos </label>
+
+            <input type="number" class="form-control" formControlName="cupos" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"> Profesor </label>
+
+          <input class="form-control" formControlName="profesor" (keypress)="soloLetras($event)" />
+
+          <div class="form-hint">Nombre completo del docente</div>
+        </div>
+
+        <div class="form-group">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label mb-0"> Horarios </label>
+
+            <button type="button" class="btn btn-primary btn-sm" (click)="agregarHorario()">
+              <i class="ti ti-plus"></i>
+              Agregar
+            </button>
+          </div>
+          <div class="contenedor-horarios">
+            @for (h of horariosTemp; track $index) {
+              <div class="horario-card">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label"> Día </label>
+
+                    <select
+                      class="form-control"
+                      [value]="h.dia"
+                      (change)="actualizarDiaTemp($index, $event)"
+                    >
+                      @for (dia of diasSemana; track dia) {
+                        <option [value]="dia">
+                          {{ dia }}
+                        </option>
+                      }
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label"> Inicio </label>
+
+                    <select
+                      class="form-control"
+                      [(ngModel)]="h.horaInicio"
+                      [ngModelOptions]="{ standalone: true }"
+                      (change)="onHoraInicioChangeTemp($index)"
+                    >
+                      @for (bloque of bloques; track bloque.horaInicio) {
+                        <option [value]="bloque.horaInicio">
+                          {{ bloque.horaInicio }}
+                        </option>
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label"> Fin </label>
+
+                    <input type="time" class="form-control" [value]="h.horaFin" disabled />
+                  </div>
+
+                  <div class="form-group d-flex justify-content-end align-items-end">
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      (click)="eliminarHorario($index)"
+                    >
+                      <i class="ti ti-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary btn-sm" (click)="cancelar.emit()">
+        Cancelar
+      </button>
+
+      <button type="button" class="btn btn-primary btn-sm" (click)="guardarOferta()">
+        <i class="ti ti-device-floppy"></i>
+
+        {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+</div>
