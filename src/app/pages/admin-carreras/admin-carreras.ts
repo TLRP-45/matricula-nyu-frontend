@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CarrerasService } from '../../services/carreras.service';
 import { Carrera, Semestre, Toast } from '../../models/carrera.model';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../enviroment';
 
 export interface CreateCarrera{
   nombre: string;
@@ -42,7 +40,6 @@ export class AdminCarrerasComponent implements OnInit {
   readonly anios      = ['1° año', '2° año', '3° año', '4° año', '5° año'];
   constructor(
     private carrerasService: CarrerasService,
-    private http: HttpClient,
   ) {}
 
   ngOnInit(): void {
@@ -196,66 +193,4 @@ export class AdminCarrerasComponent implements OnInit {
     setTimeout(() => this.toasts = this.toasts.filter(t => t.id !== id), 3200);
   }
 
-// ENPOINTS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-  obtenerCarreras(){
-    return this.http.get(`${environment.apiUrl}/carrera`);
-  }
-
-  obtenerSemestres(carreraID: number){
-    return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
-  }
-
-  // Por si haces buscador____________________________________________________________
-  buscarCarreraNombre(busqueda: string){
-    return this.http.get(`${environment.apiUrl}/carrera/buscar/nombre/${busqueda}`);
-  }
-
-  buscarCarreraFacultad(busqueda: string){
-    return this.http.get(`${environment.apiUrl}/carrera/buscar/facultad/${busqueda}`);
-  }
-
-  // POST_____________________________________________________________________________
-  crearCarrera(carrera: CreateCarrera) {
-    return this.http.post(`${environment}/carrera`, carrera);
-  }
-
-  // PUT_______________________________________________________________________
-  actualizarCarrera(carrera: UpdateCarrera, carreraID: number) {
-    return this.http.put(`${environment}/carrera/${carreraID}/actualizar`, carrera);
-  }
-
-  //DELETE_____________________________________________________________________
-  eliminarCarrera(carreraID: number) {
-    return this.http.delete(`${environment}/carrera/${carreraID}`);
-  }
-
-  //Asignaturas________________________________________________________________ (para seleccionar y después agregar o eliminar)
-  getAsignaturasPorCarrera(carreraID:number){
-    return this.http.get(`${environment}/carrera/${carreraID}/asignaturas`);
-  }
-
-  //PUSH........................................................................................................................
-  putPushAsignatura(carreraID: number, asignatura: AsignarAsignatura) {
-    return this.http.put(`${environment}/carrera/${carreraID}/actualizar/asignatura/remove`, asignatura);
-  }
-
-  //REMOVE......................................................................................................................
-  putRemoveAsignatura(carreraID: number, asignaturaID: number) {
-    return this.http.put(`${environment}/carrera/${carreraID}/actualizar/asignatura/remove`, {ID_asignatura: asignaturaID});
-  }
-
-  //REMOVE POR SEMESTRE..........................................................................................................
-  putRemoveAsignaturasPorSemestre(carreraID: number, semestre: number) {
-    return this.http.put(`${environment}/carrera/${carreraID}/asignaturas/semestre/remove`, {semestre: semestre});
-  }
-
-  //BUSCAR.......................................................................................................................
-  buscarAsignaturasPorNombre(nombre: string) {
-    return this.http.get(`${environment}/asignaturas/buscar/nombre/${nombre}`);
-  }
-
-  buscarAsignaturasPorCodigo(codigo: string) {
-    return this.http.get(`${environment}/asignaturas/buscar/codigo/${codigo}`);
-  }
 }

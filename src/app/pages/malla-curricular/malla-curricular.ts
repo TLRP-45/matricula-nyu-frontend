@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, SlicePipe } from '@angular/common';
 import { MallaService } from '../../services/malla.service';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../enviroment';
 import { BehaviorSubject, forkJoin, map, Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
@@ -80,23 +78,20 @@ export class MallaCurricular implements OnInit {
   };
 
 
-  constructor(
-    private mallaService: MallaService,
-    private http: HttpClient,
-  ) {}
+  constructor(private mallaService: MallaService) {}
 
   async ngOnInit() {
     //cambiar a la logica real
     sessionStorage.setItem('id', JSON.stringify(1));
 
-    this.obtenerCarrera().subscribe((aux: any) => {
+    this.mallaService.obtenerCarrera().subscribe((aux: any) => {
       console.log('carga');
       this.carreraNombre = aux.nombre;
       this.carrera=aux;
 
       console.log(this.carrera);
 
-      this.obtenerSemestres(aux.id_carrera).subscribe(cant => {
+      this.mallaService.obtenerSemestres(aux.id_carrera).subscribe(cant => {
         console.log('SEMESTRES RAW:', cant);
         const n = Number(cant);
         this.semestres = Array.from({ length: n }, (_, i) => i + 1);
@@ -114,7 +109,7 @@ export class MallaCurricular implements OnInit {
   // Carga asignaturas al diccionario que las guarda por semestre
   // Y carga los estados de las asignaturas en el diccionario de estados
   getAsignaturasBySemestre(semestre: number) {
-    this.obtenerAsignaturaPorSemestre(
+    this.mallaService.obtenerAsignaturaPorSemestre(
       this.carrera.id_carrera,
       semestre
     ).subscribe(asignaturas => {
@@ -128,7 +123,7 @@ export class MallaCurricular implements OnInit {
 
       forkJoin(
         asignaturas.map(asig =>
-          this.obtenerEstadoAsignatura(asig.ID_asignatura)
+          this.mallaService.obtenerEstadoAsignatura(asig.ID_asignatura)
         )
       ).subscribe(estados => {
         asignaturas.forEach((asig, i) => {
@@ -141,7 +136,7 @@ export class MallaCurricular implements OnInit {
   }
 
   loadSemestre(carreraId: number, semestre: number) {
-    this.obtenerAsignaturaPorSemestre(carreraId, semestre)
+    this.mallaService.obtenerAsignaturaPorSemestre(carreraId, semestre)
       .subscribe(asignaturas => {
         console.log('LOAD:', semestre, asignaturas);
 
@@ -152,7 +147,7 @@ export class MallaCurricular implements OnInit {
 
         forkJoin(
           asignaturas.map(asig =>
-            this.obtenerEstadoAsignatura(asig.ID_asignatura)
+            this.mallaService.obtenerEstadoAsignatura(asig.ID_asignatura)
           )
         ).subscribe(estados => {
           asignaturas.forEach((asig, i) => {
@@ -204,7 +199,7 @@ export class MallaCurricular implements OnInit {
   }
 
   getPrerequisitosData(id: number): Observable<{ nombre: string, id: number }[]>{
-    return this.obtenerPrerrequisitos(
+    return this.mallaService.obtenerPrerrequisitos(
       id,
       this.carrera.id_carrera
     ).pipe(
@@ -218,7 +213,7 @@ export class MallaCurricular implements OnInit {
   }
 
   getTributasData(id: number): Observable<{ nombre: string, id: number }[]>{
-    return this.obtenerTributas(
+    return this.mallaService.obtenerTributas(
       id,
       this.carrera.id_carrera
     ).pipe(
@@ -284,39 +279,4 @@ export class MallaCurricular implements OnInit {
     }
   }
 
-// ENPOINTS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-  obtenerCarrera() {
-    // Cambiar el nombre a lo que haya
-    const estudianteID = sessionStorage.getItem('id');
-    return this.http.get(`${environment.apiUrl}/carrera/${estudianteID}`);
-  }
-
-  obtenerSemestres(carreraID: number){
-    return this.http.get<number>(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
-  }
-
-  obtenerAsignaturaPorSemestre(carreraID:number, semestre: number){
-    return this.http.get<Asignatura[]>(`${environment.apiUrl}/carrera/${carreraID}/asignaturas/${semestre}`);
-  }
-
-  obtenerEstadoAsignatura(asignaturaID: number){
-    // acá igual
-    const estudianteID = sessionStorage.getItem('id');
-    return this.http.get<String>(`${environment.apiUrl}/asignaturas/${asignaturaID}/${estudianteID}/estado`);
-  }
-
-  obtenerAsignatura(asignaturaID: number){
-    return this.http.get<Asignatura>(`${environment.apiUrl}/asignaturas/${asignaturaID}`);
-  }
-
-// Estas cada vez que se seleccione una asignatura _______________________________________________________
-
-  obtenerPrerrequisitos(asignaturaID:number, carreraID:number){
-    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/prerrequisitos/${carreraID}`);
-  }
-
-  obtenerTributas(asignaturaID:number, carreraID:number){
-    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/tributas/${carreraID}`);
-  }
 }
