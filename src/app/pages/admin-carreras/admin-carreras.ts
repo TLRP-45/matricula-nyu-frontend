@@ -249,4 +249,13 @@ export class AdminCarrerasComponent implements OnInit {
   putRemoveAsignaturasPorSemestre(carreraID: number, semestre: number) {
     return this.http.put(`${environment}/carrera/${carreraID}/asignaturas/semestre/remove`, {semestre: semestre});
   }
+
+  //BUSCAR.......................................................................................................................
+  buscarAsignaturasPorNombre(nombre: string) {
+    return this.http.get(`${environment}/asignaturas/buscar/nombre/${nombre}`);
+  }
+
+  buscarAsignaturasPorCodigo(codigo: string) {
+    return this.http.get(`${environment}/asignaturas/buscar/codigo/${codigo}`);
+  }
 }
