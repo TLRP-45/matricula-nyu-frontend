@@ -2,6 +2,7 @@
 
 <div class="topbar">
   <h1><i class="bi bi-book"></i> Administrar ofertas</h1>
+  <button type="button" class="btn btn-primary" (click)="publicarOferta()">Publicar oferta</button>
 </div>
 
 <app-filtros-academicos [autorizado]="true" [semestre]="true" (cambio)="onFiltroChange($event)">
