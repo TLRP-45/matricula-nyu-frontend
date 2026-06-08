@@ -1,16 +1,9 @@
-export interface Semestre {
-  id: number;
-  num: number;
-  anio: string;
-  asignaturas: string[];
-}
-
 export interface Carrera {
   id: number;
   nombre: string;
   facultad: string;
-  duracion: string;
-  semestres: Semestre[];
+  duracion: number;
+  cupos: number;
 }
 
 export type ToastType = 'success' | 'danger';

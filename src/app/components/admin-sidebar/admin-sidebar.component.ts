@@ -13,6 +13,7 @@ import {
   LogOut,
 } from 'lucide-angular';
 import { Router, NavigationEnd } from '@angular/router';
+import { CarrerasService } from '../../services/carreras.service';
 import { LoginService } from '../../services/login.service';
 import { filter } from 'rxjs/operators';
 
@@ -41,7 +42,8 @@ export class AdminSidebarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private carrerasService: CarrerasService
   ) {}
 
   ngOnInit(): void {
@@ -60,8 +62,12 @@ export class AdminSidebarComponent implements OnInit {
     this.activeRoute = route;
 
     if (route === 'dashboard') {
-      this.router.navigate(['/admin']);
+      this.router.navigate(['/admin', 'dashboard']);
       return;
+    }
+
+    if (route === 'carreras') {
+      this.carrerasService.cargarCarreras();
     }
 
     this.router.navigate(['/admin', route]);

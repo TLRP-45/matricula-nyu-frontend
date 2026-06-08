@@ -34,6 +34,11 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'dashboard',
+        redirectTo: 'carreras',
+        pathMatch: 'full'
+      },
+      {
         path: 'carreras',
         component: AdminCarrerasComponent
       }
