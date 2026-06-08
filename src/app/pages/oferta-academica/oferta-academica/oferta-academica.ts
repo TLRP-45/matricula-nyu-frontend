@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BLOQUES_HORARIOS } from '../../../data/bloques-horarios.data';
 import { ASIGNATURAS } from '../../../data/asignaturas.data';
 import { OFERTAS } from '../../../data/ofertas.data';
+import { CARRERAS } from '../../../data/carreras.data';
+import { PERIODOS } from '../../../data/periodos.data';
 
 import { Oferta } from '../../../models/oferta';
 import { Asignatura } from '../../../models/asignatura';
@@ -40,6 +42,8 @@ import { FormularioOferta } from '../../../components/formulario-oferta/formular
 })
 export class OfertaAcademica {
   horas = BLOQUES_HORARIOS;
+  carreras = CARRERAS;
+  periodos = PERIODOS;
 
   carreraSeleccionada!: string;
 
@@ -273,5 +277,19 @@ export class OfertaAcademica {
     this.grupoOfertaEliminar =
       this.ofertaGrupoEditando.grupo.tipo + ' ' + this.ofertaGrupoEditando.grupo.letra;
     this.mostrarConfirmacionEliminar = true;
+  }
+
+  publicarOferta() {
+    const carreraEncontrada = this.carreras.find((c) => c.codigo === this.carreraSeleccionada);
+    const nombreCarrera = carreraEncontrada?.nombre;
+    const periodoEncontrado = this.periodos.find((c) => c.codigo === this.periodoSeleccionado);
+    const nombrePeriodo = periodoEncontrado?.nombre;
+
+    if (carreraEncontrada && periodoEncontrado) {
+      this.toastService.success(
+        `Oferta publicada para la carrera ${nombreCarrera} en el periodo ${nombrePeriodo}`,
+      );
+    }
+    return;
   }
 }
