@@ -17,7 +17,13 @@ export const authGuard: CanActivateFn = (route, state) => {
         expectedRole = Role.ADMIN;
       }
       if (expectedRole !== undefined && !login.hasRole(expectedRole)) {
-        router.navigate(['/login']);
+        // Redirect based on actual role to avoid infinite loop
+        const user = login.getUser();
+        if (user && Number(user.role) === 0) {
+          router.navigate(['/admin']);
+        } else {
+          router.navigate(['/home']);
+        }
         return false;
       }
       return true;

@@ -7,13 +7,16 @@ import { ConfirmacionComponent } from './pages/confirmacion/confirmacion';
 import { FinalizadoComponent } from './pages/finalizado/finalizado';
 import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
 import { LoginComponent } from './pages/login/login.component';
-import { OfertaAcademica } from './pages/oferta-academica/oferta-academica/oferta-academica';
 import { authGuard, notLogged } from './guards/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { OfertaAcademica } from './pages/oferta-academica/oferta-academica/oferta-academica';
 import { AdminCarrerasComponent } from './pages/admin-carreras/admin-carreras';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { EstadoAcademicoComponent } from './pages/estado-academico/estado-academico';
 import { Role } from './models/roles';
+import { RegisterComponent } from './pages/register/register.component';
+import { AdminComponent } from './pages/admin/admin.component';
 import { GestionAsignaturas } from './pages/gestion-asginaturas/gestion-asignaturas';
 
 export const routes: Routes = [
@@ -80,11 +83,19 @@ export const routes: Routes = [
       },
       {
         path: 'carreras',
-        component: AdminCarrerasComponent,
+        component: AdminCarrerasComponent
       },
       {
         path: 'oferta-academica',
-        component: OfertaAcademica,
+        component: OfertaAcademica
+      },
+      {
+        path: 'registrar-usuarios',
+        component: RegisterComponent
+      },
+      {
+        path: 'usuarios',
+        component: AdminComponent
       },
       {
         path: 'gestion-asignaturas',
@@ -142,9 +153,20 @@ export const routes: Routes = [
         path: 'ma-principal',
         component: MaPrincipalComponent,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT },
+        data: { role: Role.STUDENT }
       },
-    ],
+      {
+        path: 'estado-academico',
+        component: EstadoAcademicoComponent,
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+        canActivate: [notLogged],
+      }
+    ]
   },
   {
     path: '**',

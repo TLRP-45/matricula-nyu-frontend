@@ -10,9 +10,13 @@ import { LoginService } from '../services/login.service';
 export class HomeComponent implements OnInit {
 
   user: any;
+  estadoMatricula = 'Pendiente';
+  matriculado = false;
+
   menuItems = [
     { title: 'Matrícula', icon: '🎓', route: '/matricula', color: '#57068c' },
     { title: 'Inscripción', icon: '📚', route: '/inscripcion', color: '#7b2cbf' },
+    { title: 'Estado Académico', icon: '🏛️', route: '/estado-academico', color: '#6a0dad' },
     { title: 'Mi Perfil', icon: '👤', route: '/info', color: '#3c096c' },
     { title: 'Solicitudes', icon: '📋', route: '/estado', color: '#9d4edd' },
     { title: 'Portal Matricula', icon: '🏠', route: '/ma-principal', color: '#240046' }
@@ -25,6 +29,15 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.loginService.getUser();
+    const data = localStorage.getItem('historial_matriculas');
+    const matriculas = data ? JSON.parse(data) : [];
+    if (matriculas.length > 0) {
+      this.estadoMatricula = 'Matriculado / Activo';
+      this.matriculado = true;
+    } else {
+      this.estadoMatricula = 'Pendiente';
+      this.matriculado = false;
+    }
   }
 
   navigateTo(route: string) {

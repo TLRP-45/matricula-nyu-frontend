@@ -12,7 +12,8 @@ import {
   LogOut,
   Mail,
   CreditCard,
-  UserPlus
+  UserPlus,
+  GraduationCap
 } from 'lucide-angular';
 import { LoginService } from '../../services/login.service';
 import { Role } from '../../models/roles';
@@ -35,7 +36,8 @@ export class HeaderComponent implements OnInit {
     LogOut,
     Mail,
     CreditCard,
-    UserPlus
+    UserPlus,
+    GraduationCap
   };
   user: any;
   nombreEstudiante: string = '';
