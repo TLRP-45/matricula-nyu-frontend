@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ClientService } from './client.service';
-import { Observable, map, of } from 'rxjs';
+import { UserService } from './user.service';
+import { Observable, map, of, catchError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Role } from '../models/roles';
 
@@ -11,30 +11,43 @@ import { Role } from '../models/roles';
 export class LoginService {
   constructor(
     private router: Router,
-    private clientService: ClientService,
+    private userService: UserService,
     private authService: AuthService
   ) { }
 
   public login(r: string, p: string, isAdmin: boolean = false): Observable<{ authorized: boolean, user?: any, errorType?: string }> {
-    return this.clientService.postClientData(r, p).pipe(map((response: any) => {
-      if (response.success && response.user) {
-        const authorizedUser = response.user;
-        authorizedUser.role = authorizedUser.rol;
+    return this.userService.postUserData(r, p).pipe(
+      map((response: any) => {
+        if (response.token && response.user) {
+          const authorizedUser = response.user;
 
-        if (isAdmin && Number(authorizedUser.role) !== Number(Role.ADMIN)) {
-          return { authorized: false, errorType: 'NOT_ADMIN' };
+          // Mapear rol string del backend a número del enum frontend
+          const rolMap: Record<string, Role> = {
+            '0': Role.ADMIN,
+            '1': Role.STUDENT,
+            'admin': Role.ADMIN,
+            'estudiante': Role.STUDENT,
+          };
+          authorizedUser.role = rolMap[authorizedUser.rol] ?? Role.STUDENT;
+
+          if (isAdmin && authorizedUser.role !== Role.ADMIN) {
+            return { authorized: false, errorType: 'NOT_ADMIN' };
+          }
+          if (!isAdmin && authorizedUser.role === Role.ADMIN) {
+            return { authorized: false, errorType: 'NOT_STUDENT' };
+          }
+          const token: string = response.token;
+          this.authService.saveUser(authorizedUser);
+          this.authService.saveToken(token);
+          return { authorized: true, user: authorizedUser };
+        } else {
+          return { authorized: false, errorType: 'WRONG_CREDENTIALS' };
         }
-        if (!isAdmin && Number(authorizedUser.role) === Number(Role.ADMIN)) {
-          return { authorized: false, errorType: 'NOT_STUDENT' };
-        }
-        const token: string = response.token;
-        this.authService.saveUser(authorizedUser);
-        this.authService.saveToken(token);
-        return { authorized: true, user: authorizedUser };
-      } else {
-        return { authorized: false, errorType: 'WRONG_CREDENTIALS' };
-      }
-    }));
+      }),
+      catchError((error) => {
+        return of({ authorized: false, errorType: 'WRONG_CREDENTIALS' });
+      })
+    );
   }
 
   public hasRole(role: Role): boolean {
@@ -63,7 +76,12 @@ export class LoginService {
   public isAlreadyLogged(): Observable<boolean> {
     let token = this.authService.getToken();
     if (token) {
-      this.router.navigateByUrl('home');
+      const user = this.authService.getUser();
+      if (user && Number(user.role) === 0) {
+        this.router.navigateByUrl('admin');
+      } else {
+        this.router.navigateByUrl('home');
+      }
       return of(false);
     }
     return of(true);

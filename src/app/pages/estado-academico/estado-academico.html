@@ -1,0 +1,323 @@
+<!-- Banner del Simulador de Demostración -->
+<div class="simulation-banner mb-4">
+  <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge bg-warning text-dark px-3 py-2 fw-semibold shadow-sm d-flex align-items-center gap-1">
+        <lucide-icon [img]="icons.RefreshCw" class="spin-icon" size="14"></lucide-icon>
+        SIMULADOR DEMO
+      </span>
+      <p class="mb-0 text-white-50 small d-none d-md-block">Prueba cómo reacciona la interfaz según tu estado académico</p>
+    </div>
+    <div class="btn-group shadow-sm" role="group">
+      <button 
+        type="button" 
+        class="btn btn-sm btn-outline-light" 
+        [class.active]="currentState === 'activo'"
+        (click)="setSimulationState('activo')">
+        Activo / Matriculado
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-sm btn-outline-light" 
+        [class.active]="currentState === 'pendiente_pago'"
+        (click)="setSimulationState('pendiente_pago')">
+        Pendiente de Pago
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-sm btn-outline-light" 
+        [class.active]="currentState === 'bloqueado'"
+        (click)="setSimulationState('bloqueado')">
+        Bloqueado Académico
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb-container" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-4">
+      <li class="breadcrumb-item">Estudiante</li>
+      <li class="breadcrumb-item active" aria-current="page">Portal de Servicios y Estado</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <!-- Columna Izquierda: Información y Ficha de Matrícula -->
+    <div class="col-lg-4">
+      <!-- Ficha de Perfil Académico -->
+      <div class="card status-profile-card border-0 mb-4 shadow-sm">
+        <div class="card-body p-4 text-center">
+          <div class="profile-avatar-wrapper mb-3 position-relative d-inline-block">
+            <div class="profile-avatar text-white mx-auto shadow-sm">
+              <lucide-icon [img]="icons.User" size="32"></lucide-icon>
+            </div>
+            <span class="status-indicator-dot" [ngClass]="currentState"></span>
+          </div>
+
+          <h4 class="fw-bold mb-1 text-primary-dark">{{ studentName }}</h4>
+          <p class="text-muted small mb-3">{{ studentEmail }}</p>
+
+          <hr class="my-3 opacity-10">
+
+          <!-- Badges de Estado -->
+          <div class="status-badge-container mb-3">
+            @if (currentState === 'activo') {
+              <span class="badge badge-status-active px-3 py-2 rounded-pill d-inline-flex align-items-center gap-1">
+                <lucide-icon [img]="icons.CheckCircle" size="14"></lucide-icon>
+                Matrícula Activa
+              </span>
+            }
+            @if (currentState === 'pendiente_pago') {
+              <span class="badge badge-status-pending px-3 py-2 rounded-pill d-inline-flex align-items-center gap-1">
+                <lucide-icon [img]="icons.AlertTriangle" size="14"></lucide-icon>
+                Pendiente de Pago
+              </span>
+            }
+            @if (currentState === 'bloqueado') {
+              <span class="badge badge-status-blocked px-3 py-2 rounded-pill d-inline-flex align-items-center gap-1">
+                <lucide-icon [img]="icons.Lock" size="14"></lucide-icon>
+                Bloqueado Académico
+              </span>
+            }
+          </div>
+
+          <!-- Detalles adicionales -->
+          <div class="academic-details text-start bg-light p-3 rounded-3">
+            <div class="mb-2">
+              <span class="text-muted d-block small">Carrera:</span>
+              <strong class="text-primary-dark text-wrap">{{ studentCareer }}</strong>
+            </div>
+            <div class="mb-2">
+              <span class="text-muted d-block small">RUT / ID:</span>
+              <strong class="text-primary-dark">{{ studentRut }}</strong>
+            </div>
+            <div>
+              <span class="text-muted d-block small">Periodo Vigente:</span>
+              <strong class="text-primary-dark">2026 - Primer Semestre</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de Etapas de Matrícula -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h5 class="fw-bold text-primary-dark mb-3">Progreso de Matrícula</h5>
+          <p class="text-muted small mb-4">Verifica los pasos obligatorios para habilitar tus servicios.</p>
+
+          <div class="step-list">
+            <!-- Paso 1 -->
+            <div class="step-item d-flex gap-3 mb-4 completed">
+              <div class="step-icon-check bg-success-light text-success shadow-sm">
+                <lucide-icon [img]="icons.CheckCircle" size="18"></lucide-icon>
+              </div>
+              <div class="step-details">
+                <h6 class="mb-0 fw-bold">1. Preinscripción de Matrícula</h6>
+                <span class="text-muted small">Validación de datos personales</span>
+              </div>
+            </div>
+
+            <!-- Paso 2 -->
+            <div class="step-item d-flex gap-3 mb-4" [ngClass]="currentState !== 'bloqueado' ? 'completed' : 'pending'">
+              @if (currentState !== 'bloqueado') {
+                <div class="step-icon-check bg-success-light text-success shadow-sm">
+                  <lucide-icon [img]="icons.CheckCircle" size="18"></lucide-icon>
+                </div>
+              } @else {
+                <div class="step-icon-check bg-warning-light text-warning shadow-sm">
+                  <lucide-icon [img]="icons.AlertTriangle" size="18"></lucide-icon>
+                </div>
+              }
+              <div class="step-details">
+                <h6 class="mb-0 fw-bold">2. Carga y Requisitos</h6>
+                <span class="text-muted small">
+                  {{ currentState !== 'bloqueado' ? 'Documentos verificados correctamente' : 'Faltan documentos obligatorios' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Paso 3 -->
+            <div class="step-item d-flex gap-3" [ngClass]="currentState === 'activo' ? 'completed' : 'pending'">
+              @if (currentState === 'activo') {
+                <div class="step-icon-check bg-success-light text-success shadow-sm">
+                  <lucide-icon [img]="icons.CheckCircle" size="18"></lucide-icon>
+                </div>
+              } @else {
+                <div class="step-icon-check bg-danger-light text-danger shadow-sm animate-pulse">
+                  <lucide-icon [img]="icons.Lock" size="18"></lucide-icon>
+                </div>
+              }
+              <div class="step-details">
+                <h6 class="mb-0 fw-bold">3. Pago de Arancel y Matrícula</h6>
+                <span class="text-muted small">
+                  {{ currentState === 'activo' ? 'Pago registrado y verificado' : 'Pago pendiente' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          @if (currentState !== 'activo') {
+            <div class="alert alert-warning-custom mt-4 d-flex gap-2 align-items-start border-0 shadow-sm p-3">
+              <lucide-icon [img]="icons.Info" class="text-warning flex-shrink-0" size="20"></lucide-icon>
+              <div>
+                <strong class="d-block small text-warning-dark">Matrícula no habilitada</strong>
+                <span class="small text-secondary">
+                  {{ currentState === 'pendiente_pago' 
+                     ? 'Completa el pago del arancel para activar de inmediato todos los servicios.' 
+                     : 'Debes regularizar tu situación documental antes de pagar aranceles.' }}
+                </span>
+                <button (click)="irAPagar()" class="btn btn-sm btn-primary-custom mt-2 w-100 py-2 d-flex align-items-center justify-content-center gap-1">
+                  Ir al portal de pago
+                  <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Servicios Habilitados / Bloqueados -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-primary-dark mb-0">Disponibilidad de Servicios Institucionales</h5>
+            <span class="badge bg-light text-secondary border px-3 py-2 small">Total: 6 Servicios</span>
+          </div>
+          <p class="text-muted mb-4">
+            A continuación se listan los accesos a los distintos servicios del portal. Los servicios bloqueados requieren que tu matrícula se encuentre al día.
+          </p>
+
+          <div class="row g-3">
+            @for (service of services; track service.id) {
+              <div class="col-md-6">
+                <div 
+                  class="service-card h-100 position-relative d-flex flex-column justify-content-between p-4" 
+                  [class.blocked]="!isServiceAvailable(service)"
+                  (click)="handleServiceClick(service)">
+                  
+                  <div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                      <div class="service-icon-wrapper rounded-3 shadow-sm d-flex align-items-center justify-content-center">
+                        <lucide-icon [img]="service.icon" size="24"></lucide-icon>
+                      </div>
+                      
+                      <!-- Lock Badge -->
+                      <div class="lock-indicator">
+                        @if (isServiceAvailable(service)) {
+                          <span class="badge-active-service text-success bg-success-light">
+                            <lucide-icon [img]="icons.Unlock" size="12"></lucide-icon>
+                            Disponible
+                          </span>
+                        } @else {
+                          <span class="badge-locked-service text-danger bg-danger-light">
+                            <lucide-icon [img]="icons.Lock" size="12"></lucide-icon>
+                            Bloqueado
+                          </span>
+                        }
+                      </div>
+                    </div>
+
+                    <h6 class="fw-bold service-title text-primary-dark">{{ service.title }}</h6>
+                    <p class="text-muted small service-desc mb-4">{{ service.description }}</p>
+                  </div>
+
+                  <div class="service-action-footer d-flex align-items-center gap-1 fw-semibold text-primary mt-auto">
+                    @if (isServiceAvailable(service)) {
+                      <span>Ingresar</span>
+                      <lucide-icon [img]="service.route ? icons.ArrowRight : icons.ExternalLink" size="14"></lucide-icon>
+                    } @else {
+                      <span class="text-danger">Desbloquear Matrícula</span>
+                      <lucide-icon [img]="icons.Lock" size="14" class="text-danger"></lucide-icon>
+                    }
+                  </div>
+
+                  <!-- Overlay de bloqueo con glassmorphism -->
+                  @if (!isServiceAvailable(service)) {
+                    <div class="service-lock-overlay d-flex flex-column align-items-center justify-content-center">
+                      <div class="lock-circle bg-white shadow d-flex align-items-center justify-content-center mb-2">
+                        <lucide-icon [img]="icons.Lock" class="text-danger" size="20"></lucide-icon>
+                      </div>
+                      <span class="fw-bold text-danger-dark small">Servicio Bloqueado</span>
+                      <span class="text-muted px-3 text-center super-small mt-1">Requiere Matrícula Activa</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Informativo / Acceso Denegado -->
+@if (showModal) {
+  <div class="modal-backdrop-custom d-flex align-items-center justify-content-center" (click)="closeModal()">
+    <div class="modal-dialog-custom bg-white rounded-4 shadow-lg border-0 overflow-hidden" (click)="$event.stopPropagation()">
+      <div class="modal-header-custom p-4 text-white d-flex align-items-center gap-3" 
+        [ngClass]="currentState === 'activo' ? 'bg-primary-gradient' : 'bg-danger-gradient'">
+        <div class="modal-header-icon rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm">
+          @if (currentState === 'activo') {
+            <lucide-icon [img]="icons.CheckCircle" class="text-success" size="24"></lucide-icon>
+          } @else {
+            <lucide-icon [img]="icons.AlertTriangle" class="text-danger animate-pulse" size="24"></lucide-icon>
+          }
+        </div>
+        <div>
+          <h5 class="modal-title fw-bold mb-0">{{ modalTitle }}</h5>
+          <small class="text-white-50">Portal NYU UTA</small>
+        </div>
+      </div>
+      
+      <div class="modal-body p-4">
+        <p class="text-secondary mb-0 line-height-relaxed">
+          {{ modalMessage }}
+        </p>
+
+        @if (currentState !== 'activo') {
+          <div class="bg-light p-3 rounded-3 mt-4 border">
+            <h6 class="fw-bold text-primary-dark mb-2 small d-flex align-items-center gap-1">
+              <lucide-icon [img]="icons.Info" size="14"></lucide-icon>
+              ¿Cómo regularizar tu estado?
+            </h6>
+            <ol class="small text-muted mb-0 ps-3">
+              @if (currentState === 'pendiente_pago') {
+                <li class="mb-1">Dirígete al portal de Matrícula haciendo clic en el botón de abajo.</li>
+                <li class="mb-1">Verifica y realiza tu pago en línea (Webpay/Transferencia).</li>
+                <li>Espera hasta 10 minutos para que el sistema actualice el comprobante bancario.</li>
+              } @else {
+                <li class="mb-1">Sube tus documentos faltantes (Certificado de Título o Cédula de Identidad) en la sección de Requisitos.</li>
+                <li class="mb-1">Espera la validación de la Dirección de Admisión y Registro Académico (DARA).</li>
+                <li>Una vez validado, podrás registrar el pago de tu matrícula.</li>
+              }
+            </ol>
+          </div>
+        }
+      </div>
+
+      <div class="modal-footer p-4 border-top bg-light d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary px-4 py-2" (click)="closeModal()">
+          Cerrar
+        </button>
+        @if (currentState !== 'activo') {
+          <button type="button" class="btn btn-danger-custom px-4 py-2" (click)="irAPagar(); closeModal()">
+            Proceder a Matrícula
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Toast flotante para simulaciones -->
+@if (showToast) {
+  <div class="toast-global success">
+    <div class="icon">⚡</div>
+    <div>{{ toastMessage }}</div>
+  </div>
+}

@@ -6,17 +6,17 @@ import { EstadoComponent } from './pages/estado/estado';
 import { ConfirmacionComponent } from './pages/confirmacion/confirmacion';
 import { FinalizadoComponent } from './pages/finalizado/finalizado';
 import { MaPrincipalComponent } from './pages/ma-principal/ma-principal';
-import { LoginComponent } from '../login/login.component';
-import { authGuard, notLogged } from '../guards/auth.guard';
-import { HomeComponent } from '../home/home.component';
-import { OfertaAcademica } from './pages/oferta-academica/oferta-academica/oferta-academica';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './pages/login/login.component';
 import { authGuard, notLogged } from './guards/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { OfertaAcademica } from './pages/oferta-academica/oferta-academica/oferta-academica';
 import { AdminCarrerasComponent } from './pages/admin-carreras/admin-carreras';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { EstadoAcademicoComponent } from './pages/estado-academico/estado-academico';
 import { Role } from './models/roles';
+import { RegisterComponent } from './pages/register/register.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 export const routes: Routes = [
   {
@@ -30,49 +30,6 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'inscripcion',
-    component: InscripcionAsignaturas,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'matricula',
-    component: MatriculaComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'info',
-    component: InfoComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'estado',
-    component: EstadoComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'confirmacion',
-    component: ConfirmacionComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'finalizado',
-    component: FinalizadoComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'ma-principal',
-    component: MaPrincipalComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'oferta-academica',
-    component: OfertaAcademica,
-    canActivate: [authGuard],
     path: 'admin',
     component: AdminLayoutComponent,
     canActivate: [authGuard],
@@ -86,6 +43,18 @@ export const routes: Routes = [
       {
         path: 'carreras',
         component: AdminCarrerasComponent
+      },
+      {
+        path: 'oferta-academica',
+        component: OfertaAcademica
+      },
+      {
+        path: 'registrar-usuarios',
+        component: RegisterComponent
+      },
+      {
+        path: 'usuarios',
+        component: AdminComponent
       }
     ]
   },
@@ -140,6 +109,17 @@ export const routes: Routes = [
         component: MaPrincipalComponent,
         canActivate: [authGuard],
         data: { role: Role.STUDENT }
+      },
+      {
+        path: 'estado-academico',
+        component: EstadoAcademicoComponent,
+        canActivate: [authGuard],
+        data: { role: Role.STUDENT }
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+        canActivate: [notLogged],
       }
     ]
   },
@@ -148,7 +128,4 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-];
-    pathMatch: 'full'
-  }
 ];

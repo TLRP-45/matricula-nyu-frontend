@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClientService } from '../../services/client.service';
+import { UserService } from '../../services/user.service';
 import { rutValidator } from '../../validators/rut.validator';
 import { RutFormatDirective } from '../../directive/rut-format.directive';
 import { Role } from '../../models/roles';
@@ -17,6 +17,7 @@ import { Role } from '../../models/roles';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
+  carreras: any[] = [];
   readonly roles = [
     { value: Role.ADMIN, label: 'Administrador' },
     { value: Role.STUDENT, label: 'Estudiante' }
@@ -24,7 +25,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private clientService: ClientService,
+    private userService: UserService,
     public router: Router
   ) {
     this.registerForm = this.fb.group({
@@ -42,17 +43,38 @@ export class RegisterComponent implements OnInit {
       nacimiento: ['', Validators.required],
       direccion: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9+]+$')]],
-      rol: [Role.STUDENT, Validators.required]
+      rol: [Role.STUDENT, Validators.required],
+      ID_carrera: ['']
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userService.getCarreras().subscribe({
+      next: (res: any) => {
+        this.carreras = res || [];
+      },
+      error: (err) => {
+        console.error('Error fetching careers:', err);
+      }
+    });
+  }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      const payload = { ...this.registerForm.value };
+      if (Number(payload.rol) === Role.STUDENT) {
+        if (!payload.ID_carrera) {
+          alert('Debe seleccionar una carrera');
+          return;
+        }
+        payload.ID_carrera = Number(payload.ID_carrera);
+      } else {
+        delete payload.ID_carrera;
+      }
+
       this.loading = true;
-      this.clientService.register(this.registerForm.value).subscribe({
-        next: (res) => {
+      this.userService.register(payload).subscribe({
+        next: (res: any) => {
           this.loading = false;
           if (res.success) {
             alert('Usuario registrado con éxito');

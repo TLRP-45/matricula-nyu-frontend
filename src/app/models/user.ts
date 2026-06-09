@@ -1,4 +1,4 @@
-export class Client {
+export class User {
     public id: number
     public nombre: string
     public rut: string
