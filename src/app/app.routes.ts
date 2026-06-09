@@ -17,6 +17,7 @@ import { EstadoAcademicoComponent } from './pages/estado-academico/estado-academ
 import { Role } from './models/roles';
 import { RegisterComponent } from './pages/register/register.component';
 import { AdminComponent } from './pages/admin/admin.component';
+import { GestionAsignaturas } from './pages/gestion-asginaturas/gestion-asignaturas';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,46 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'inscripcion',
+    component: InscripcionAsignaturas,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'matricula',
+    component: MatriculaComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'info',
+    component: InfoComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'estado',
+    component: EstadoComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'confirmacion',
+    component: ConfirmacionComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'finalizado',
+    component: FinalizadoComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'ma-principal',
+    component: MaPrincipalComponent,
+    canActivate: [authGuard],
+  },
+  {
     path: 'admin',
     component: AdminLayoutComponent,
     canActivate: [authGuard],
@@ -38,7 +79,7 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'carreras',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'carreras',
@@ -55,8 +96,12 @@ export const routes: Routes = [
       {
         path: 'usuarios',
         component: AdminComponent
-      }
-    ]
+      },
+      {
+        path: 'gestion-asignaturas',
+        component: GestionAsignaturas,
+      },
+    ],
   },
   {
     path: '',
@@ -66,43 +111,43 @@ export const routes: Routes = [
         path: 'home',
         component: HomeComponent,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT }
+        data: { role: Role.STUDENT },
       },
       {
         path: 'inscripcion',
         component: InscripcionAsignaturas,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT }
+        data: { role: Role.STUDENT },
       },
       {
         path: 'matricula',
         component: MatriculaComponent,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT }
+        data: { role: Role.STUDENT },
       },
       {
         path: 'info',
         component: InfoComponent,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT }
+        data: { role: Role.STUDENT },
       },
       {
         path: 'estado',
         component: EstadoComponent,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT }
+        data: { role: Role.STUDENT },
       },
       {
         path: 'confirmacion',
         component: ConfirmacionComponent,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT }
+        data: { role: Role.STUDENT },
       },
       {
         path: 'finalizado',
         component: FinalizadoComponent,
         canActivate: [authGuard],
-        data: { role: Role.STUDENT }
+        data: { role: Role.STUDENT },
       },
       {
         path: 'ma-principal',

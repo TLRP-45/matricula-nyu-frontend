@@ -1,1027 +1,49 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+import { OFERTAS } from '../../data/ofertas.data';
+import { CARRERAS } from '../../data/carreras.data';
+import { PERIODOS } from '../../data/periodos.data';
+
 import { Grupo } from '../../models/grupo';
-import { Asignatura } from '../../models/asignatura';
 import { Carrera } from '../../models/carrera';
 import { Periodo } from '../../models/periodo';
+import { Oferta } from '../../models/oferta';
+
 import { InscripcionElectivos } from '../inscripcion-electivos/inscripcion-electivos';
 import { Inscripcion } from '../../services/inscripcion';
-import { Oferta } from '../../models/oferta';
+import { InscripcionService } from '../../services/inscripcion.service';
+import { FiltrosAcademicos } from '../filtros-academicos/filtros-academicos';
 
 @Component({
   selector: 'app-inscripcion-asignaturas',
   standalone: true,
-  imports: [CommonModule, FormsModule, InscripcionElectivos],
+  imports: [CommonModule, FormsModule, InscripcionElectivos, FiltrosAcademicos],
   templateUrl: './inscripcion-asignaturas.html',
   styleUrl: './inscripcion-asignaturas.css',
 })
-/*export class InscripcionAsignaturas {
-  constructor(private inscripcionService: Inscripcion) {}
-
-  periodoActual = '2026-1';
-
-  asignaturas: Oferta[] = [
-    {
-      codigo: 'MAT101',
-      nombre: 'Matemáticas I',
-      tipo: 'obligatoria',
-
-      ubicaciones: [
-        { carrera: 'ICCI', periodo: '2026-1' },
-        { carrera: 'IND', periodo: '2026-2' },
-      ],
-
-      catedra: [
-        {
-          codigoAsignatura: 'MAT101',
-          tipo: 'catedra',
-          letra: 'A',
-          profesor: 'Dr. Pérez',
-          cupos: 0,
-          seleccionado: false,
-        },
-        {
-          codigoAsignatura: 'MAT101',
-          tipo: 'catedra',
-          letra: 'B',
-          profesor: 'Dra. Gómez',
-          cupos: 25,
-          seleccionado: false,
-        },
-      ],
-
-      taller: [
-        {
-          codigoAsignatura: 'MAT101',
-          tipo: 'taller',
-          letra: 'A',
-          profesor: 'Juan Soto',
-          cupos: 20,
-          seleccionado: false,
-        },
-      ],
-      requisitos: [],
-      inscrita: false,
-    },
-
-    {
-      codigo: 'FIS201',
-      nombre: 'Física I',
-      tipo: 'obligatoria',
-
-      ubicaciones: [
-        { carrera: 'ICCI', periodo: '2026-1' },
-        { carrera: 'IND', periodo: '2026-1' },
-      ],
-
-      catedra: [
-        {
-          codigoAsignatura: 'FIS201',
-          tipo: 'catedra',
-          letra: 'A',
-          profesor: 'Dr. Ramírez',
-          cupos: 40,
-          seleccionado: false,
-        },
-      ],
-
-      laboratorio: [
-        {
-          codigoAsignatura: 'FIS201',
-          tipo: 'laboratorio',
-          letra: 'A',
-          profesor: 'María López',
-          cupos: 15,
-          seleccionado: false,
-        },
-      ],
-      requisitos: [],
-      inscrita: false,
-    },
-
-    {
-      codigo: 'INF301',
-      nombre: 'Programación',
-      tipo: 'obligatoria',
-
-      ubicaciones: [{ carrera: 'ICCI', periodo: '2026-2' }],
-
-      catedra: [
-        {
-          codigoAsignatura: 'INF301',
-          tipo: 'catedra',
-          letra: 'A',
-          profesor: 'Ing. Torres',
-          cupos: 35,
-          seleccionado: false,
-        },
-      ],
-      requisitos: [],
-      inscrita: false,
-    },
-  ];
-
-  electivos: Oferta[] = [
-    {
-      codigo: 'ELC101',
-      nombre: 'Introducción a IA',
-      tipo: 'electivo',
-
-      ubicaciones: [{ carrera: 'ICCI', periodo: '2026-1' }],
-
-      requisitos: [
-        {
-          codigo: 'MAT101',
-          nombre: 'Matemáticas I',
-        },
-      ],
-
-      catedra: [
-        {
-          codigoAsignatura: 'ELC101',
-          tipo: 'catedra',
-          letra: 'A',
-          profesor: 'Dr. IA',
-          cupos: 20,
-          seleccionado: false,
-        },
-        {
-          codigoAsignatura: 'ELC101',
-          tipo: 'catedra',
-          letra: 'B',
-          profesor: 'Dra. Neural',
-          cupos: 15,
-          seleccionado: false,
-        },
-      ],
-
-      taller: [
-        {
-          codigoAsignatura: 'ELC101',
-          tipo: 'taller',
-          letra: 'A',
-          profesor: 'Asistente IA',
-          cupos: 10,
-          seleccionado: false,
-        },
-      ],
-
-      inscrita: false,
-    },
-
-    {
-      codigo: 'ELC202',
-      nombre: 'Desarrollo Web',
-      tipo: 'electivo',
-
-      ubicaciones: [{ carrera: 'ICCI', periodo: '2026-2' }],
-
-      requisitos: [
-        {
-          codigo: 'INF101',
-          nombre: 'Programación I',
-        },
-        {
-          codigo: 'INF201',
-          nombre: 'Estructuras de Datos',
-        },
-      ],
-
-      catedra: [
-        {
-          codigoAsignatura: 'ELC202',
-          tipo: 'catedra',
-          letra: 'A',
-          profesor: 'Ing. Web',
-          cupos: 25,
-          seleccionado: false,
-        },
-      ],
-
-      laboratorio: [
-        {
-          codigoAsignatura: 'ELC202',
-          tipo: 'laboratorio',
-          letra: 'A',
-          profesor: 'Lab Web',
-          cupos: 12,
-          seleccionado: false,
-        },
-      ],
-
-      inscrita: false,
-    },
-  ];
-
-  carreras: Carrera[] = [
-    {
-      codigo: 'ICCI',
-      nombre: 'Ingeniería Civil en Computación',
-      facultad: 'Facultad de Informática',
-      seleccionado: false,
-    },
-    {
-      codigo: 'IND',
-      nombre: 'Ingeniería Industrial',
-      facultad: 'Facultad de Ingeniería',
-      seleccionado: false,
-    },
-  ];
-
-  periodos: Periodo[] = [
-    { codigo: '2026-1', nombre: '2026 Semestre 1', seleccionado: false },
-    { codigo: '2026-2', nombre: '2026 Semestre 2', seleccionado: false },
-  ];
-
-  carreraSeleccionada?: Carrera;
-  periodoSeleccionado?: Periodo;
-  asignaturasFiltradas: Oferta[] = [];
-  electivosFiltrados: Oferta[] = [];
-  asignaturasAprobadas: string[] = ['MAT101'];
-  mostrarElectivos = false;
-
-  ngOnInit() {
-    const todas = [...this.asignaturas, ...this.electivos];
-
-    todas.forEach((a) => {
-      if (a.catedra?.length && !this.getGrupoSeleccionado(a.catedra)) {
-        a.catedra[0].seleccionado = true;
-      }
-
-      if (a.taller?.length && !this.getGrupoSeleccionado(a.taller)) {
-        a.taller[0].seleccionado = true;
-      }
-
-      if (a.laboratorio?.length && !this.getGrupoSeleccionado(a.laboratorio)) {
-        a.laboratorio[0].seleccionado = true;
-      }
-    });
-
-    if (this.carreras.length) {
-      this.carreraSeleccionada = this.carreras[0];
-    }
-
-    if (this.periodos.length) {
-      this.periodoSeleccionado = this.periodos[0];
-    }
-
-    this.asignaturasFiltradas = this.filtrarAsignaturas(this.asignaturas);
-    this.electivosFiltrados = this.filtrarAsignaturas(this.electivos);
-    console.log(this.electivosFiltrados);
-    this.cargarInscripcionGuardada();
-  }
-
-  toggleElectivos() {
-    this.mostrarElectivos = !this.mostrarElectivos;
-  }
-
-  onSelectChange(grupos: Grupo[], event: Event) {
-    const letra = (event.target as HTMLSelectElement).value;
-    const seleccionado = grupos.find((g) => g.letra === letra);
-
-    if (seleccionado?.cupos === 0) {
-      return;
-    }
-
-    if (seleccionado) {
-      this.toggleGrupo(grupos, seleccionado);
-    }
-  }
-
-  toggleGrupo(lista: Grupo[], seleccionado: Grupo) {
-    lista.forEach((g) => (g.seleccionado = false));
-    seleccionado.seleccionado = true;
-  }
-
-  onCarreraChange(carreras: Carrera[], event: Event) {
-    const codigo = (event.target as HTMLSelectElement).value;
-
-    const encontrada = carreras.find((c) => c.codigo === codigo);
-
-    if (encontrada) {
-      this.carreraSeleccionada = encontrada;
-
-      this.asignaturasFiltradas = this.filtrarAsignaturas(this.asignaturas);
-      this.electivosFiltrados = this.filtrarAsignaturas(this.electivos);
-      this.limpiarEstadoInscripcion();
-
-      this.cargarInscripcionGuardada();
-    }
-  }
-
-  toggleCarrera(lista: Carrera[], seleccionado: Carrera) {
-    lista.forEach((c) => (c.seleccionado = false));
-    seleccionado.seleccionado = true;
-  }
-
-  onPeriodoChange(periodos: Periodo[], event: Event) {
-    const codigo = (event.target as HTMLSelectElement).value;
-
-    const encontrado = periodos.find((p) => p.codigo === codigo);
-
-    if (encontrado) {
-      this.periodoSeleccionado = encontrado;
-
-      this.asignaturasFiltradas = this.filtrarAsignaturas(this.asignaturas);
-      this.electivosFiltrados = this.filtrarAsignaturas(this.electivos);
-      this.limpiarEstadoInscripcion();
-
-      this.cargarInscripcionGuardada();
-    }
-    console.log(this.electivosFiltrados);
-  }
-
-  togglePeriodo(lista: Periodo[], seleccionado: Periodo) {
-    lista.forEach((p) => (p.seleccionado = false));
-    seleccionado.seleccionado = true;
-  }
-
-  filtrarAsignaturas(lista: Asignatura[]) {
-    return lista.filter((a) =>
-      a.ubicaciones.some(
-        (u) =>
-          u.carrera === this.carreraSeleccionada?.codigo &&
-          u.periodo === this.periodoSeleccionado?.codigo,
-      ),
-    );
-  }
-
-  limpiarEstadoInscripcion() {
-    const todas = [...this.asignaturas, ...this.electivos];
-    todas.forEach((a) => {
-      a.inscrita = false;
-
-      a.catedra?.forEach((g) => (g.seleccionado = false));
-
-      a.taller?.forEach((g) => (g.seleccionado = false));
-
-      a.laboratorio?.forEach((g) => (g.seleccionado = false));
-
-      if (a.catedra?.length) {
-        a.catedra[0].seleccionado = true;
-      }
-
-      if (a.taller?.length) {
-        a.taller[0].seleccionado = true;
-      }
-
-      if (a.laboratorio?.length) {
-        a.laboratorio[0].seleccionado = true;
-      }
-    });
-  }
-
-  cargarInscripcionGuardada() {
-    const key = `inscripcion_${this.carreraSeleccionada?.codigo}_${this.periodoSeleccionado?.codigo}`;
-
-    const guardado = localStorage.getItem(key);
-
-    if (guardado) {
-      this.restaurarInscripcion(JSON.parse(guardado));
-    }
-  }
-
-  restaurarInscripcion(inscripciones: any[]) {
-    const todas = [...this.asignaturas, ...this.electivos];
-    inscripciones.forEach((i) => {
-      const asignatura = this.asignaturas.find((a) => a.codigo === i.codigoAsignatura);
-
-      if (!asignatura) return;
-
-      asignatura.inscrita = true;
-
-      i.grupos.forEach((g: any) => {
-        let lista;
-
-        if (g.tipo === 'catedra') {
-          lista = asignatura.catedra;
-        }
-
-        if (g.tipo === 'taller') {
-          lista = asignatura.taller;
-        }
-
-        if (g.tipo === 'laboratorio') {
-          lista = asignatura.laboratorio;
-        }
-
-        if (lista) {
-          lista.forEach((x) => (x.seleccionado = false));
-
-          const elegido = lista.find((x) => x.letra === g.letra);
-
-          if (elegido) {
-            elegido.seleccionado = true;
-          }
-        }
-      });
-    });
-  }
-
-  guardar() {
-    if (!this.validarInscripcion()) return;
-
-    const data = this.obtenerSeleccionFinal();
-
-    this.inscripcionService.guardar(data).subscribe({
-      next: () => {
-        alert('Inscripción guardada');
-      },
-      error: () => {
-        alert('Error al guardar');
-      },
-    });
-  }
-
-  validarInscripcion(): boolean {
-    const todas = [...this.asignaturas, ...this.electivos];
-
-    const inscritas = todas.filter((a) => a.inscrita);
-
-    const electivos = inscritas.filter((a) => a.tipo === 'electivo');
-
-    if (inscritas.length === 0) {
-      alert('Debes seleccionar al menos una asignatura');
-      return false;
-    }
-
-    if (inscritas.length > 6) {
-      alert('Máximo 6 asignaturas permitidas');
-      return false;
-    }
-
-    if (electivos.length > 2) {
-      alert('Máximo 2 electivos permitidos');
-      return false;
-    }
-
-    const sinCupos = inscritas.some((a) =>
-      ['catedra', 'taller', 'laboratorio'].some((tipo) => {
-        const grupo = this.getGrupoSeleccionado(a[tipo as keyof Asignatura] as Grupo[]);
-        return grupo?.cupos === 0;
-      }),
-    );
-
-    if (sinCupos) {
-      alert('Hay grupos sin cupos disponibles');
-      return false;
-    }
-
-    return true;
-  }
-
-  obtenerSeleccionFinal() {
-    const todas = [...this.asignaturasFiltradas, ...this.electivosFiltrados];
-    return todas
-
-      .filter((a) => a.inscrita)
-
-      .map((a) => {
-        const construirGrupo = (tipo: string, grupo?: Grupo) =>
-          grupo
-            ? {
-                tipo,
-                letra: grupo.letra,
-                profesor: grupo.profesor,
-              }
-            : null;
-
-        return {
-          codigoAsignatura: a.codigo,
-          nombreAsignatura: a.nombre,
-          tipo: a.tipo,
-
-          grupos: [
-            construirGrupo('catedra', this.getGrupoSeleccionado(a.catedra)),
-
-            construirGrupo('taller', this.getGrupoSeleccionado(a.taller)),
-
-            construirGrupo('laboratorio', this.getGrupoSeleccionado(a.laboratorio)),
-          ].filter((g) => g !== null),
-        };
-      });
-  }
-
-  actualizarCupos(codigo: string, grupo: any, delta: number) {
-    const asignatura = [...this.asignaturas, ...this.electivos].find((a) => a.codigo === codigo);
-
-    let lista;
-
-    if (grupo.tipo === 'catedra') lista = asignatura?.catedra;
-    if (grupo.tipo === 'taller') lista = asignatura?.taller;
-    if (grupo.tipo === 'laboratorio') lista = asignatura?.laboratorio;
-
-    const g = lista?.find((x) => x.letra === grupo.letra);
-
-    if (g) {
-      g.cupos += delta;
-    }
-  }
-
-  getGrupoSeleccionado(grupos?: Grupo[]) {
-    return grupos?.find((g) => g.seleccionado);
-  }
-
-  puedeInscribirsePeriodo(): boolean {
-    console.log('Periodo seleccionado:', this.periodoSeleccionado?.codigo);
-    console.log('Periodo actual:', this.periodoActual);
-    console.log(this.periodoSeleccionado?.codigo === this.periodoActual);
-    return this.periodoSeleccionado?.codigo === this.periodoActual;
-  }
-
-  cumpleRequisitos(a: Asignatura): boolean {
-    return a.requisitos.every((r) => this.asignaturasAprobadas.includes(r.codigo));
-  }
-}*/
-
-//------
 export class InscripcionAsignaturas {
-  constructor(private inscripcionService: Inscripcion) {}
+  constructor(
+    private inscripcionServ: Inscripcion,
+    private inscripcionService: InscripcionService,
+  ) {}
 
   periodoActual = '2026-1';
 
-  ofertasAsignaturas: Oferta[] = [
-    {
-      id: 'OF-MAT101-ICCI-2026-1',
-
-      carrera: 'ICCI',
-
-      periodoAcademico: '2026-1',
-
-      asignatura: {
-        codigo: 'MAT101',
-
-        nombre: 'Matemáticas I',
-
-        tipo: 'obligatoria',
-        ubicaciones: [
-          {
-            carrera: 'ICCI',
-            periodo: '2026-1',
-          },
-          {
-            carrera: 'IND',
-            periodo: '2026-1',
-          },
-        ],
-
-        requisitos: [],
-      },
-
-      grupos: {
-        catedra: [
-          {
-            id: 'MAT101-CAT-A',
-
-            tipo: 'catedra',
-
-            letra: 'A',
-
-            profesor: 'Dr. Pérez',
-
-            cupos: 0,
-
-            horarios: [
-              {
-                dia: 'Lunes',
-                horaInicio: '08:00',
-                horaFin: '09:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-
-          {
-            id: 'MAT101-CAT-B',
-
-            tipo: 'catedra',
-
-            letra: 'B',
-
-            profesor: 'Dra. Gómez',
-
-            cupos: 25,
-
-            horarios: [
-              {
-                dia: 'Martes',
-                horaInicio: '10:00',
-                horaFin: '11:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-
-        taller: [
-          {
-            id: 'MAT101-TAL-A',
-
-            tipo: 'taller',
-
-            letra: 'A',
-
-            profesor: 'Juan Soto',
-
-            cupos: 20,
-
-            horarios: [
-              {
-                dia: 'Miércoles',
-                horaInicio: '12:00',
-                horaFin: '13:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-        laboratorio: [],
-      },
-
-      inscrita: false,
-    },
-
-    {
-      id: 'OF-FIS201-ICCI-2026-1',
-
-      carrera: 'ICCI',
-
-      periodoAcademico: '2026-1',
-
-      asignatura: {
-        codigo: 'FIS201',
-
-        nombre: 'Física I',
-
-        tipo: 'obligatoria',
-        ubicaciones: [
-          {
-            carrera: 'ICCI',
-            periodo: '2026-1',
-          },
-
-          {
-            carrera: 'IND',
-            periodo: '2026-1',
-          },
-        ],
-
-        requisitos: [],
-      },
-
-      grupos: {
-        catedra: [
-          {
-            id: 'FIS201-CAT-A',
-
-            tipo: 'catedra',
-
-            letra: 'A',
-
-            profesor: 'Dr. Ramírez',
-
-            cupos: 40,
-
-            horarios: [
-              {
-                dia: 'Lunes',
-                horaInicio: '14:00',
-                horaFin: '15:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-
-        taller: [],
-        laboratorio: [
-          {
-            id: 'FIS201-LAB-A',
-
-            tipo: 'laboratorio',
-
-            letra: 'A',
-
-            profesor: 'María López',
-
-            cupos: 15,
-
-            horarios: [
-              {
-                dia: 'Jueves',
-                horaInicio: '16:00',
-                horaFin: '17:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-      },
-
-      inscrita: false,
-    },
-
-    {
-      id: 'OF-INF301-ICCI-2026-2',
-
-      carrera: 'ICCI',
-
-      periodoAcademico: '2026-2',
-
-      asignatura: {
-        codigo: 'INF301',
-
-        nombre: 'Programación',
-
-        tipo: 'obligatoria',
-        ubicaciones: [
-          {
-            carrera: 'ICCI',
-            periodo: '2026-2',
-          },
-        ],
-
-        requisitos: [],
-      },
-
-      grupos: {
-        catedra: [
-          {
-            id: 'INF301-CAT-A',
-
-            tipo: 'catedra',
-
-            letra: 'A',
-
-            profesor: 'Ing. Torres',
-
-            cupos: 35,
-
-            horarios: [
-              {
-                dia: 'Viernes',
-                horaInicio: '09:00',
-                horaFin: '10:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-        taller: [],
-        laboratorio: [],
-      },
-
-      inscrita: false,
-    },
-  ];
-
-  ofertasElectivos: Oferta[] = [
-    {
-      id: 'OF-ELC101-ICCI-2026-1',
-
-      carrera: 'ICCI',
-
-      periodoAcademico: '2026-1',
-
-      asignatura: {
-        codigo: 'ELC101',
-
-        nombre: 'Introducción a IA',
-
-        tipo: 'electivo',
-
-        ubicaciones: [
-          {
-            carrera: 'ICCI',
-            periodo: '2026-1',
-          },
-
-          {
-            carrera: 'IND',
-            periodo: '2026-1',
-          },
-        ],
-
-        requisitos: [
-          {
-            codigo: 'MAT101',
-            nombre: 'Matemáticas I',
-          },
-        ],
-      },
-
-      grupos: {
-        catedra: [
-          {
-            id: 'ELC101-CAT-A',
-
-            tipo: 'catedra',
-
-            letra: 'A',
-
-            profesor: 'Dr. IA',
-
-            cupos: 20,
-
-            horarios: [
-              {
-                dia: 'Martes',
-                horaInicio: '08:00',
-                horaFin: '09:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-
-          {
-            id: 'ELC101-CAT-B',
-
-            tipo: 'catedra',
-
-            letra: 'B',
-
-            profesor: 'Dra. Neural',
-
-            cupos: 15,
-
-            horarios: [
-              {
-                dia: 'Miércoles',
-                horaInicio: '10:00',
-                horaFin: '11:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-
-        taller: [
-          {
-            id: 'ELC101-TAL-A',
-
-            tipo: 'taller',
-
-            letra: 'A',
-
-            profesor: 'Asistente IA',
-
-            cupos: 10,
-
-            horarios: [
-              {
-                dia: 'Viernes',
-                horaInicio: '12:00',
-                horaFin: '13:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-        laboratorio: [],
-      },
-
-      inscrita: false,
-    },
-
-    {
-      id: 'OF-ELC202-ICCI-2026-2',
-
-      carrera: 'ICCI',
-
-      periodoAcademico: '2026-2',
-
-      asignatura: {
-        codigo: 'ELC202',
-
-        nombre: 'Desarrollo Web',
-
-        tipo: 'electivo',
-        ubicaciones: [
-          {
-            carrera: 'ICCI',
-            periodo: '2026-2',
-          },
-        ],
-
-        requisitos: [
-          {
-            codigo: 'INF101',
-            nombre: 'Programación I',
-          },
-
-          {
-            codigo: 'INF201',
-            nombre: 'Estructuras de Datos',
-          },
-        ],
-      },
-
-      grupos: {
-        catedra: [
-          {
-            id: 'ELC202-CAT-A',
-
-            tipo: 'catedra',
-
-            letra: 'A',
-
-            profesor: 'Ing. Web',
-
-            cupos: 25,
-
-            horarios: [
-              {
-                dia: 'Lunes',
-                horaInicio: '18:00',
-                horaFin: '19:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-
-        taller: [],
-        laboratorio: [
-          {
-            id: 'ELC202-LAB-A',
-
-            tipo: 'laboratorio',
-
-            letra: 'A',
-
-            profesor: 'Lab Web',
-
-            cupos: 12,
-
-            horarios: [
-              {
-                dia: 'Jueves',
-                horaInicio: '18:00',
-                horaFin: '19:30',
-              },
-            ],
-
-            seleccionado: false,
-          },
-        ],
-      },
-
-      inscrita: false,
-    },
-  ];
-
-  carreras: Carrera[] = [
-    {
-      codigo: 'ICCI',
-      nombre: 'Ingeniería Civil en Computación',
-      facultad: 'Facultad de Informática',
-    },
-    {
-      codigo: 'IND',
-      nombre: 'Ingeniería Industrial',
-      facultad: 'Facultad de Ingeniería',
-    },
-  ];
-
-  periodos: Periodo[] = [
-    {
-      codigo: '2026-1',
-      nombre: '2026 Semestre 1',
-      activo: true,
-      fechaInicio: new Date('2026-03-01'),
-      fechaTermino: new Date('2026-03-15'),
-    },
-    {
-      codigo: '2026-2',
-      nombre: '2026 Semestre 2',
-      activo: false,
-      fechaInicio: new Date('2026-08-01'),
-      fechaTermino: new Date('2026-08-15'),
-    },
-  ];
-
-  carreraSeleccionada?: Carrera;
-  periodoSeleccionado?: Periodo;
-  asignaturasFiltradas: Oferta[] = [];
+  ofertas: Oferta[] = OFERTAS;
+  carreras: Carrera[] = CARRERAS;
+  periodos: Periodo[] = PERIODOS;
+
+  carreraSeleccionada!: string;
+  periodoSeleccionado!: string;
+  ofertasFiltradas: Oferta[] = [];
   electivosFiltrados: Oferta[] = [];
   asignaturasAprobadas: string[] = ['MAT101'];
   mostrarElectivos = false;
 
   ngOnInit() {
-    const todas = [...this.ofertasAsignaturas, ...this.ofertasElectivos];
-
-    todas.forEach((oferta) => {
+    this.ofertas.forEach((oferta) => {
       if (oferta.grupos.catedra?.length && !this.getGrupoSeleccionado(oferta.grupos.catedra)) {
         oferta.grupos.catedra[0].seleccionado = true;
       }
@@ -1039,16 +61,24 @@ export class InscripcionAsignaturas {
     });
 
     if (this.carreras.length) {
-      this.carreraSeleccionada = this.carreras[0];
+      this.carreraSeleccionada = this.carreras[0].codigo;
     }
 
     if (this.periodos.length) {
-      this.periodoSeleccionado = this.periodos[0];
+      this.periodoSeleccionado = this.periodos[0].codigo;
     }
 
-    this.asignaturasFiltradas = this.filtrarOfertas(this.ofertasAsignaturas);
+    this.ofertasFiltradas = this.inscripcionService.filtrarOfertas(
+      this.ofertas,
+      this.carreraSeleccionada,
+      this.periodoSeleccionado,
+    );
 
-    this.electivosFiltrados = this.filtrarOfertas(this.ofertasElectivos);
+    this.electivosFiltrados = this.inscripcionService.filtrarElectivos(
+      this.ofertas,
+      this.carreraSeleccionada,
+      this.periodoSeleccionado,
+    );
 
     this.cargarInscripcionGuardada();
   }
@@ -1074,60 +104,30 @@ export class InscripcionAsignaturas {
     seleccionado.seleccionado = true;
   }
 
-  onCarreraChange(carreras: Carrera[], event: Event): void {
-    const codigo = (event.target as HTMLSelectElement).value;
+  onFiltroChange(event: { carrera: string; periodo: string }): void {
+    this.carreraSeleccionada = event.carrera;
 
-    const encontrada = carreras.find((c) => c.codigo === codigo);
+    this.periodoSeleccionado = event.periodo;
 
-    if (!encontrada) {
-      return;
-    }
-
-    this.carreraSeleccionada = encontrada;
-
-    this.asignaturasFiltradas = this.filtrarOfertas(this.ofertasAsignaturas);
-
-    this.electivosFiltrados = this.filtrarOfertas(this.ofertasElectivos);
-
-    this.limpiarEstadoInscripcion();
-
-    this.cargarInscripcionGuardada();
-  }
-
-  onPeriodoChange(periodos: Periodo[], event: Event): void {
-    const codigo = (event.target as HTMLSelectElement).value;
-
-    const encontrado = periodos.find((p) => p.codigo === codigo);
-
-    if (!encontrado) {
-      return;
-    }
-
-    this.periodoSeleccionado = encontrado;
-
-    this.asignaturasFiltradas = this.filtrarOfertas(this.ofertasAsignaturas);
-
-    this.electivosFiltrados = this.filtrarOfertas(this.ofertasElectivos);
-
-    this.limpiarEstadoInscripcion();
-
-    this.cargarInscripcionGuardada();
-
-    console.log(this.electivosFiltrados);
-  }
-
-  filtrarOfertas(lista: Oferta[]): Oferta[] {
-    return lista.filter(
-      (oferta) =>
-        oferta.carrera === this.carreraSeleccionada?.codigo &&
-        oferta.periodoAcademico === this.periodoSeleccionado?.codigo,
+    this.ofertasFiltradas = this.inscripcionService.filtrarOfertas(
+      this.ofertas,
+      this.carreraSeleccionada,
+      this.periodoSeleccionado,
     );
+
+    this.electivosFiltrados = this.inscripcionService.filtrarElectivos(
+      this.ofertas,
+      this.carreraSeleccionada,
+      this.periodoSeleccionado,
+    );
+
+    this.limpiarEstadoInscripcion();
+
+    this.cargarInscripcionGuardada();
   }
 
   limpiarEstadoInscripcion(): void {
-    const todas = [...this.ofertasAsignaturas, ...this.ofertasElectivos];
-
-    todas.forEach((oferta: Oferta) => {
+    this.ofertas.forEach((oferta: Oferta) => {
       oferta.inscrita = false;
 
       oferta.grupos.catedra?.forEach((g: Grupo) => {
@@ -1161,8 +161,7 @@ export class InscripcionAsignaturas {
       return;
     }
 
-    const key =
-      `inscripcion_${this.carreraSeleccionada.codigo}_` + `${this.periodoSeleccionado.codigo}`;
+    const key = `inscripcion_${this.carreraSeleccionada}_` + `${this.periodoSeleccionado}`;
 
     const guardado = localStorage.getItem(key);
 
@@ -1176,7 +175,7 @@ export class InscripcionAsignaturas {
   }
 
   restaurarInscripcion(inscripciones: any[]): void {
-    const todas = [...this.ofertasAsignaturas, ...this.ofertasElectivos];
+    const todas = this.ofertas;
 
     inscripciones.forEach((i: any) => {
       const oferta = todas.find((o: Oferta) => o.id === i.idOferta);
@@ -1220,7 +219,7 @@ export class InscripcionAsignaturas {
   }
 
   guardar() {
-    if (!this.validarInscripcion()) return;
+    /* if (!this.validarInscripcion()) return;
 
     const data = this.obtenerSeleccionFinal();
 
@@ -1231,15 +230,15 @@ export class InscripcionAsignaturas {
       error: () => {
         alert('Error al guardar');
       },
-    });
+    });*/
   }
 
   validarInscripcion(): boolean {
-    const todas = [...this.ofertasAsignaturas, ...this.ofertasElectivos];
+    const todas = this.ofertas;
 
     const inscritas = todas.filter((o: Oferta) => o.inscrita);
 
-    const electivos = inscritas.filter((o: Oferta) => o.asignatura.tipo === 'electivo');
+    const electivos = inscritas.filter((o: Oferta) => o.asignatura.caracter === 'Electivo');
 
     if (inscritas.length === 0) {
       alert('Debes seleccionar al menos una asignatura');
@@ -1277,7 +276,7 @@ export class InscripcionAsignaturas {
   }
 
   obtenerSeleccionFinal() {
-    const todas = [...this.asignaturasFiltradas, ...this.electivosFiltrados];
+    const todas = [...this.ofertasFiltradas, ...this.electivosFiltrados];
 
     return todas
 
@@ -1304,7 +303,7 @@ export class InscripcionAsignaturas {
 
           nombreAsignatura: oferta.asignatura.nombre,
 
-          tipo: oferta.asignatura.tipo,
+          tipo: oferta.asignatura.caracter,
 
           grupos: [
             construirGrupo('catedra', this.getGrupoSeleccionado(oferta.grupos.catedra)),
@@ -1318,9 +317,7 @@ export class InscripcionAsignaturas {
   }
 
   actualizarCupos(idOferta: string, grupo: any, delta: number): void {
-    const oferta = [...this.ofertasAsignaturas, ...this.ofertasElectivos].find(
-      (o: Oferta) => o.id === idOferta,
-    );
+    const oferta = this.ofertas.find((o: Oferta) => o.id === idOferta);
 
     if (!oferta) {
       return;
@@ -1352,7 +349,7 @@ export class InscripcionAsignaturas {
   }
 
   puedeInscribirsePeriodo(): boolean {
-    return this.periodoSeleccionado?.codigo === this.periodoActual;
+    return this.periodoSeleccionado === this.periodoActual;
   }
 
   cumpleRequisitos(oferta: Oferta): boolean {

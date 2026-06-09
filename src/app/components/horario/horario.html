@@ -8,11 +8,7 @@
   }
 
   @for (hora of horas; track hora.id) {
-    <div class="hora-cell">
-      {{ hora.horaInicio }}
-      -
-      {{ hora.horaFin }}
-    </div>
+    <div class="hora-cell">{{ hora.horaInicio }} - {{ hora.horaFin }}</div>
 
     @for (dia of dias; track dia) {
       <div

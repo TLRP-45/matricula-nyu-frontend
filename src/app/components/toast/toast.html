@@ -1,0 +1,9 @@
+<div class="toast-container">
+  @for (t of toastService.toasts(); track t.id) {
+    <div class="toast" [ngClass]="['toast-' + t.type, t.visible ? 'toast-show' : 'toast-hide']">
+      <i class="ti" [ngClass]="t.type === 'success' ? 'ti-circle-check' : 'ti-alert-circle'"></i>
+
+      {{ t.msg }}
+    </div>
+  }
+</div>

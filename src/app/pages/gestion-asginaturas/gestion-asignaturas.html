@@ -1,0 +1,301 @@
+<app-toast></app-toast>
+
+<div class="container-fluid">
+  <div class="topbar">
+    <h1><i class="bi bi-file-earmark-text"></i> Gestionar asignaturas</h1>
+    <button type="button" class="btn btn-primary" (click)="abrirFormularioAsignatura()">
+      <i class="ti ti-plus"></i> Nueva asignatura
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Asignaturas registradas</span>
+      <span class="badge badge-purple"
+        >{{ asignaturas.length }} asignatura{{ asignaturas.length !== 1 ? 's' : '' }}</span
+      >
+    </div>
+
+    @if (asignaturas.length === 0) {
+      <div class="empty-state">
+        <i class="bi bi-file-earmark-x"></i>
+        <p>
+          No hay asignaturas registradas.<br />Crea la primera con
+          <strong>Nueva asignatura</strong>.
+        </p>
+      </div>
+    }
+
+    @if (asignaturas.length > 0) {
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Créditos</th>
+              <th>Horas presenciales</th>
+              <th>Horas autónomas</th>
+              <th>Requisitos</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of asignaturas; track item.codigo + '-' + $index) {
+              <ng-container>
+                <tr
+                  [id]="'asig-' + item.codigo"
+                  [class.destacada]="asignaturaDestacada === item.codigo"
+                >
+                  <td>
+                    <strong>{{ item.nombre }}</strong>
+                  </td>
+                  <td>
+                    <span class="badge badge-purple">{{ item.codigo }}</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-amber">{{ item.caracter }} </span>
+                  </td>
+                  <td>
+                    <span class="badge badge-teal">{{ item.creditos }} créditos</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-purple">{{ item.horasPresenciales }} hrs.</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-amber">{{ item.horasAutonomas }} hrs.</span>
+                  </td>
+                  <td>
+                    <span
+                      class="badge badge-teal clickable"
+                      (click)="toggleRequisitos(item.codigo)"
+                    >
+                      <i class="ti ti-books"></i>
+                      {{ item.requisitos.length }} requisitos • Ver requisitos
+                      <i class="ti ti-chevron-down"></i>
+                    </span>
+
+                    @if (requisitoAbierto === item.codigo) {
+                      @for (r of item.requisitos; track r.codigo) {
+                        <span class="badge badge-amber clickable" (click)="irAAsignatura(r.codigo)">
+                          {{ r.codigo }} - {{ r.nombre }} • Ver requisito
+                        </span>
+                      }
+                    }
+                  </td>
+                  <td>
+                    <div class="action-group">
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon-ghost"
+                        title="Editar carrera"
+                        (click)="abrirFormularioAsignatura(item)"
+                      >
+                        <i class="ti ti-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon-del"
+                        title="Eliminar carrera"
+                        (click)="preguntarEliminar(item.codigo, item.nombre)"
+                      >
+                        <i class="ti ti-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+@if (mostrarFormularioAsignatura) {
+  <div class="overlay" (click)="cerrarFormularioAsignatura()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>
+          {{ codigoEditarAsignatura ? 'Editar asignatura' : 'Nueva asignatura' }}
+        </h2>
+
+        <button type="button" class="modal-close" (click)="cerrarFormularioAsignatura()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="asignaturaForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label"> Código asignatura </label>
+
+              <input
+                class="form-control"
+                formControlName="codigo"
+                style="text-transform: uppercase"
+                (keypress)="soloLetrasNumeros($event)"
+              />
+
+              <div class="form-hint">Código de la asignatura</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"> Nombre asignatura </label>
+              <input
+                class="form-control"
+                formControlName="nombre"
+                (keypress)="soloLetras($event)"
+              />
+              <div class="form-hint">Nombre completo de la asignatura</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label"> Tipo </label>
+              <select class="form-control" formControlName="tipo">
+                <option value="Obligatoria">Obligatoria</option>
+                <option value="Electivo">Electivo</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"> Créditos </label>
+              <input
+                class="form-control"
+                formControlName="creditos"
+                type="number"
+                min="1"
+                max="10"
+                placeholder="Ej: 1"
+              />
+              <div class="form-hint">Créditos de la asignatura</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label"> Horas presenciales </label>
+              <input
+                class="form-control"
+                formControlName="horasPresenciales"
+                type="number"
+                min="1"
+                max="100"
+                placeholder="Ej: 1"
+              />
+              <div class="form-hint">Horas presenciales de la asignatura</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"> Horas autónomas </label>
+              <input
+                class="form-control"
+                formControlName="horasAutonomas"
+                type="number"
+                min="1"
+                max="100"
+                placeholder="Ej: 1"
+              />
+              <div class="form-hint">Horas autónomas de la asignatura</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Requisitos</label>
+
+            <div class="form-row">
+              <select
+                class="form-control"
+                [(ngModel)]="requisitoSeleccionado"
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <option [ngValue]="null">Seleccione una asignatura...</option>
+
+                @for (asig of asignaturas; track asig.codigo) {
+                  <option [ngValue]="asig">{{ asig.codigo }} - {{ asig.nombre }}</option>
+                }
+              </select>
+
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                (click)="agregarRequisito()"
+                [disabled]="!requisitoSeleccionado"
+              >
+                <i class="ti ti-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="requisito-list">
+            @for (requisito of requisitosTemp; track $index) {
+              <span class="requisito-tag">
+                {{ requisito.codigo }} - {{ requisito.nombre }}
+                <button type="button" (click)="eliminarRequisito(requisito.codigo)" title="Quitar">
+                  ×
+                </button>
+              </span>
+            }
+          </div>
+          <div class="form-hint">
+            {{
+              requisitosTemp.length
+                ? requisitosTemp.length + ' requisito(s) agregados'
+                : 'Presiona Enter o + para agregar'
+            }}
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          (click)="cerrarFormularioAsignatura()"
+        >
+          Cancelar
+        </button>
+
+        <button type="button" class="btn btn-primary btn-sm" (click)="guardarAsignatura()">
+          <i class="ti ti-device-floppy"></i>
+
+          {{ codigoEditarAsignatura ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (mostrarConfirmacionEliminar) {
+  <div class="overlay" (click)="mostrarConfirmacionEliminar = false">
+    <div class="modal modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-body confirm-body">
+        <div class="confirm-icon"><i class="ti ti-trash"></i></div>
+        <div class="confirm-text">
+          <h3>¿Eliminar asignatura?</h3>
+          <p>
+            Se eliminará <strong>{{ nombreAsignaturaEliminar }}</strong
+            >. Esta acción no se puede deshacer.
+          </p>
+        </div>
+        <div class="confirm-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="mostrarConfirmacionEliminar = false"
+          >
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-danger" (click)="eliminarAsignatura()">
+            <i class="ti ti-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

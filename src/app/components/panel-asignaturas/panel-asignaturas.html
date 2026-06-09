@@ -1,15 +1,21 @@
 <div class="p-3 panel-asignaturas">
-  <h5 class="mb-3">Asignaturas del periodo</h5>
-  <button class="btn btn-primary btn-sm w-100 mb-2" (click)="abrirSelector.emit()">
-    + Nueva oferta
-  </button>
-  @if (ofertas.length === 0) {
-    <div class="alert alert-light border">No hay ofertas disponibles.</div>
+  <div class="topbar">
+    <h1>Ofertas del periodo</h1>
+    <button type="button" class="btn btn-primary" (click)="abrirSelector.emit()">
+      <i class="ti ti-plus"></i> Nueva oferta
+    </button>
+  </div>
+
+  @if (ofertasPanel.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-bookmark-x"></i>
+      <p>No hay ofertas registradas.<br />Crea la primera con <strong>Nueva oferta</strong>.</p>
+    </div>
   }
 
   @for (
-    item of ofertas;
-    track item.grupo.id + '-' + item.horario.dia + '-' + item.horario.horaInicio
+    item of ofertasPanel;
+    track item.grupo.id + '-' + item.horario.dia + '-' + item.horario.horaInicio + '-' + $index
   ) {
     <app-oferta-card
       class="d-block mb-3"
@@ -17,6 +23,8 @@
       modo="panel"
       [seleccionada]="esSeleccionada(item)"
       (seleccionar)="seleccionar(item)"
+      (editar)="onEditar($event)"
+      (eliminar)="onEliminar($event)"
     >
     </app-oferta-card>
   }

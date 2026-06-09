@@ -1,124 +1,112 @@
-<div class="container-fluid">
-  <app-filtros-academicos
-    [carreras]="carreras"
-    [periodos]="periodos"
-    (cambio)="onFiltroChange($event)"
-  >
-  </app-filtros-academicos>
+<app-toast></app-toast>
 
-  <div class="row g-3 align-items-start">
-    <div class="col-md-3">
-      <app-panel-asignaturas
-        [ofertas]="ofertasDisponibles"
-        (nuevaOferta)="abrirNuevaOferta($event)"
-        (abrirSelector)="abrirSelectorAsignaturas()"
-        (seleccion)="agregarAlHorario($event)"
-      >
-      </app-panel-asignaturas>
-    </div>
-    <div class="col-md-9">
-      <app-horario [ofertas]="ofertasEnHorario" (eliminarOferta)="quitarDelHorario($event)">
-      </app-horario>
-    </div>
+<div class="topbar">
+  <h1><i class="bi bi-book"></i> Administrar ofertas</h1>
+  <button type="button" class="btn btn-primary" (click)="publicarOferta()">Publicar oferta</button>
+</div>
+
+<app-filtros-academicos [autorizado]="true" [semestre]="true" (cambio)="onFiltroChange($event)">
+</app-filtros-academicos>
+
+<div class="contenedor-principal">
+  <div class="panel-asignaturas">
+    <app-panel-asignaturas
+      [ofertas]="ofertasDisponibles"
+      (nuevaOferta)="abrirNuevaOferta($event)"
+      (abrirSelector)="mostrarSelectorAsignaturas = true"
+      (seleccion)="agregarAlHorario($event)"
+      (editar)="editarOferta($event)"
+      (eliminar)="preguntarEliminar($event)"
+    >
+    </app-panel-asignaturas>
   </div>
+  <div class="panel-horario">
+    <app-horario [ofertas]="ofertasEnHorario" (eliminarOferta)="quitarDelHorario($event)">
+    </app-horario>
+  </div>
+</div>
 
-  @if (mostrarFormularioOferta) {
-    <div class="card mt-3 p-3">
-      <h6>Nueva oferta de {{ asignaturaSeleccionada?.nombre }}</h6>
+@if (mostrarSelectorAsignaturas) {
+  <div class="overlay" (click)="mostrarSelectorAsignaturas = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Seleccionar asignatura</h2>
 
-      <form [formGroup]="ofertaForm">
-        <div class="mb-2">
-          <label>Tipo de grupo</label>
+        <button type="button" class="modal-close" (click)="mostrarSelectorAsignaturas = false">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
 
-          <select class="form-select" formControlName="tipo">
-            <option value="catedra">Cátedra</option>
-            <option value="taller">Taller</option>
-            <option value="laboratorio">Laboratorio</option>
-          </select>
+      @if (asignaturasFiltradas.length === 0) {
+        <div class="empty-state">
+          <i class="bi bi-file-earmark-x"></i>
+          <p>No hay asignaturas registradas.</p>
         </div>
-        <!-- GRUPO -->
-        <div class="mb-2">
-          <label>Grupo</label>
-          <select class="form-select" formControlName="letra">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="G">G</option>
-            <option value="H">H</option>
-          </select>
-        </div>
+      }
 
-        <div class="mb-2">
-          <label>Profesor</label>
-          <input class="form-control" placeholder="Profesor" formControlName="profesor" />
-        </div>
+      @if (asignaturasFiltradas.length > 0) {
+        <div class="modal-body">
+          @for (asig of asignaturasFiltradas; track asig.codigo) {
+            <button class="btn-asignatura w-100 mb-2 text-start" (click)="abrirNuevaOferta(asig)">
+              <div class="asig-header">
+                <span class="asig-code">
+                  <i class="ti ti-book-2"></i>
+                  {{ asig.codigo }}
+                </span>
 
-        <div class="mb-2">
-          <label>Cupos</label>
-          <input type="number" class="form-control" placeholder="Cupos" formControlName="cupos" />
-        </div>
+                <span class="asig-badge">
+                  {{ asig.caracter }}
+                </span>
+              </div>
 
-        <div class="mb-2">
-          <label class="form-label">Horarios</label>
-
-          @for (h of horariosTemp; track $index) {
-            <div class="horario-box">
-              <label>Día</label>
-              <select
-                class="form-select"
-                [value]="h.dia"
-                (change)="actualizarDiaTemp($index, $event)"
-              >
-                @for (dia of diasSemana; track dia) {
-                  <option [value]="dia">
-                    {{ dia }}
-                  </option>
-                }
-              </select>
-
-              <label>Hora de inicio</label>
-              <select
-                class="form-select"
-                [value]="h.horaInicio"
-                (change)="onHoraInicioChangeTemp($index, $event)"
-              >
-                @for (bloque of horas; track bloque.horaInicio) {
-                  <option [value]="bloque.horaInicio">
-                    {{ bloque.horaInicio }}
-                  </option>
-                }
-              </select>
-
-              <label>Hora de fin</label>
-              <input type="time" class="form-control" [value]="h.horaFin" disabled />
-            </div>
+              <div class="asig-name">
+                {{ asig.nombre }}
+              </div>
+            </button>
           }
         </div>
-
-        <button type="button" class="btn btn-outline-primary btn-sm" (click)="agregarHorario()">
-          + Agregar horario
-        </button>
-        <button type="button" class="btn btn-outline-primary btn-sm" (click)="eliminarHorario(-1)">
-          - Eliminar horario
-        </button>
-      </form>
-
-      <button class="btn btn-success w-100 mt-2" (click)="guardarOferta()">Guardar oferta</button>
-    </div>
-  }
-
-  @if (mostrarSelectorAsignaturas) {
-    <div class="card p-3 mb-3">
-      <h6>Selecciona una asignatura</h6>
-
-      @for (asig of asignaturasFiltradas; track asig.codigo) {
-        <button class="btn btn-outline-primary w-100 mb-2" (click)="abrirNuevaOferta(asig)">
-          {{ asig.codigo }} - {{ asig.nombre }}
-        </button>
       }
     </div>
-  }
-</div>
+  </div>
+}
+
+@if (mostrarFormularioOferta && ofertaEnEdicion) {
+  <app-formulario-oferta
+    [oferta]="ofertaEnEdicion"
+    [bloques]="horas"
+    [esEdicion]="ofertaGrupoEditando !== null"
+    [grupoEditar]="ofertaGrupoEditando?.grupo ?? null"
+    (guardar)="guardarOferta($event)"
+    (cancelar)="cerrarFormularioOferta()"
+  />
+}
+
+@if (mostrarConfirmacionEliminar) {
+  <div class="overlay" (click)="mostrarConfirmacionEliminar = false">
+    <div class="modal modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-body confirm-body">
+        <div class="confirm-icon"><i class="ti ti-trash"></i></div>
+        <div class="confirm-text">
+          <h3>¿Eliminar oferta?</h3>
+          <p>
+            Se eliminará
+            <strong>{{ nombreOfertaEliminar }} - {{ grupoOfertaEliminar | titlecase }}</strong
+            >. Esta acción no se puede deshacer.
+          </p>
+        </div>
+        <div class="confirm-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="mostrarConfirmacionEliminar = false"
+          >
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-danger" (click)="eliminarOferta()">
+            <i class="ti ti-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
