@@ -19,7 +19,6 @@ export interface UpdateCarrera {
 }
 
 export interface AsignarAsignatura {
-  ID_asignatura: number;
   semestre: number;
   posicion: number;
 }
@@ -35,7 +34,7 @@ export class CarrerasService {
   }
 
   cargarCarreras(): void {
-    this.obtenerCarreras().subscribe({
+    this.getCarreras().subscribe({
       next: (data: any) => {
         console.log(data)
         const mapped: Carrera[] = data.map((c: any) => ({
@@ -60,7 +59,7 @@ export class CarrerasService {
       cupos: Number(c.cupos) || 0
     };
 
-    this.crearCarrera(payload).subscribe({
+    this.postCarrera(payload).subscribe({
       next: () => this.cargarCarreras(),
       error: (err) => console.error('Error creando carrera', err)
     });
@@ -74,47 +73,54 @@ export class CarrerasService {
       cupos: Number(patch.cupos) || undefined
     };
 
-    this.actualizarCarrera(payload, id).subscribe({
+    this.putCarrera(payload, id).subscribe({
       next: () => this.cargarCarreras(),
       error: (err) => console.error('Error actualizando carrera', err)
     });
   }
 
-  deleteCarrera(id: number): void {
-    this.eliminarCarrera(id).subscribe({
+  eliminarCarrera(id: number): void {
+    this.deleteCarrera(id).subscribe({
       next: () => this.cargarCarreras(),
       error: (err) => console.error('Error eliminando carrera', err)
     });
   }
 
-  obtenerCarreras() {
+  getCarreras() {
     return this.http.get(`${environment.apiUrl}/carrera`);
   }
 
-  obtenerSemestres(carreraID: number) {
+  getSemestres(carreraID: number) {
     return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
   }
 
-  buscarCarreraNombre(busqueda: string) {
-    return this.http.get(`${environment.apiUrl}/carrera/buscar/nombre/${busqueda}`);
+  //_____________________________________--
+  buscarCarreraNombre(nombre: string) {
+    return this.http.get(
+      `${environment.apiUrl}/carrera?nombre=${encodeURIComponent(nombre)}`
+    );
   }
 
-  buscarCarreraFacultad(busqueda: string) {
-    return this.http.get(`${environment.apiUrl}/carrera/buscar/facultad/${busqueda}`);
+  buscarCarreraFacultad(facultad: string) {
+    return this.http.get(
+      `${environment.apiUrl}/carrera?facultad=${encodeURIComponent(facultad)}`
+    );
   }
+  //_____________________________________--
 
-  crearCarrera(carrera: CreateCarrera) {
+
+  postCarrera(carrera: CreateCarrera) {
     return this.http.post(`${environment.apiUrl}/carrera`, carrera);
   }
 
-  actualizarCarrera(carrera: UpdateCarrera, carreraID: number) {
+  putCarrera(carrera: UpdateCarrera, carreraID: number) {
     return this.http.put(
-      `${environment.apiUrl}/carrera/${carreraID}/actualizar`,
+      `${environment.apiUrl}/carrera/${carreraID}`,
       carrera
     );
   }
 
-  eliminarCarrera(carreraID: number) {
+  deleteCarrera(carreraID: number) {
     return this.http.delete(`${environment.apiUrl}/carrera/${carreraID}`);
   }
 
@@ -122,36 +128,34 @@ export class CarrerasService {
     return this.http.get(`${environment.apiUrl}/carrera/${carreraID}/asignaturas`);
   }
 
-  putPushAsignatura(carreraID: number, asignatura: AsignarAsignatura) {
+  putAsignaturaCarrera(carreraID: number, asignaturaID: number, asignatura: AsignarAsignatura) {
     return this.http.put(
-      `${environment.apiUrl}/carrera/${carreraID}/actualizar/asignatura/push`,
+      `${environment.apiUrl}/carrera/${carreraID}/asignatura/${asignaturaID}`,
       asignatura
     );
   }
 
-  putRemoveAsignatura(carreraID: number, asignaturaID: number) {
-    return this.http.put(
-      `${environment.apiUrl}/carrera/${carreraID}/actualizar/asignatura/remove`,
-      { ID_asignatura: asignaturaID }
+  deleteAsignaturaCarrera(carreraID: number, asignaturaID: number) {
+    return this.http.delete(
+      `${environment.apiUrl}/carrera/${carreraID}/asignatura/${asignaturaID}`
     );
   }
 
-  putRemoveAsignaturasPorSemestre(carreraID: number, semestre: number) {
-    return this.http.put(
-      `${environment.apiUrl}/carrera/${carreraID}/asignaturas/semestre/remove`,
-      { semestre }
+  deleteAsignaturasPorSemestre(carreraID: number, semestre: number) {
+    return this.http.delete(
+      `${environment.apiUrl}/carrera/${carreraID}/asignaturas/semestre/${semestre}`
     );
   }
 
-  buscarAsignaturasPorNombre(nombre: string) {
+  buscarAsignaturaNombre(nombre: string) {
     return this.http.get(
-      `${environment.apiUrl}/asignaturas/buscar/nombre/${nombre}`
+      `${environment.apiUrl}/carrera?nombre=${encodeURIComponent(nombre)}`
     );
   }
 
-  buscarAsignaturasPorCodigo(codigo: string) {
+  buscarAsignaturaCodigo(codigo: string) {
     return this.http.get(
-      `${environment.apiUrl}/asignaturas/buscar/codigo/${codigo}`
+      `${environment.apiUrl}/carrera?codigo=${encodeURIComponent(codigo)}`
     );
   }
 }

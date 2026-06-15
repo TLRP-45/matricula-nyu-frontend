@@ -22,33 +22,33 @@ export class MallaService {
     return this.subject.getValue();
   }
 
-  obtenerCarrera() {
+  getCarrera() {
     const estudianteID = sessionStorage.getItem('id');
-    return this.http.get(`${environment.apiUrl}/carrera/${estudianteID}`);
+    return this.http.get(`${environment.apiUrl}/carrera/estudiante/${estudianteID}`);
   }
 
-  obtenerSemestres(carreraID: number) {
+  getSemestres(carreraID: number) {
     return this.http.get<number>(`${environment.apiUrl}/carrera/${carreraID}/semestres`);
   }
 
-  obtenerAsignaturaPorSemestre(carreraID:number, semestre: number) {
-    return this.http.get<Asignatura[]>(`${environment.apiUrl}/carrera/${carreraID}/asignaturas/${semestre}`);
+  getAsignaturaPorSemestre(carreraID:number, semestre: number) {
+    return this.http.get<Asignatura[]>(`${environment.apiUrl}/carrera/${carreraID}/asignaturas/semestre/${semestre}`);
   }
 
-  obtenerEstadoAsignatura(asignaturaID: number) {
+  getEstadoAsignatura(asignaturaID: number) {
     const estudianteID = sessionStorage.getItem('id');
-    return this.http.get<String>(`${environment.apiUrl}/asignaturas/${asignaturaID}/${estudianteID}/estado`);
+    return this.http.get<String>(`${environment.apiUrl}/asignaturas/${asignaturaID}/usuario/${estudianteID}/estado`);
   }
 
-  obtenerAsignatura(asignaturaID: number) {
+  getAsignatura(asignaturaID: number) {
     return this.http.get<Asignatura>(`${environment.apiUrl}/asignaturas/${asignaturaID}`);
   }
 
-  obtenerPrerrequisitos(asignaturaID:number, carreraID:number) {
-    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/prerrequisitos/${carreraID}`);
+  getPrerrequisitos(asignaturaID:number, carreraID:number) {
+    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/carrera/${carreraID}/prerrequisitos`);
   }
 
   obtenerTributas(asignaturaID:number, carreraID:number) {
-    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/tributas/${carreraID}`);
+    return this.http.get<Asignatura[]>(`${environment.apiUrl}/asignaturas/${asignaturaID}/carrera/${carreraID}/tributas`);
   }
 }
