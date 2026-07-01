@@ -19,7 +19,7 @@ export class UserService {
   }
 
   public register(userData: any): Observable<any> {
-    const registerUrl = 'http://localhost:3000/autenticacion/register';
+    const registerUrl = 'http://localhost:3000/registrar-usuario';
     return this.http.post<any>(registerUrl, userData);
   }
 

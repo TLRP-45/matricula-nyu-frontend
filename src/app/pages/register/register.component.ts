@@ -76,11 +76,11 @@ export class RegisterComponent implements OnInit {
       this.userService.register(payload).subscribe({
         next: (res: any) => {
           this.loading = false;
-          if (res.success) {
-            alert('Usuario registrado con éxito');
+          if (res.estudiante || res.mensaje) {
+            alert(res.mensaje || 'Usuario registrado con éxito');
             this.router.navigate(['/admin']);
           } else {
-            alert('Error: ' + res.mensaje);
+            alert('Error inesperado durante el registro');
           }
         },
         error: (err) => {
